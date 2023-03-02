@@ -1,0 +1,35 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["airbnb", "airbnb-typescript/base"],
+  "parserOptions": {
+    "project": "./backend/tsconfig.json"
+  },
+  "rules": {
+    "semi": "off",
+    "implicit-arrow-linebreak": "off",
+    "operator-linebreak": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "": "never",
+        "js": "never",
+        "ts": "never",
+        "d.ts": "never"
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".ts"],
+        "paths": ["src"]
+      },
+      "typescript": {}
+    }
+  },
+  "ignorePatterns": ["dist/*"]
+}
