@@ -1,8 +1,10 @@
-import Button from '@/components/Button'
+import Dashboard from '@/components/Dashboard'
+import Sidebar from '@/components/Sidebar'
 
 const Home = () => (
-  <div className="">
-    <Button />
+  <div className="container mx-auto flex h-screen xl:px-20">
+    <Sidebar />
+    <Dashboard />
   </div>
 )
 
