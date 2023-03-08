@@ -1,4 +1,4 @@
-import TrendTopic, { ITrend } from '../TrendTopic'
+import TrendTopic, { ITrend } from './TrendTopic'
 
 const TRENDS_DATA: ITrend[] = [
   {
