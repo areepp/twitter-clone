@@ -1,5 +1,9 @@
+import TrendsForYou from './TrendsForYou'
+
 const RightPanel = () => (
-  <div className="hidden w-[350px] bg-red-200 lg:block"></div>
+  <div className="ml-6 hidden w-[350px] lg:block">
+    <TrendsForYou />
+  </div>
 )
 
 export default RightPanel
