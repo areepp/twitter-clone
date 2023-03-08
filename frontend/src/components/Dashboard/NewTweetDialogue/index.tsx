@@ -4,10 +4,19 @@ import {
   FaceSmileIcon,
   MapPinIcon,
 } from '@heroicons/react/24/outline'
+import Image from 'next/image'
 
 const NewTweetDialogue = () => (
   <div className="flex w-full gap-4 border-b px-3 py-2">
-    <div className="h-12 w-12 rounded-full bg-slate-500" />
+    <div>
+      <Image
+        src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+        width="48"
+        height="48"
+        className="rounded-full"
+        alt="photo profile"
+      />
+    </div>
     <form className="grow">
       <input
         className="w-full py-3 text-xl focus:outline-none"

@@ -1,5 +1,5 @@
 import Dashboard from '@/components/Dashboard'
-import RightPanel from '@/components/Dashboard/RightPanel'
+import RightPanel from '@/components/RightPanel'
 import Sidebar from '@/components/Sidebar'
 
 const Home = () => (
