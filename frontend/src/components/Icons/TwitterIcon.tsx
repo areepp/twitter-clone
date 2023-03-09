@@ -1,6 +1,8 @@
-const TwitterIcon = () => (
+import clsx from 'clsx'
+
+const TwitterIcon = ({ className }: { className?: string }) => (
   <svg
-    className="h-7 w-7 fill-primary-blue"
+    className={clsx('h-7 w-7 fill-primary-blue', className)}
     version="1.1"
     id="Layer_1"
     xmlns="http://www.w3.org/2000/svg"
