@@ -8,9 +8,10 @@ const UserCard = ({ data }: { data: IUser }) => (
         src={data.userImgUrl}
         width="48"
         height="48"
-        className="rounded-full object-cover"
+        className="h-12 rounded-full object-cover"
         alt="photo profile"
       />
+
       <div className="flex flex-col">
         <span className="font-bold">{data.userName}</span>
         <span className="text-dark-gray">@{data.userId}</span>
