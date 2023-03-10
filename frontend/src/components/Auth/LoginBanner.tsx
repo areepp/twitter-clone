@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { useState } from 'react'
 
 const LoginBanner = () => {
@@ -13,15 +14,19 @@ const LoginBanner = () => {
             <span>People on Twitter are first to know.</span>
           </div>
           <div className="flex w-full gap-3 md:max-w-[175px]">
-            <button
+            <Link
+              href="/login"
               onClick={() => setShowModal(true)}
-              className="flex-grow rounded-full border border-slate-50 py-1 font-semibold"
+              className="flex-grow rounded-full border border-slate-50 py-1 text-center font-semibold"
             >
               Log in
-            </button>
-            <button className="flex-grow rounded-full bg-slate-50 py-1 font-semibold text-black ">
+            </Link>
+            <Link
+              href="/signup"
+              className="flex-grow rounded-full bg-slate-50 py-1 text-center font-semibold  text-black"
+            >
               Sign up
-            </button>
+            </Link>
           </div>
         </div>
       </div>

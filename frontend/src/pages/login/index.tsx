@@ -1,7 +1,6 @@
 import GoogleIcon from '@/components/Icons/GoogleIcon'
 import TwitterIcon from '@/components/Icons/TwitterIcon'
 import Image from 'next/image'
-import { signIn, signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 
 const Login = () => {
@@ -11,7 +10,7 @@ const Login = () => {
         <Image
           className="object-cover"
           src="/twitter-banner.png"
-          alt="twitter auth image"
+          alt="twitter  image"
           fill
         />
       </div>
