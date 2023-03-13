@@ -7,11 +7,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// do I need to create my own user table?
 model User {
-  id           String   @id @unique @default(uuid())
-  email        String   @unique
-  password     String
-  refreshToken String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id    String @id @unique @default(uuid())
+  todos Todo[]
+}
+
+model Todo {
+  id     String  @id @unique @default(uuid())
+  task   String
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
 }
