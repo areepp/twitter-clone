@@ -10,7 +10,7 @@ const Login = () => {
         <Image
           className="object-cover"
           src="/twitter-banner.png"
-          alt="twitter  image"
+          alt="twitter auth image"
           fill
         />
       </div>
