@@ -2,8 +2,39 @@ import GoogleIcon from '@/components/Icons/GoogleIcon'
 import TwitterIcon from '@/components/Icons/TwitterIcon'
 import Image from 'next/image'
 import Link from 'next/link'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
+
+export const Inputs = z.object({
+  email: z.string().min(1, { message: 'Email is required' }).email({
+    message: 'Must be a valid email',
+  }),
+  password: z
+    .string()
+    .min(6, { message: 'Password must be atleast 6 characters' }),
+})
+
+export type Inputs = z.infer<typeof Inputs>
 
 const Signup = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>({ resolver: zodResolver(Inputs) })
+
+  const [passwordInputType, setPasswordInputType] = useState<
+    'text' | 'password'
+  >('password')
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
+
+  const togglePasswordInputType = () =>
+    setPasswordInputType((prev) => (prev === 'password' ? 'text' : 'password'))
+
   return (
     <main className="grid h-screen w-full lg:grid-cols-[1fr,45vw]">
       <div className="relative hidden lg:block">
@@ -29,18 +60,48 @@ const Signup = () => {
             <span>or</span>
             <span className="border-b" />
           </div>
-          <form className="flex w-full flex-col gap-3">
-            <input
-              className="rounded-lg border py-3 px-2"
-              type="text"
-              placeholder="username"
-            />
-            <input
-              className="rounded-lg border py-3 px-2"
-              type="text"
-              placeholder="password"
-            />
-            <button className="flex w-full items-center justify-center gap-3 rounded-full border bg-gray-900 py-2 px-6 font-semibold text-white">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex w-full flex-col gap-3"
+          >
+            <fieldset className="flex flex-col gap-1">
+              <input
+                className="rounded-lg border py-3 px-2 focus:outline-primary-blue"
+                type="text"
+                placeholder="email"
+                {...register('email')}
+              />
+              {errors.email && (
+                <span className="text-xs">{errors.email.message}</span>
+              )}
+            </fieldset>
+            <fieldset className="relative flex flex-col gap-1">
+              <input
+                className="rounded-lg border py-3 px-2 focus:outline-primary-blue"
+                type={passwordInputType}
+                placeholder="password"
+                {...register('password')}
+              />
+              {passwordInputType === 'password' ? (
+                <EyeIcon
+                  className="absolute top-4 right-4 h-5 w-5 hover:cursor-pointer"
+                  onClick={togglePasswordInputType}
+                />
+              ) : (
+                <EyeSlashIcon
+                  className="absolute top-4 right-4 h-5 w-5 hover:cursor-pointer"
+                  onClick={togglePasswordInputType}
+                />
+              )}
+              {errors.password && (
+                <span className="text-xs">{errors.password.message}</span>
+              )}
+            </fieldset>
+
+            <button
+              type="submit"
+              className="flex w-full items-center justify-center gap-3 rounded-full border bg-gray-900 py-2 px-6 font-semibold text-white"
+            >
               Sign up
             </button>
           </form>
