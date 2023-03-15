@@ -6,6 +6,7 @@ import session from 'express-session'
 import errorHandler from './middlewares/errorHandler'
 import authRouter from '@/api/auth/auth.router'
 import './api/auth/passportGoogleSetup'
+import userRouter from './api/user/user.router'
 
 dotenv.config()
 
@@ -35,7 +36,8 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.get('/', (_req, res) => res.send('Hello world!'))
-app.use(authRouter)
+app.use('/auth', authRouter)
+app.use('/user', userRouter)
 
 // app.use(errorHandler)
 

@@ -16,7 +16,7 @@ const errorHandler = (
     })
   }
 
-  return res.status(500).json('something went wrong')
+  return res.status(500).json({ msg: 'something went wrong', err })
 }
 
 export default errorHandler
