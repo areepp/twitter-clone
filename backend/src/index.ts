@@ -1,15 +1,18 @@
 import * as dotenv from 'dotenv'
 import express from 'express'
 import cors from 'cors'
-import cookieParser from 'cookie-parser'
-import credentials from './middlewares/credentials'
+import passport from 'passport'
+import session from 'express-session'
 import errorHandler from './middlewares/errorHandler'
+import authRouter from '@/api/auth/auth.router'
+import './api/auth/passportGoogleSetup'
 
 dotenv.config()
 
 const app = express()
 
-app.use(credentials)
+app.use(express.json())
+
 app.use(
   cors({
     origin:
@@ -19,14 +22,24 @@ app.use(
     credentials: true,
   }),
 )
-app.use(express.json())
-app.use(cookieParser())
+
+app.use(
+  session({
+    secret: 'keyboard cat',
+    resave: true,
+    saveUninitialized: true,
+  }),
+)
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.get('/', (_req, res) => res.send('Hello world!'))
+app.use(authRouter)
 
-app.use(errorHandler)
+// app.use(errorHandler)
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 8000
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
