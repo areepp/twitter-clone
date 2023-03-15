@@ -4,6 +4,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 const Login = () => {
+  const signInWithGoogle = () => {
+    window.open('http://localhost:8000/auth/google', '_self')
+  }
+
   return (
     <main className="grid h-screen w-full lg:grid-cols-[1fr,45vw]">
       <div className="relative hidden lg:block">
@@ -21,7 +25,10 @@ const Login = () => {
           See what's happening in the world right now.
         </h1>
         <div className="flex w-full max-w-sm flex-col items-center justify-center gap-3">
-          <button className="flex w-full items-center justify-center gap-3 rounded-full border py-2 px-6 font-semibold">
+          <button
+            className="flex w-full items-center justify-center gap-3 rounded-full border py-2 px-6 font-semibold"
+            onClick={signInWithGoogle}
+          >
             <GoogleIcon /> <span>Sign in with Google</span>
           </button>
           <div className="grid w-full grid-cols-[1fr,auto,1fr] items-center gap-2">

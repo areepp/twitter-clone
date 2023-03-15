@@ -8,7 +8,6 @@ import {
 import { ITweet } from '@/types/ITweet'
 
 const Tweet = ({ data }: { data: ITweet }) => {
-  console.log(data.userImg)
   return (
     <div className="flex w-full gap-3 border-b p-3">
       <div>
