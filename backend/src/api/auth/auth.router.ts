@@ -40,7 +40,9 @@ authRouter.post(
           res.send('Authenticated')
         })
       } else {
-        return res.status(403).json({ message: info.message })
+        return res
+          .status(403)
+          .json({ message: info.message ?? 'some error occured' })
       }
     })(req, res, next)
   },
@@ -49,7 +51,6 @@ authRouter.post(
 authRouter.get('/logout', (req, res, next) => {
   req.logOut((err) => {
     if (err) return next(err)
-    // res.redirect(process.env.CLIENT_URL!)
     res.send('logged out')
   })
 })

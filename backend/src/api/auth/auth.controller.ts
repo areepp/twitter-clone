@@ -18,15 +18,3 @@ export const signup = async (
     return next(error)
   }
 }
-
-export const login = async (
-  req: Request<{}, {}, AuthSchema>,
-  res: Response,
-  next: NextFunction,
-) => {
-  return passport.authenticate('local', (err: any, user: any) => {
-    if (err) throw err
-    if (!user) res.send('No user exists')
-    res.send('Successfully authenticated')
-  })(req, res, next)
-}

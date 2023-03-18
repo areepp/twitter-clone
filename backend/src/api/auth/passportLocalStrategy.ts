@@ -10,14 +10,18 @@ passport.use(
       try {
         const user = await db.user.findUnique({ where: { email } })
 
-        if (!user)
+        if (!user) {
           done(null, false, { message: 'Incorrect email and/or password.' })
+        } else {
+          const passwordMatches = await bcrypt.compare(
+            password,
+            user?.password!,
+          )
 
-        const passwordMatches = await bcrypt.compare(password, user?.password!)
-
-        passwordMatches
-          ? done(null, user!)
-          : done(null, false, { message: 'Incorrect email and/or password.' })
+          passwordMatches
+            ? done(null, user!)
+            : done(null, false, { message: 'Incorrect email and/or password.' })
+        }
       } catch (error) {
         done(error, false)
       }
