@@ -6,24 +6,38 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Inputs } from '../signup'
+import { useRouter } from 'next/router'
+import * as authService from '@/lib/api/auth.service'
 
 const Login = () => {
+  const router = useRouter()
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({ resolver: zodResolver(Inputs) })
+  } = useForm<authService.Inputs>({ resolver: zodResolver(authService.Inputs) })
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const [passwordInputType, setPasswordInputType] = useState<
     'text' | 'password'
   >('password')
 
-  const signInWithEmailAndPassword: SubmitHandler<Inputs> = (data) =>
-    console.log(data)
+  const signInWithEmailAndPassword: SubmitHandler<authService.Inputs> = async (
+    data
+  ) => {
+    try {
+      setErrorMessage(null)
+      const response = await authService.login(data)
+      router.push('/')
+    } catch (err) {
+      setErrorMessage(
+        err.response.data.message ?? 'something wrong occured. Try again later'
+      )
+    }
+  }
 
   const signInWithGoogle = () => {
-    window.open('http://localhost:8000/auth/google', '_self')
+    window.open(process.env.NEXT_PUBLIC_API_URL + '/auth/google', '_self')
   }
 
   const togglePasswordInputType = () =>
@@ -100,6 +114,7 @@ const Login = () => {
             >
               Log in
             </button>
+            {errorMessage && <span className="text-xs">{errorMessage}</span>}
           </form>
           <p className="self-start">
             Don't have an account?{' '}

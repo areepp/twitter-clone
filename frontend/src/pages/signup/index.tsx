@@ -3,34 +3,31 @@ import TwitterIcon from '@/components/Icons/TwitterIcon'
 import Image from 'next/image'
 import Link from 'next/link'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
-
-export const Inputs = z.object({
-  email: z.string().min(1, { message: 'Email is required' }).email({
-    message: 'Must be a valid email',
-  }),
-  password: z
-    .string()
-    .min(6, { message: 'Password must be atleast 6 characters' }),
-})
-
-export type Inputs = z.infer<typeof Inputs>
+import * as authService from '@/lib/api/auth.service'
 
 const Signup = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({ resolver: zodResolver(Inputs) })
+  } = useForm<authService.Inputs>({ resolver: zodResolver(authService.Inputs) })
+  const [message, setMessage] = useState<string | null>(null)
 
   const [passwordInputType, setPasswordInputType] = useState<
     'text' | 'password'
   >('password')
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
+  const onSubmit: SubmitHandler<authService.Inputs> = async (data) => {
+    try {
+      const response = await authService.signup(data)
+      setMessage('User successfully created. You can now login.')
+    } catch (err) {
+      setMessage(err.response.data.message)
+    }
+  }
 
   const togglePasswordInputType = () =>
     setPasswordInputType((prev) => (prev === 'password' ? 'text' : 'password'))
@@ -104,6 +101,7 @@ const Signup = () => {
             >
               Sign up
             </button>
+            {message && <span className="text-xs">{message}</span>}
           </form>
           <p className="self-start">
             Already have an account?{' '}
