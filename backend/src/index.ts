@@ -5,8 +5,9 @@ import passport from 'passport'
 import session from 'express-session'
 import errorHandler from './middlewares/errorHandler'
 import authRouter from '@/api/auth/auth.router'
-import './api/auth/passportGoogleSetup'
 import userRouter from './api/user/user.router'
+import './api/auth/passportGoogleStrategy'
+import './api/auth/passportLocalStrategy'
 
 dotenv.config()
 
@@ -27,8 +28,8 @@ app.use(
 app.use(
   session({
     secret: 'keyboard cat',
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
   }),
 )
 
@@ -39,7 +40,7 @@ app.get('/', (_req, res) => res.send('Hello world!'))
 app.use('/auth', authRouter)
 app.use('/user', userRouter)
 
-// app.use(errorHandler)
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 8000
 

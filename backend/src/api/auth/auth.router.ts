@@ -1,5 +1,8 @@
+import validateRequest from '@/middlewares/validateRequest'
 import express from 'express'
 import passport from 'passport'
+import { AuthSchema } from './auth.model'
+import * as authController from './auth.controller'
 
 const authRouter = express.Router()
 
@@ -18,5 +21,37 @@ authRouter.get(
     res.redirect(process.env.CLIENT_URL!)
   },
 )
+
+authRouter.post(
+  '/signup',
+  validateRequest({ body: AuthSchema }),
+  authController.signup,
+)
+
+authRouter.post(
+  '/login',
+  validateRequest({ body: AuthSchema }),
+  (req, res, next) => {
+    passport.authenticate('local', (err: any, user: any, info: any) => {
+      if (err) next(err)
+      if (user) {
+        req.logIn(user, (err) => {
+          if (err) throw err
+          res.send('Authenticated')
+        })
+      } else {
+        return res.status(403).json({ message: info.message })
+      }
+    })(req, res, next)
+  },
+)
+
+authRouter.get('/logout', (req, res, next) => {
+  req.logOut((err) => {
+    if (err) return next(err)
+    // res.redirect(process.env.CLIENT_URL!)
+    res.send('logged out')
+  })
+})
 
 export default authRouter

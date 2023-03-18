@@ -8,15 +8,9 @@ const errorHandler = (
   // eslint-disable-next-line no-unused-vars
   next: NextFunction,
 ) => {
-  if (err instanceof ApiError) {
-    const statusCode = err.statusCode ?? 500
-    res.status(statusCode)
-    return res.json({
-      message: err.message,
-    })
-  }
-
-  return res.status(500).json({ msg: 'something went wrong', err })
+  return res
+    .status(err.statusCode ?? 500)
+    .json({ message: err.message ?? 'something went wrong' })
 }
 
 export default errorHandler
