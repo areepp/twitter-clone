@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import TwitterIcon from '../Icons/TwitterIcon'
+import TwitterIcon from '../ui/icons/TwitterIcon'
 import Navigations from './Navigations'
 
 const Sidebar = () => (

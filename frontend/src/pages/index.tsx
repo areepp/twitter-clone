@@ -1,7 +1,7 @@
-import LoginBanner from '@/components/Auth/LoginBanner'
-import Dashboard from '@/components/Dashboard'
-import RightPanel from '@/components/RightPanel'
-import Sidebar from '@/components/Sidebar'
+import LoginBanner from '@/components/auth/LoginBanner'
+import Dashboard from '@/components/dashboard'
+import RightPanel from '@/components/rightPanel'
+import Sidebar from '@/components/sidebar'
 import axios from 'axios'
 import { useEffect } from 'react'
 

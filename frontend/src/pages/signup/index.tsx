@@ -1,28 +1,32 @@
-import GoogleIcon from '@/components/Icons/GoogleIcon'
-import TwitterIcon from '@/components/Icons/TwitterIcon'
+import GoogleIcon from '@/components/ui/icons/GoogleIcon'
+import TwitterIcon from '@/components/ui/icons/TwitterIcon'
 import Image from 'next/image'
 import Link from 'next/link'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
-import * as authService from '@/lib/api/auth.service'
+import { AuthInput } from '@/types/AuthInput.d'
+import useSignup from '@/hooks/react-query/auth/useSignup'
+import Spinner from '@/components/ui/Spinner'
 
 const Signup = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<authService.Inputs>({ resolver: zodResolver(authService.Inputs) })
+  } = useForm<AuthInput>({ resolver: zodResolver(AuthInput) })
   const [message, setMessage] = useState<string | null>(null)
 
   const [passwordInputType, setPasswordInputType] = useState<
     'text' | 'password'
   >('password')
 
-  const onSubmit: SubmitHandler<authService.Inputs> = async (data) => {
+  const { mutateAsync, isLoading } = useSignup()
+
+  const onSubmit: SubmitHandler<AuthInput> = async (data) => {
     try {
-      const response = await authService.signup(data)
+      await mutateAsync(data)
       setMessage('User successfully created. You can now login.')
     } catch (err) {
       setMessage(err.response.data.message)
@@ -96,10 +100,11 @@ const Signup = () => {
             </fieldset>
 
             <button
+              disabled={isLoading}
               type="submit"
               className="flex w-full items-center justify-center gap-3 rounded-full border bg-gray-900 py-2 px-6 font-semibold text-white"
             >
-              Sign up
+              {isLoading ? <Spinner /> : 'Log in'}
             </button>
             {message && <span className="text-xs">{message}</span>}
           </form>
