@@ -1,16 +1,12 @@
-import LoginBanner from '@/components/auth/LoginBanner'
-import Dashboard from '@/components/dashboard'
-import RightPanel from '@/components/rightPanel'
-import Sidebar from '@/components/sidebar'
-import axios from 'axios'
+import { MainLayout } from '@/components/layouts/main-layout'
+import { NewTweetDialogue, Tweets } from '@/features/tweets'
+import { getMyProfile } from '@/lib/users'
 import { useEffect } from 'react'
 
 const Home = () => {
-  const getUserProfile = async () => {
+  const logUserProfile = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/user/me', {
-        withCredentials: true,
-      })
+      const response = await getMyProfile()
 
       console.log(response.data)
     } catch (error) {
@@ -18,32 +14,17 @@ const Home = () => {
     }
   }
 
-  const logOut = async () => {
-    const response = await axios.get('http://localhost:8000/auth/logout', {
-      withCredentials: true,
-    })
-
-    console.log(response)
-  }
-
   useEffect(() => {
-    getUserProfile()
+    logUserProfile()
   }, [])
   return (
-    <>
-      <div className="container mx-auto flex h-screen xl:px-20">
-        <Sidebar />
-        <Dashboard />
-        <RightPanel />
-      </div>
-      <LoginBanner />
-      <button onClick={getUserProfile} className="fixed inset-0 h-4 w-4">
-        getUser
-      </button>
-      <button onClick={logOut} className="fixed top-4 left-0 h-7 w-7">
-        log out
-      </button>
-    </>
+    <MainLayout>
+      <main className="ml-[65px] max-w-[600px] grow border-r xl:ml-[250px]">
+        <h1 className="border-b p-3 text-xl font-bold">Home</h1>
+        <NewTweetDialogue />
+        <Tweets />
+      </main>
+    </MainLayout>
   )
 }
 
