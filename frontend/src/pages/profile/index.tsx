@@ -1,5 +1,7 @@
+import { MainLayout } from '@/components/layouts/main-layout'
+
 const Profile = () => {
-  return <div></div>
+  return <MainLayout>profile section</MainLayout>
 }
 
 export default Profile
