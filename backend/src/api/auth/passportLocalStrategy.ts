@@ -30,18 +30,17 @@ passport.use(
 )
 
 passport.serializeUser((user: any, done: any) => {
-  console.log('serializing user: ', user)
   done(null, user.id)
 })
 
 passport.deserializeUser(async (id: string, done: any) => {
-  console.log('deserializing user with id:', id)
   try {
     const user = await db.user.findUnique({ where: { id } })
     if (user) {
       done(null, {
-        email: user?.email,
-        profilePicture: user?.profilePicture,
+        email: user.email,
+        profilePicture: user.profilePicture,
+        id: user.id,
       })
     } else {
       done(null, false)

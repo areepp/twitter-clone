@@ -3,6 +3,7 @@ import express from 'express'
 import passport from 'passport'
 import { AuthSchema } from './auth.model'
 import * as authController from './auth.controller'
+import User from '../user/user.model'
 
 const authRouter = express.Router()
 
@@ -32,12 +33,16 @@ authRouter.post(
   '/login',
   validateRequest({ body: AuthSchema }),
   (req, res, next) => {
-    passport.authenticate('local', (err: any, user: any, info: any) => {
+    passport.authenticate('local', (err: any, user: User, info: any) => {
       if (err) next(err)
       if (user) {
         req.logIn(user, (err) => {
           if (err) throw err
-          res.send('Authenticated')
+          res.json({
+            id: user.id,
+            email: user.email,
+            profilePicture: user.profilePicture,
+          })
         })
       } else {
         return res

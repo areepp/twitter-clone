@@ -36,6 +36,7 @@ passport.deserializeUser(async (id: string, done) => {
     done(null, {
       email: user?.email,
       profilePicture: user?.profilePicture,
+      id: user?.id,
     })
   } catch (error) {
     done(error, null)
