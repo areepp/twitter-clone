@@ -1,7 +1,7 @@
 import Image from 'next/image'
-import { IUser } from '@/features/profiles'
+import { IUserTemp } from '@/features/profiles'
 
-export const UserCard = ({ data }: { data: IUser }) => (
+export const UserCard = ({ data }: { data: IUserTemp }) => (
   <div className="flex items-center justify-between">
     <div className="flex flex-grow gap-3">
       <Image

@@ -1,7 +1,7 @@
-import { IUser } from '@/features/profiles'
+import { IUserTemp } from '@/features/profiles'
 import { UserCard } from './user-card'
 
-const USERS_DATA: IUser[] = [
+const USERS_DATA: IUserTemp[] = [
   {
     userId: 'clara',
     userName: 'Clara',
