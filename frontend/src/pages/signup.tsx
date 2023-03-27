@@ -101,7 +101,7 @@ const Signup = () => {
               type="submit"
               className="flex w-full items-center justify-center gap-3 rounded-full border bg-gray-900 py-2 px-6 font-semibold text-white"
             >
-              {isLoading ? <Spinner /> : 'Log in'}
+              {isLoading ? <Spinner /> : 'Sign up'}
             </button>
             {message && <span className="text-xs">{message}</span>}
           </form>
