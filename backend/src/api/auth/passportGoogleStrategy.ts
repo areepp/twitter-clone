@@ -1,6 +1,7 @@
 import passport from 'passport'
 import GoogleStrategy from 'passport-google-oauth20'
-import db from '@/utils/db'
+import * as authService from './auth.service'
+import { getNewUniqueUsername } from './auth.util'
 
 passport.use(
   new GoogleStrategy.Strategy(
@@ -10,18 +11,21 @@ passport.use(
       callbackURL: 'http://localhost:8000/auth/google/callback',
     },
     async (accessToken, refreshToken, profile, done) => {
-      const user = await db.user.upsert({
-        where: {
-          id: profile.id,
-        },
-        update: {},
-        create: {
+      const user = await authService.getUserWithId(profile.id)
+
+      if (user) {
+        done(null, user)
+      } else {
+        const username = await getNewUniqueUsername(profile.displayName)
+        const user = await authService.signUpWithGoogle({
           id: profile.id,
           email: profile._json.email!,
-          profilePicture: profile._json.picture,
-        },
-      })
-      done(null, user)
+          profilePicture: profile._json.picture!,
+          displayName: profile.displayName,
+          username,
+        })
+        done(null, user)
+      }
     },
   ),
 )
@@ -32,7 +36,7 @@ passport.serializeUser((user: any, done) => {
 
 passport.deserializeUser(async (id: string, done) => {
   try {
-    const user = await db.user.findUnique({ where: { id } })
+    const user = await authService.getUserWithId(id)
     done(null, {
       email: user?.email,
       profilePicture: user?.profilePicture,
