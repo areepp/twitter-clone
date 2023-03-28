@@ -2,12 +2,17 @@ import Image from 'next/image'
 import { MainLayout } from '@/components/layouts/main-layout'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
 import { PillButton } from '@/components/elements'
-import { useUser } from '@/features/profiles'
+import { useUser } from '@/features/auth'
+import { useRouter } from 'next/router'
 
 const Profile = () => {
-  const { data, isLoading } = useUser()
+  const { query, isReady } = useRouter()
+  const { username } = query
 
-  if (isLoading) return <div>loading screen..</div>
+  const { data, isLoading } = useUser(isReady)
+
+  if (isLoading || !isReady) return <div>loading screen..</div>
+
   return (
     <MainLayout>
       <div className="flex items-center gap-6 border-b px-3 py-1">
@@ -25,8 +30,8 @@ const Profile = () => {
           </div>
           <div className="absolute left-5 top-12 flex flex-col gap-3 sm:top-20">
             <div>
-              <h1 className="text-xl font-semibold">ramarimari</h1>
-              <p className=" text-dark-gray">@pentlogoreng</p>
+              <h1 className="text-xl font-semibold">{data.displayName}</h1>
+              <p className=" text-dark-gray">@{data.username}</p>
             </div>
             <p>Paulin</p>
             <div className="flex gap-3">

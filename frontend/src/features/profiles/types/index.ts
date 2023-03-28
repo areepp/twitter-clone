@@ -6,6 +6,7 @@ export interface IUserTemp {
 
 export interface IUser {
   id: string
-  email: string
+  username: string
+  displayName: string
   profilePicture: string
 }

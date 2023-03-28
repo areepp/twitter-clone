@@ -1,4 +1,4 @@
-import { useUser } from '@/features/profiles'
+import { useUser } from '@/features/auth'
 import {
   PhotoIcon,
   GifIcon,
