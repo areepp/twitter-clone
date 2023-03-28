@@ -17,6 +17,7 @@ interface Props {
   variant: keyof typeof variants
   size?: keyof typeof sizes
   className?: string
+  onClick?: () => void
 }
 
 export const PillButton = ({
@@ -24,6 +25,8 @@ export const PillButton = ({
   variant,
   size = 'medium',
   className,
+  onClick,
+  ...rest
 }: Props) => (
   <button
     className={clsx(
@@ -32,6 +35,8 @@ export const PillButton = ({
       sizes[size],
       className
     )}
+    onClick={onClick}
+    {...rest}
   >
     {text}
   </button>
