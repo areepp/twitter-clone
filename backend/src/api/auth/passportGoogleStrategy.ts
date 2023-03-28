@@ -37,11 +37,16 @@ passport.serializeUser((user: any, done) => {
 passport.deserializeUser(async (id: string, done) => {
   try {
     const user = await authService.getUserWithId(id)
-    done(null, {
-      email: user?.email,
-      profilePicture: user?.profilePicture,
-      id: user?.id,
-    })
+    if (user) {
+      done(null, {
+        username: user.username,
+        displayName: user.displayName,
+        profilePicture: user.profilePicture,
+        id: user.id,
+      })
+    } else {
+      done(null, false)
+    }
   } catch (error) {
     done(error, null)
   }

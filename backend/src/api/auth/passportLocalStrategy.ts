@@ -46,7 +46,8 @@ passport.deserializeUser(async (id: string, done: any) => {
     const user = await authService.getUserWithId(id)
     if (user) {
       done(null, {
-        email: user.email,
+        username: user.username,
+        displayName: user.displayName,
         profilePicture: user.profilePicture,
         id: user.id,
       })
