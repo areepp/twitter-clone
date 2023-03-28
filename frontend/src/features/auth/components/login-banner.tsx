@@ -1,3 +1,4 @@
+import { PillButton } from '@/components/elements'
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -13,19 +14,20 @@ export const LoginBanner = () => {
             </span>
             <span>People on Twitter are first to know.</span>
           </div>
-          <div className="flex w-full gap-3 md:max-w-[175px]">
+          <div className="flex flex-grow gap-3 md:max-w-[175px] md:flex-auto">
             <Link
               href="/login"
+              className="w-full md:w-fit"
               onClick={() => setShowModal(true)}
-              className="flex-grow rounded-full border border-slate-50 py-1 text-center font-semibold"
             >
-              Log in
+              <PillButton
+                text="Log in"
+                variant="blue"
+                className="w-full border border-white"
+              />
             </Link>
-            <Link
-              href="/signup"
-              className="flex-grow rounded-full bg-slate-50 py-1 text-center font-semibold  text-black"
-            >
-              Sign up
+            <Link href="/signup" className="w-full md:w-fit">
+              <PillButton text="Sign up" variant="white" className="w-full" />
             </Link>
           </div>
         </div>

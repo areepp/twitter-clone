@@ -1,3 +1,4 @@
+import { PillButton } from '@/components/elements'
 import { useUser } from '@/features/auth'
 import {
   PhotoIcon,
@@ -35,9 +36,7 @@ export const NewTweetDialogue = () => {
             <FaceSmileIcon className="h-5 w-5 text-primary-blue" />
             <MapPinIcon className="h-5 w-5 text-primary-blue" />
           </fieldset>
-          <button className="rounded-full bg-primary-blue px-4 py-2 font-semibold text-white">
-            Tweet
-          </button>
+          <PillButton text="Tweet" variant="blue" />
         </div>
       </form>
     </div>

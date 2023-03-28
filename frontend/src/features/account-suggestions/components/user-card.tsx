@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { IUserTemp } from '@/features/profiles'
+import { PillButton } from '@/components/elements'
 
 export const UserCard = ({ data }: { data: IUserTemp }) => (
   <div className="flex items-center justify-between">
@@ -17,8 +18,6 @@ export const UserCard = ({ data }: { data: IUserTemp }) => (
         <span className="text-dark-gray">@{data.userId}</span>
       </div>
     </div>
-    <button className="rounded-full bg-black px-3 py-1 font-semibold text-white">
-      Follow
-    </button>
+    <PillButton text="Follow" variant="black" size="small" />
   </div>
 )

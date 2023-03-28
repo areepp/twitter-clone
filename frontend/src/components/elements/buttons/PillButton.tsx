@@ -1,19 +1,37 @@
 import clsx from 'clsx'
 
 const variants = {
-  dark: 'bg-black text-white',
-  light: 'bg-white text-black border border-gray-200',
+  black: 'bg-black text-white',
+  white: 'bg-white text-black border border-gray-200',
+  blue: 'bg-primary-blue text-white',
+}
+
+const sizes = {
+  small: 'h-[32px]',
+  medium: 'h-[36px]',
+  large: 'h-[42px]',
 }
 
 interface Props {
   text: string
   variant: keyof typeof variants
-  classNames?: string
+  size?: keyof typeof sizes
+  className?: string
 }
 
-export const PillButton = ({ text, variant }: Props) => (
+export const PillButton = ({
+  text,
+  variant,
+  size = 'medium',
+  className,
+}: Props) => (
   <button
-    className={clsx('rounded-full px-4 py-1 font-semibold', variants[variant])}
+    className={clsx(
+      'h-[36px] rounded-full px-4 text-sm font-semibold',
+      variants[variant],
+      sizes[size],
+      className
+    )}
   >
     {text}
   </button>

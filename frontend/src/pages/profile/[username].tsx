@@ -26,7 +26,7 @@ const Profile = () => {
         <section className="w-full flex-shrink grow-[1] bg-slate-200 xs:grow-[3] sm:grow-[8]"></section>
         <section className="relative w-full grow-[2] xs:grow-[4] sm:grow-[10]">
           <div className="absolute top-3 right-3">
-            <PillButton text="Edit profile" variant="light" />
+            <PillButton text="Edit profile" variant="white" />
           </div>
           <div className="absolute left-5 top-12 flex flex-col gap-3 sm:top-20">
             <div>
