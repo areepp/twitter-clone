@@ -9,6 +9,7 @@ import Image from 'next/image'
 
 export const NewTweetDialogue = () => {
   const { data } = useUser()
+
   return (
     <div className="flex w-full gap-4 border-b px-3 py-2">
       <div>

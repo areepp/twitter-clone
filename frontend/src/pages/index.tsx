@@ -3,7 +3,7 @@ import { LoginBanner, useUser } from '@/features/auth'
 import { NewTweetDialogue, Tweets } from '@/features/tweets'
 
 const Home = () => {
-  const { isLoading, isError, isSuccess } = useUser()
+  const { isLoading, isError, isSuccess, data } = useUser()
 
   if (isLoading) return <div>loading screen...</div>
 
@@ -11,10 +11,10 @@ const Home = () => {
     <>
       <MainLayout>
         <h1 className="border-b p-3 text-xl font-bold">Home</h1>
-        {isSuccess && <NewTweetDialogue />}
+        {data && <NewTweetDialogue />}
         <Tweets />
       </MainLayout>
-      {isError && <LoginBanner />}
+      {!data && <LoginBanner />}
     </>
   )
 }
