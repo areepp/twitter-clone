@@ -13,6 +13,8 @@ const Profile = () => {
 
   if (isLoading || !isReady) return <div>loading screen..</div>
 
+  if (!data) return <div>blank</div>
+
   return (
     <MainLayout>
       <div className="flex items-center gap-6 border-b px-3 py-1">
