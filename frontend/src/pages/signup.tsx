@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 import { AuthInput, useSignup } from '@/features/auth'
 import { Spinner, GoogleIcon, TwitterIcon } from '@/components/elements'
+import { TextInput } from '@/components/elements'
 
 const Signup = () => {
   const {
@@ -63,22 +64,33 @@ const Signup = () => {
             className="flex w-full flex-col gap-3"
           >
             <fieldset className="flex flex-col gap-1">
-              <input
+              {/* <input
                 className="rounded-lg border py-3 px-2 focus:outline-primary-blue"
                 type="text"
                 placeholder="email"
                 {...register('email')}
+              /> */}
+              <TextInput
+                placeholder="email"
+                register={register}
+                registerValue="email"
               />
               {errors.email && (
                 <span className="text-xs">{errors.email.message}</span>
               )}
             </fieldset>
             <fieldset className="relative flex flex-col gap-1">
-              <input
+              {/* <input
                 className="rounded-lg border py-3 px-2 focus:outline-primary-blue"
                 type={passwordInputType}
                 placeholder="password"
                 {...register('password')}
+              /> */}
+              <TextInput
+                placeholder="password"
+                register={register}
+                registerValue="password"
+                inputType={passwordInputType}
               />
               {passwordInputType === 'password' ? (
                 <EyeIcon

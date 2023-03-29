@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { AuthInput, useLogin } from '@/features/auth'
 import { Spinner, GoogleIcon, TwitterIcon } from '@/components/elements'
+import { TextInput } from '@/components/elements'
 
 const Login = () => {
   const router = useRouter()
@@ -76,22 +77,20 @@ const Login = () => {
             className="flex w-full flex-col gap-3"
           >
             <fieldset className="flex flex-col gap-1">
-              <input
-                className="rounded-lg border py-3 px-2 focus:outline-primary-blue"
-                type="text"
+              <TextInput
                 placeholder="email"
-                {...register('email')}
+                register={register}
+                registerValue="email"
               />
               {errors.email && (
                 <span className="text-xs">{errors.email.message}</span>
               )}
             </fieldset>
             <fieldset className="relative flex flex-col gap-1">
-              <input
-                className="rounded-lg border py-3 px-2 focus:outline-primary-blue"
-                type={passwordInputType}
+              <TextInput
                 placeholder="password"
-                {...register('password')}
+                register={register}
+                registerValue="password"
               />
               {passwordInputType === 'password' ? (
                 <EyeIcon
