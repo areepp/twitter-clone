@@ -1,19 +1,18 @@
-import { useLogout } from '@/features/auth'
+import { useGetUserQueryData, useLogout } from '@/features/auth'
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline'
 import * as Dialog from '@radix-ui/react-dialog'
-import { useState } from 'react'
 import { PillButton, TwitterIcon } from '../elements'
 
 const Logout = () => {
   const { refetch } = useLogout()
-  const [openModal, setOpenModal] = useState(false)
+  const user = useGetUserQueryData()
 
   return (
-    <Dialog.Root open={openModal} onOpenChange={setOpenModal}>
+    <Dialog.Root>
       <Dialog.Trigger asChild>
-        <button className="flex items-center gap-4">
-          <ArrowLeftOnRectangleIcon className="h-7 w-7" />
-          <span className="hidden text-xl xl:block">Log out</span>
+        <button className="flex items-center gap-1 rounded-2xl border-t border-gray-100 bg-white p-6 drop-shadow-xl hover:bg-gray-100 focus:outline-none">
+          <ArrowLeftOnRectangleIcon className="h-5 w-5" />
+          <span className="font-bold">Log out @{user.username}</span>
         </button>
       </Dialog.Trigger>
       <Dialog.Portal>
