@@ -3,15 +3,19 @@ import { z } from 'zod'
 const User = z.object({
   id: z.string(),
   email: z.string().email(),
-  profilePicture: z.string().nullable(),
+  profilePicture: z.string().optional(),
+  username: z.string(),
+  displayName: z.string(),
 })
 
-// export const AuthSchema = z.object({
-//   email: z.string().email(),
-//   password: z.string(),
-// })
-
 type User = z.infer<typeof User>
-// export type AuthSchema = z.infer<typeof AuthSchema>
+
+export const EditUserProfileSchema = z
+  .object({
+    newUsername: z.string(),
+  })
+  .partial()
+
+export type EditUserProfileSchema = z.infer<typeof EditUserProfileSchema>
 
 export default User

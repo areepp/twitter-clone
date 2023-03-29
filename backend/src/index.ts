@@ -9,6 +9,17 @@ import userController from './api/user/user.controller'
 import './api/auth/passportGoogleStrategy'
 import './api/auth/passportLocalStrategy'
 
+declare global {
+  namespace Express {
+    interface User {
+      id: string
+      username: string
+      displayName: string
+      profilePicture?: string | null
+    }
+  }
+}
+
 dotenv.config()
 
 const app = express()
