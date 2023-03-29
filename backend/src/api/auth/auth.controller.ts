@@ -1,4 +1,4 @@
-import validateRequest from '@/middlewares/validateRequest'
+import validateRequest from '@/middlewares/validate-request'
 import express, { NextFunction, Request, Response } from 'express'
 import passport from 'passport'
 import { AuthSchema } from './auth.model'

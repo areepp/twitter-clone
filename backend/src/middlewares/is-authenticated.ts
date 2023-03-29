@@ -1,4 +1,4 @@
-import ApiError from '@/types/ApiError'
+import ApiError from '@/types/api-error'
 import { NextFunction, Request, Response } from 'express'
 
 const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {

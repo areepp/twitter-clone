@@ -1,4 +1,4 @@
-import ApiError from '@/types/ApiError'
+import ApiError from '@/types/api-error'
 import db from '@/utils/db'
 import { AuthSchema } from './auth.model'
 import bcrypt from 'bcryptjs'
