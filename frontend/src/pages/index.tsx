@@ -13,7 +13,7 @@ const Home = () => {
       <MainLayout>
         <div className="flex items-center justify-between border-b p-3 text-xl font-bold">
           <h1>Home</h1>
-          <EditUserNameModal />
+          {data && <EditUserNameModal />}
         </div>
         {data && <NewTweetDialogue />}
         <Tweets />

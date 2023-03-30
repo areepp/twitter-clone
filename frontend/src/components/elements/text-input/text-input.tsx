@@ -24,8 +24,8 @@ export const TextInput = ({
   return (
     <input
       className={clsx(
-        'rounded border py-3 px-2 focus:outline-primary-blue',
-        className
+        className,
+        'rounded border py-3 px-2 focus:border-primary-blue focus:outline-none'
       )}
       type={inputType}
       placeholder={placeholder}

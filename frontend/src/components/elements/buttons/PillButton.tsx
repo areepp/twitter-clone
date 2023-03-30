@@ -13,11 +13,13 @@ const sizes = {
 }
 
 interface Props {
-  text: string
+  text: string | React.ReactNode
   variant: keyof typeof variants
   size?: keyof typeof sizes
   className?: string
   onClick?: () => void
+  type?: 'button' | 'submit'
+  disabled?: boolean
 }
 
 export const PillButton = ({
@@ -30,7 +32,7 @@ export const PillButton = ({
 }: Props) => (
   <button
     className={clsx(
-      'h-[36px] rounded-full px-4 text-sm font-semibold',
+      'flex h-[36px] items-center justify-center rounded-full px-4 text-sm font-semibold',
       variants[variant],
       sizes[size],
       className
