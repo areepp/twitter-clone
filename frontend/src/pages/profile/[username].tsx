@@ -31,18 +31,24 @@ const Profile = () => {
           <p className="text-xs text-dark-gray">15 Tweets</p>
         </div>
       </div>
-      <div className="relative flex h-[320px] w-full  flex-col xs:h-[380px] sm:h-[450px]">
-        <section className="w-full flex-shrink grow-[1] bg-slate-200 xs:grow-[3] sm:grow-[8]"></section>
-        <section className="relative w-full grow-[2] xs:grow-[4] sm:grow-[10]">
+      <div className="relative flex w-full flex-col">
+        <section className="h-[27vw] max-h-[200px] w-full flex-shrink bg-slate-200"></section>
+        <section className="relative h-auto min-h-[250px] p-5">
           <div className="absolute top-3 right-3">
             <PillButton text="Edit profile" variant="white" />
           </div>
-          <div className="absolute left-5 top-12 flex flex-col gap-3 sm:top-20">
+          <div className="mt-6 flex flex-col gap-3 xs:mt-14 sm:top-20">
             <div>
-              <h1 className="text-xl font-semibold">{data.displayName}</h1>
+              <h1 className="truncate text-xl font-semibold">
+                {data.displayName}
+              </h1>
               <p className=" text-dark-gray">@{data.username}</p>
             </div>
-            <p>Paulin</p>
+            <p>
+              Yuduyu long long Yuduyu long longYuduyu long long Yuduyu long long
+              Yuduyu long long Yuduyu long long Yuduyu long long Yuduyu long
+              long Yuduyu long long Yuduyu l
+            </p>
             <div className="flex gap-3">
               <div className="flex gap-1">
                 <span className="font-bold">29</span>
@@ -54,15 +60,16 @@ const Profile = () => {
               </div>
             </div>
           </div>
+          <div className="absolute -top-8 left-5 h-16 w-16 overflow-hidden rounded-full border-2 border-white xs:-top-12 xs:h-[100px] xs:w-[100px] sm:-top-16 sm:h-[132px] sm:w-[132px] sm:border-4">
+            <Image
+              src={data.profilePicture ?? '/twitter-default-pp.png'}
+              alt="profile picture"
+              fill
+            />
+          </div>
         </section>
-        <div className="absolute top-[75px] left-5 h-16 w-16 overflow-hidden rounded-full border-2 border-white xs:top-[110px] xs:h-[100px] xs:w-[100px] sm:top-[130px] sm:h-[132px] sm:w-[132px] sm:border-4">
-          <Image
-            src={data.profilePicture ?? '/twitter-default-pp.png'}
-            alt="profile picture"
-            fill
-          />
-        </div>
       </div>
+      <h1>hello</h1>
     </MainLayout>
   )
 }
