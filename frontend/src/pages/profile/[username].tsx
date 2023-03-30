@@ -5,8 +5,10 @@ import { PillButton } from '@/components/elements'
 import { useUser } from '@/features/auth'
 import { useRouter } from 'next/router'
 
+// mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+
 const Profile = () => {
-  const { query, isReady } = useRouter()
+  const { query, isReady, push } = useRouter()
   const { username } = query
 
   const { data, isLoading } = useUser(isReady)
@@ -17,10 +19,15 @@ const Profile = () => {
 
   return (
     <MainLayout>
-      <div className="flex items-center gap-6 border-b px-3 py-1">
-        <ArrowLeftIcon className="h-5 w-5" />
-        <div>
-          <p className="text-xl font-semibold">ramarimari</p>
+      <div className="flex w-full items-center gap-6 border-b px-3 py-1">
+        <ArrowLeftIcon
+          onClick={() => push('/')}
+          className="h-5 w-5 shrink-0 cursor-pointer"
+        />
+        <div className="w-full">
+          <p className="w-11/12 truncate text-xl font-semibold">
+            {data.displayName}
+          </p>
           <p className="text-xs text-dark-gray">15 Tweets</p>
         </div>
       </div>
