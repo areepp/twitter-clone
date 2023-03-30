@@ -2,7 +2,10 @@ import isAuthenticated from '@/middlewares/is-authenticated'
 import validateRequest from '@/middlewares/validate-request'
 import ApiError from '@/types/api-error'
 import express from 'express'
-import { EditUserProfileSchema } from './user.model'
+import {
+  CheckUsernameAvailabilitySchema,
+  EditUserProfileSchema,
+} from './user.model'
 import * as userService from './user.service'
 
 const userController = express.Router()
@@ -14,6 +17,7 @@ userController.get('/me', isAuthenticated, (req, res) => {
 userController.get(
   '/check-availability/:username',
   isAuthenticated,
+  validateRequest({ params: CheckUsernameAvailabilitySchema }),
   async (req, res, next) => {
     try {
       const taken = await userService.checkUsernameAvailability(
