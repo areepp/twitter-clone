@@ -1,22 +1,16 @@
 import { FieldValues, UseFormRegister } from 'react-hook-form'
 import clsx from 'clsx'
 
-interface Props {
-  placeholder: string
-  inputType?: 'text' | 'password'
+interface Props extends React.HTMLProps<HTMLInputElement> {
   registerValue?: string
   register?: UseFormRegister<FieldValues>
-  className?: string
   value?: string
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export const TextInput = ({
-  placeholder,
   registerValue,
   register,
   className,
-  inputType = 'text',
   ...rest
 }: Props) => {
   const props = register ? register(registerValue) : {}
@@ -27,8 +21,6 @@ export const TextInput = ({
         className,
         'rounded border py-3 px-2 focus:border-primary-blue focus:outline-none'
       )}
-      type={inputType}
-      placeholder={placeholder}
       {...props}
       {...rest}
     />

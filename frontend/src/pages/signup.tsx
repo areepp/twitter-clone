@@ -90,7 +90,7 @@ const Signup = () => {
                 placeholder="password"
                 register={register}
                 registerValue="password"
-                inputType={passwordInputType}
+                type={passwordInputType}
               />
               {passwordInputType === 'password' ? (
                 <EyeIcon
