@@ -50,7 +50,7 @@ userController.patch(
 
       await userService.editUserProfile(req.user!, req.body)
 
-      return res.status(200).send('Username changed successfully.')
+      return res.status(200).send('User edited successfully.')
     } catch (error) {
       next(error)
     }

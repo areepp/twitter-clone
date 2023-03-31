@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express'
-import { AnyZodObject, ZodError } from 'zod'
+import { AnyZodObject, ZodEffects, ZodError } from 'zod'
 
 interface RequestValidators {
-  body?: AnyZodObject
-  params?: AnyZodObject
-  query?: AnyZodObject
+  body?: AnyZodObject | ZodEffects<AnyZodObject>
+  params?: AnyZodObject | ZodEffects<AnyZodObject>
+  query?: AnyZodObject | ZodEffects<AnyZodObject>
 }
 
 // prettier-ignore

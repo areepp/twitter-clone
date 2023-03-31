@@ -7,11 +7,11 @@ export const checkUsernameAvailability = async (username: string) =>
 
 export const editUserProfile = async (
   user: Express.User,
-  { newUsername }: EditUserProfileSchema,
+  { username, displayName, bio }: EditUserProfileSchema,
 ) => {
-  if (newUsername) {
+  if (username) {
     const userWithUserNameExist = await db.user.findUnique({
-      where: { username: newUsername },
+      where: { username },
     })
 
     if (userWithUserNameExist) {
@@ -20,14 +20,23 @@ export const editUserProfile = async (
         400,
       )
     } else {
-      return db.user.update({
+      await db.user.update({
         where: {
           username: user.username,
         },
         data: {
-          username: newUsername,
+          username,
         },
       })
     }
+  }
+
+  if (displayName) {
+    await db.user.update({
+      where: { username: user.username },
+      data: {
+        displayName,
+      },
+    })
   }
 }
