@@ -10,8 +10,40 @@ import * as userService from './user.service'
 
 const userController = express.Router()
 
-userController.get('/me', isAuthenticated, (req, res) => {
-  res.json(req.user ?? { error: 'no user' })
+userController.get('/me', isAuthenticated, async (req, res, next) => {
+  try {
+    const user = await userService.getUser(req.user!.username)
+    if (!user) {
+      throw new ApiError('Error: User not found', 404)
+    }
+    res.status(200).json({
+      username: user.username,
+      displayName: user.displayName,
+      bio: user.bio,
+      profilePicture: user.profilePicture,
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
+userController.get('/:username', async (req, res, next) => {
+  try {
+    const user = await userService.getUser(req.params.username)
+
+    if (!user) {
+      throw new ApiError("User doesn't exists", 404)
+    }
+
+    res.status(200).json({
+      username: user.username,
+      displayName: user.displayName,
+      bio: user.bio,
+      profilePicture: user.profilePicture,
+    })
+  } catch (error) {
+    next(error)
+  }
 })
 
 userController.get(
@@ -20,18 +52,16 @@ userController.get(
   validateRequest({ params: CheckUsernameAvailabilitySchema }),
   async (req, res, next) => {
     try {
-      const taken = await userService.checkUsernameAvailability(
-        req.params.username,
-      )
+      const taken = await userService.getUser(req.params.username)
 
       if (taken) {
         throw new ApiError(
           'This username has been taken. Please choose another.',
           400,
         )
-      } else {
-        res.status(200).send('username available')
       }
+
+      res.status(200).send('username available')
     } catch (error) {
       next(error)
     }

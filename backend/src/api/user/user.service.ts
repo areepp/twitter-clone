@@ -2,7 +2,7 @@ import ApiError from '@/types/api-error'
 import db from '@/utils/db'
 import { EditUserProfileSchema } from './user.model'
 
-export const checkUsernameAvailability = async (username: string) =>
+export const getUser = async (username: string) =>
   db.user.findUnique({ where: { username } })
 
 export const editUserProfile = async (

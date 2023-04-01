@@ -1,11 +1,15 @@
 import { z } from 'zod'
 
 const User = z.object({
+  username: z
+    .string()
+    .min(4)
+    .max(15)
+    .regex(/^[a-zA-Z0-9_]*$/g),
   id: z.string(),
   email: z.string().email(),
   profilePicture: z.string(),
-  username: z.string(),
-  displayName: z.string(),
+  displayName: z.string().min(1).max(50),
 })
 
 type User = z.infer<typeof User>
