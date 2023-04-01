@@ -11,6 +11,7 @@ export interface IUser {
   username: string
   displayName: string
   profilePicture: string
+  bio: string
 }
 
 export const NewUsernameInput = z.object({

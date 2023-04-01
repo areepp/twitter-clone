@@ -23,7 +23,8 @@ export const EditProfileModal = () => {
   } = useForm<EditProfileInput>({
     resolver: zodResolver(EditProfileInput),
     defaultValues: {
-      displayName: user.displayName,
+      displayName: user?.displayName,
+      bio: user?.bio,
     },
   })
   const { mutateAsync, isLoading } = useEditProfile()

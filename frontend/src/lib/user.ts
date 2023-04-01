@@ -1,6 +1,15 @@
 import { IUser } from '@/features/profiles'
 import axios from './axios'
 
+export const getUserProfile = async (username: string) => {
+  try {
+    const response = await axios.get<IUser>(`/user/${username}`)
+    return response.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 export const getMyProfile = async () => {
   try {
     const response = await axios.get<IUser>('/user/me')

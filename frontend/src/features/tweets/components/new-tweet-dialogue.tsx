@@ -1,5 +1,5 @@
 import { PillButton } from '@/components/elements'
-import { useUser } from '@/features/auth'
+import { useGetUserQueryData } from '@/features/auth'
 import {
   PhotoIcon,
   GifIcon,
@@ -9,16 +9,16 @@ import {
 import Image from 'next/image'
 
 export const NewTweetDialogue = () => {
-  const { data } = useUser()
+  const user = useGetUserQueryData()
 
   return (
     <div className="flex w-full gap-4 border-b px-3 py-2">
       <div>
         <Image
           src={
-            data.profilePicture === ''
+            user.profilePicture === ''
               ? '/twitter-default-pp.png'
-              : data.profilePicture
+              : user.profilePicture
           }
           width="48"
           height="48"

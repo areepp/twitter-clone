@@ -1,10 +1,10 @@
 import { MainLayout } from '@/components/layouts/main-layout'
-import { LoginBanner, useUser } from '@/features/auth'
+import { LoginBanner, useGetLoggedInUser } from '@/features/auth'
 import { EditUserNameModal } from '@/features/profiles'
 import { NewTweetDialogue, Tweets } from '@/features/tweets'
 
 const Home = () => {
-  const { isLoading, data } = useUser()
+  const { isLoading, data } = useGetLoggedInUser()
 
   if (isLoading) return <div>loading screen...</div>
 

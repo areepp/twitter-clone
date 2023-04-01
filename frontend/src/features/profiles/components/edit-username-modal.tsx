@@ -16,7 +16,9 @@ import { NewUsernameInput } from '../types'
 
 export const EditUserNameModal = () => {
   const user = useGetUserQueryData()
+
   const [openModal, setOpenModal] = useState(false)
+
   const {
     register,
     handleSubmit,
@@ -27,9 +29,12 @@ export const EditUserNameModal = () => {
     resolver: zodResolver(NewUsernameInput),
     mode: 'all',
   })
+
   const { username } = useWatch({ control })
+
   const { refetch: checkAvailability, isError } =
     useCheckUsernameAvailability(username)
+
   const { mutateAsync: changeUsername, isLoading } = useEditProfile()
 
   const onSubmit: SubmitHandler<NewUsernameInput> = async (data) => {
