@@ -22,7 +22,12 @@ export const checkUsernameAvailability = async (username: string) => {
 export const editUserProfile = async ({
   username,
   newUsername,
+  displayName,
+  bio,
 }: {
   username: string
-  newUsername: string
-}) => axios.patch(`/user/${username}`, { newUsername })
+  newUsername?: string
+  displayName?: string
+  bio?: string
+}) =>
+  axios.patch(`/user/${username}`, { username: newUsername, displayName, bio })

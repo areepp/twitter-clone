@@ -31,11 +31,12 @@ export const editUserProfile = async (
     }
   }
 
-  if (displayName) {
+  if (displayName || bio) {
     await db.user.update({
       where: { username: user.username },
       data: {
         displayName,
+        bio,
       },
     })
   }

@@ -10,7 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form'
-import { useChangeUsername } from '../hooks/use-change-username'
+import { useEditProfile } from '../hooks/use-edit-profile'
 import { useCheckUsernameAvailability } from '../hooks/use-check-username-availability'
 import { NewUsernameInput } from '../types'
 
@@ -30,7 +30,7 @@ export const EditUserNameModal = () => {
   const { username } = useWatch({ control })
   const { refetch: checkAvailability, isError } =
     useCheckUsernameAvailability(username)
-  const { mutateAsync: changeUsername, isLoading } = useChangeUsername()
+  const { mutateAsync: changeUsername, isLoading } = useEditProfile()
 
   const onSubmit: SubmitHandler<NewUsernameInput> = async (data) => {
     await changeUsername({

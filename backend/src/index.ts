@@ -15,7 +15,7 @@ declare global {
       id: string
       username: string
       displayName: string
-      profilePicture?: string | null
+      profilePicture: string
     }
   }
 }

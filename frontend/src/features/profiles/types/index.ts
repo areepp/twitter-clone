@@ -24,3 +24,13 @@ export const NewUsernameInput = z.object({
 })
 
 export type NewUsernameInput = z.infer<typeof NewUsernameInput>
+
+export const EditProfileInput = z.object({
+  displayName: z
+    .string()
+    .min(1, { message: "Display name can't be blank." })
+    .max(50, { message: 'Maximum length is 50 characters.' }),
+  bio: z.string().max(160, { message: 'Maximum length is 160 characters.' }),
+})
+
+export type EditProfileInput = z.infer<typeof EditProfileInput>

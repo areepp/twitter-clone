@@ -16,7 +16,11 @@ const UserProfile = () => {
         >
           <div className="flex items-center gap-3">
             <Image
-              src={user.profilePicture ?? '/twitter-default-pp.png'}
+              src={
+                user.profilePicture === ''
+                  ? '/twitter-default-pp.png'
+                  : user.profilePicture
+              }
               width="40"
               height="40"
               className="rounded-full"

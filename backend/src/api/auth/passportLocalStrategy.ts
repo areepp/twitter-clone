@@ -24,7 +24,7 @@ passport.use(
             )
 
             passwordMatches
-              ? done(null, user!)
+              ? done(null, user)
               : done(null, false, {
                   message: 'Incorrect email and/or password.',
                 })

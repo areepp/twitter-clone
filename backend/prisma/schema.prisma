@@ -12,7 +12,8 @@ model User {
   email          String  @unique
   username       String  @unique @default(uuid())
   displayName    String
-  profilePicture String?
+  bio            String  @default("")
+  profilePicture String  @default("")
   password       String?
 
   createdAt DateTime @default(now())
