@@ -47,8 +47,6 @@ passport.deserializeUser(async (id: string, done: any) => {
     if (user) {
       done(null, {
         username: user.username,
-        displayName: user.displayName,
-        profilePicture: user.profilePicture,
         id: user.id,
       })
     } else {
