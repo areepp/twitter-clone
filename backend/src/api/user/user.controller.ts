@@ -2,26 +2,23 @@ import isAuthenticated from '@/middlewares/is-authenticated'
 import validateRequest from '@/middlewares/validate-request'
 import ApiError from '@/types/api-error'
 import express from 'express'
+import multer from 'multer'
 import {
   CheckUsernameAvailabilitySchema,
   EditUserProfileSchema,
 } from './user.model'
 import * as userService from './user.service'
 
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage })
+
 const userController = express.Router()
 
 userController.get('/me', isAuthenticated, async (req, res, next) => {
   try {
-    const user = await userService.getUser(req.user!.username)
-    if (!user) {
-      throw new ApiError('Error: User not found', 404)
-    }
-    res.status(200).json({
-      username: user.username,
-      displayName: user.displayName,
-      bio: user.bio,
-      profilePicture: user.profilePicture,
-    })
+    const user = await userService.getUserProfile(req.user!.username)
+
+    res.status(200).json(user)
   } catch (error) {
     next(error)
   }
@@ -29,18 +26,9 @@ userController.get('/me', isAuthenticated, async (req, res, next) => {
 
 userController.get('/:username', async (req, res, next) => {
   try {
-    const user = await userService.getUser(req.params.username)
+    const user = await userService.getUserProfile(req.params.username)
 
-    if (!user) {
-      throw new ApiError("User doesn't exists", 404)
-    }
-
-    res.status(200).json({
-      username: user.username,
-      displayName: user.displayName,
-      bio: user.bio,
-      profilePicture: user.profilePicture,
-    })
+    res.status(200).json(user)
   } catch (error) {
     next(error)
   }
@@ -52,7 +40,7 @@ userController.get(
   validateRequest({ params: CheckUsernameAvailabilitySchema }),
   async (req, res, next) => {
     try {
-      const taken = await userService.getUser(req.params.username)
+      const taken = await userService.getUserWithUsername(req.params.username)
 
       if (taken) {
         throw new ApiError(
@@ -71,14 +59,18 @@ userController.get(
 userController.patch(
   '/:username',
   isAuthenticated,
-  validateRequest({ body: EditUserProfileSchema }),
+  // validateRequest({ body: EditUserProfileSchema }), // TODO: work on this validation
+  upload.single('profilePictureFile'),
   async (req, res, next) => {
     try {
       if (req.params.username !== req?.user?.username) {
         throw new ApiError('Request denied.', 403)
       } // logged in user and requested user have to be the same
 
-      await userService.editUserProfile(req.user!, req.body)
+      await userService.editUserProfile(req.user!, {
+        ...req.body,
+        profilePictureFile: req.file,
+      })
 
       return res.status(200).send('User edited successfully.')
     } catch (error) {

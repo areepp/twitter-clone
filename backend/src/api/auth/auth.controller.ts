@@ -55,7 +55,7 @@ authController.post(
           res.json({
             id: user.id,
             email: user.email,
-            profilePicture: user.profilePicture,
+            profilePictureUrl: user.profilePictureUrl,
           })
         })
       } else {

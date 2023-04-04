@@ -20,7 +20,7 @@ passport.use(
         const user = await authService.signUpWithGoogle({
           id: profile.id,
           email: profile._json.email!,
-          profilePicture: profile._json.picture!,
+          profilePictureUrl: profile._json.picture!,
           displayName: profile.displayName,
           username,
         })

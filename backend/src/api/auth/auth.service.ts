@@ -1,5 +1,5 @@
 import ApiError from '@/types/api-error'
-import db from '@/utils/db'
+import db from '@/lib/db'
 import { AuthSchema } from './auth.model'
 import bcrypt from 'bcryptjs'
 import { v4 as uuidv4 } from 'uuid'
@@ -33,13 +33,13 @@ export const signup = async ({ email, password }: AuthSchema) => {
 export const signUpWithGoogle = async ({
   id,
   email,
-  profilePicture,
+  profilePictureUrl,
   username,
   displayName,
 }: {
   id: string
   email: string
-  profilePicture: string
+  profilePictureUrl: string
   username: string
   displayName: string
 }) =>
@@ -47,7 +47,7 @@ export const signUpWithGoogle = async ({
     data: {
       id,
       email,
-      profilePicture,
+      profilePictureUrl,
       username,
       displayName,
     },

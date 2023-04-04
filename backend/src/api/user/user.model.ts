@@ -8,7 +8,7 @@ const User = z.object({
     .regex(/^[a-zA-Z0-9_]*$/g),
   id: z.string(),
   email: z.string().email(),
-  profilePicture: z.string(),
+  profilePictureUrl: z.string(),
   displayName: z.string().min(1).max(50),
 })
 
@@ -39,7 +39,9 @@ export const EditUserProfileSchema = z
     'Either "username" or "displayName" or "bio" field should be filled in.',
   )
 
-export type EditUserProfileSchema = z.infer<typeof EditUserProfileSchema>
+export type EditUserProfileSchema = z.infer<typeof EditUserProfileSchema> & {
+  profilePictureFile: Express.Multer.File
+}
 
 export const CheckUsernameAvailabilitySchema = z.object({
   username: z

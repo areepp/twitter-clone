@@ -8,13 +8,14 @@ datasource db {
 }
 
 model User {
-  id             String  @id @unique
-  email          String  @unique
-  username       String  @unique @default(uuid())
-  displayName    String
-  bio            String  @default("")
-  profilePicture String  @default("")
-  password       String?
+  id                 String  @id @unique
+  email              String  @unique
+  username           String  @unique @default(uuid())
+  displayName        String
+  bio                String  @default("")
+  profilePictureUrl  String  @default("")
+  profilePictureName String?
+  password           String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
