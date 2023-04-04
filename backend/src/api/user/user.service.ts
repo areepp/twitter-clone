@@ -78,7 +78,6 @@ export const editUserProfile = async (
         username: user.username,
       },
       data: {
-        profilePictureName: uniqueFileName,
         profilePictureUrl:
           'https://my-twitter-clone.s3.ap-southeast-1.amazonaws.com/' +
           uniqueFileName,

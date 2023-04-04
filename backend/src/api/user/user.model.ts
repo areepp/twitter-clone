@@ -8,8 +8,8 @@ const User = z.object({
     .regex(/^[a-zA-Z0-9_]*$/g),
   id: z.string(),
   email: z.string().email(),
-  profilePictureUrl: z.string(),
   displayName: z.string().min(1).max(50),
+  profilePictureUrl: z.string().optional(),
 })
 
 type User = z.infer<typeof User>
