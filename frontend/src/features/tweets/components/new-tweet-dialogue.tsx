@@ -14,17 +14,18 @@ export const NewTweetDialogue = () => {
   return (
     <div className="flex w-full gap-4 border-b px-3 py-2">
       <div>
-        <Image
-          src={
-            user.profilePicture === ''
-              ? '/twitter-default-pp.png'
-              : user.profilePicture
-          }
-          width="48"
-          height="48"
-          className="rounded-full"
-          alt="photo profile"
-        />
+        <div className="relative h-12 w-12">
+          <Image
+            src={
+              user.profilePictureUrl === ''
+                ? '/twitter-default-pp.png'
+                : user.profilePictureUrl
+            }
+            fill
+            className="rounded-full object-cover"
+            alt="photo profile"
+          />
+        </div>
       </div>
       <form className="grow">
         <input

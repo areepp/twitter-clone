@@ -6,6 +6,7 @@ interface EditProfileProps {
   newUsername?: string
   displayName?: string
   bio?: string
+  profilePictureFile?: any
 }
 
 export const useEditProfile = () => {

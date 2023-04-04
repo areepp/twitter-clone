@@ -20,6 +20,7 @@ export const EditProfileModal = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<EditProfileInput>({
     resolver: zodResolver(EditProfileInput),
     defaultValues: {
@@ -30,7 +31,14 @@ export const EditProfileModal = () => {
   const { mutateAsync, isLoading } = useEditProfile()
 
   const onSubmit: SubmitHandler<EditProfileInput> = async (data) => {
-    await mutateAsync({ username: user.username, ...data })
+    const { displayName, bio, profilePictureFile } = data
+    await mutateAsync({
+      username: user.username,
+      displayName,
+      bio,
+      profilePictureFile: profilePictureFile[0] ?? null,
+    })
+    reset()
     setOpenModal(false)
   }
 
@@ -71,15 +79,28 @@ export const EditProfileModal = () => {
               <div className="absolute -top-8 left-5 h-16 w-16 overflow-hidden rounded-full border-2 border-white xs:-top-12 xs:h-[100px] xs:w-[100px] sm:-top-16 sm:h-[132px] sm:w-[132px] sm:border-4">
                 <Image
                   src={
-                    user.profilePicture === ''
+                    user.profilePictureUrl === ''
                       ? '/twitter-default-pp.png'
-                      : user.profilePicture
+                      : user.profilePictureUrl
                   }
+                  className="object-cover"
                   alt="profile picture"
                   fill
                 />
                 <div className="absolute top-[10px] left-[10px] z-50 h-fit w-fit rounded-full bg-black bg-opacity-50 p-2 xs:top-[28px] xs:left-[28px] sm:top-[42px] sm:left-[42px]">
-                  <CameraIcon className="h-6 w-6 text-white" />
+                  <label
+                    htmlFor="profile-picture-input"
+                    className="cursor-pointer"
+                  >
+                    <CameraIcon className="h-6 w-6 text-white" />
+                  </label>
+                  <input
+                    className="hidden"
+                    type="file"
+                    id="profile-picture-input"
+                    accept="image/*"
+                    {...register('profilePictureFile')}
+                  />
                 </div>
               </div>
               <div className="mt-6 flex flex-col gap-6 xs:mt-20 sm:top-20">
@@ -111,6 +132,9 @@ export const EditProfileModal = () => {
                 </fieldset>
               </div>
             </section>
+            {errors.profilePictureFile && (
+              <span>{errors.profilePictureFile.message as string}</span>
+            )}
           </form>
         </Dialog.Content>
       </Dialog.Portal>

@@ -1,5 +1,5 @@
 import { IUser } from '@/features/profiles'
-import axios from './axios'
+import axios, { axiosMultiPart } from './axios'
 
 export const getUserProfile = async (username: string) => {
   try {
@@ -33,10 +33,17 @@ export const editUserProfile = async ({
   newUsername,
   displayName,
   bio,
+  profilePictureFile,
 }: {
   username: string
   newUsername?: string
   displayName?: string
   bio?: string
+  profilePictureFile?: any
 }) =>
-  axios.patch(`/user/${username}`, { username: newUsername, displayName, bio })
+  axiosMultiPart.patch(`/user/${username}`, {
+    username: newUsername,
+    displayName,
+    bio,
+    profilePictureFile,
+  })
