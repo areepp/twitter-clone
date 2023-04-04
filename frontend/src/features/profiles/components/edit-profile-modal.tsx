@@ -16,6 +16,10 @@ import { useEditProfile } from '../hooks/use-edit-profile'
 export const EditProfileModal = () => {
   const user = useGetUserQueryData()
   const [openModal, setOpenModal] = useState(false)
+  const [profilePictureImage, setProfilePictureImage] = useState(
+    user.profilePictureUrl
+  )
+
   const {
     register,
     handleSubmit,
@@ -78,11 +82,7 @@ export const EditProfileModal = () => {
             <section className="relative h-auto min-h-[250px] p-5">
               <div className="absolute -top-8 left-5 h-16 w-16 overflow-hidden rounded-full border-2 border-white xs:-top-12 xs:h-[100px] xs:w-[100px] sm:-top-16 sm:h-[132px] sm:w-[132px] sm:border-4">
                 <Image
-                  src={
-                    user.profilePictureUrl === ''
-                      ? '/twitter-default-pp.png'
-                      : user.profilePictureUrl
-                  }
+                  src={profilePictureImage ?? '/twitter-default-pp.png'}
                   className="object-cover"
                   alt="profile picture"
                   fill
@@ -99,7 +99,12 @@ export const EditProfileModal = () => {
                     type="file"
                     id="profile-picture-input"
                     accept="image/*"
-                    {...register('profilePictureFile')}
+                    {...register('profilePictureFile', {
+                      onChange: (e) =>
+                        setProfilePictureImage(
+                          URL.createObjectURL(e.target.files[0])
+                        ),
+                    })}
                   />
                 </div>
               </div>
