@@ -62,11 +62,7 @@ const Profile = () => {
           <div className="absolute -top-8 left-5 h-16 w-16 overflow-hidden rounded-full border-2 border-white xs:-top-12 xs:h-[100px] xs:w-[100px] sm:-top-16 sm:h-[132px] sm:w-[132px] sm:border-4">
             <Image
               className="object-cover"
-              src={
-                data.profilePictureUrl === ''
-                  ? '/twitter-default-pp.png'
-                  : data.profilePictureUrl
-              }
+              src={data.profilePictureUrl ?? '/twitter-default-pp.png'}
               alt="profile picture"
               sizes="100vw"
               fill

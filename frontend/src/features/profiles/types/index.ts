@@ -10,8 +10,7 @@ export interface IUser {
   id: string
   username: string
   displayName: string
-  profilePictureUrl: string
-  profilePictureName?: string
+  profilePictureUrl: string | null
   bio: string
 }
 

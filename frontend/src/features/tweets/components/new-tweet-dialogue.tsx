@@ -16,11 +16,7 @@ export const NewTweetDialogue = () => {
       <div>
         <div className="relative h-12 w-12">
           <Image
-            src={
-              user.profilePictureUrl === ''
-                ? '/twitter-default-pp.png'
-                : user.profilePictureUrl
-            }
+            src={user.profilePictureUrl ?? '/twitter-default-pp.png'}
             fill
             className="rounded-full object-cover"
             alt="photo profile"
