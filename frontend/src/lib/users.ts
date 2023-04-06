@@ -3,7 +3,7 @@ import axios, { axiosMultiPart } from './axios'
 
 export const getUserProfile = async (username: string) => {
   try {
-    const response = await axios.get<IUser>(`/user/${username}`)
+    const response = await axios.get<IUser>(`/users/${username}`)
     return response.data
   } catch (error) {
     throw new Error(error)
@@ -12,7 +12,7 @@ export const getUserProfile = async (username: string) => {
 
 export const getMyProfile = async () => {
   try {
-    const response = await axios.get<IUser>('/user/me')
+    const response = await axios.get<IUser>('/users/me')
     return response.data
   } catch (error) {
     throw new Error(error)
@@ -21,7 +21,7 @@ export const getMyProfile = async () => {
 
 export const checkUsernameAvailability = async (username: string) => {
   try {
-    const response = await axios.get(`/user/check-availability/${username}`)
+    const response = await axios.get(`/users/check-availability/${username}`)
     return response.data
   } catch (error) {
     throw new Error(error)
@@ -41,7 +41,7 @@ export const editUserProfile = async ({
   bio?: string
   profilePictureFile?: any
 }) =>
-  axiosMultiPart.patch(`/user/${username}`, {
+  axiosMultiPart.patch(`/users/${username}`, {
     username: newUsername,
     displayName,
     bio,

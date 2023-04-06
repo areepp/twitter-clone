@@ -6,15 +6,15 @@ import multer from 'multer'
 import {
   CheckUsernameAvailabilitySchema,
   EditUserProfileSchema,
-} from './user.model'
-import * as userService from './user.service'
+} from './users.model'
+import * as userService from './users.service'
 
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
 
-const userController = express.Router()
+const usersController = express.Router()
 
-userController.get('/me', isAuthenticated, async (req, res, next) => {
+usersController.get('/me', isAuthenticated, async (req, res, next) => {
   try {
     const user = await userService.getUserProfile(req.user!.username)
 
@@ -24,7 +24,7 @@ userController.get('/me', isAuthenticated, async (req, res, next) => {
   }
 })
 
-userController.get('/:username', async (req, res, next) => {
+usersController.get('/:username', async (req, res, next) => {
   try {
     const user = await userService.getUserProfile(req.params.username)
 
@@ -34,7 +34,7 @@ userController.get('/:username', async (req, res, next) => {
   }
 })
 
-userController.get(
+usersController.get(
   '/check-availability/:username',
   isAuthenticated,
   validateRequest({ params: CheckUsernameAvailabilitySchema }),
@@ -56,7 +56,7 @@ userController.get(
   },
 )
 
-userController.patch(
+usersController.patch(
   '/:username',
   isAuthenticated,
   // validateRequest({ body: EditUserProfileSchema }), // TODO: work on this validation
@@ -79,4 +79,4 @@ userController.patch(
   },
 )
 
-export default userController
+export default usersController

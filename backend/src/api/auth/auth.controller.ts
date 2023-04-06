@@ -3,7 +3,7 @@ import express, { NextFunction, Request, Response } from 'express'
 import passport from 'passport'
 import { AuthSchema } from './auth.model'
 import * as authService from './auth.service'
-import User from '../user/user.model'
+import User from '../user/users.model'
 
 const authController = express.Router()
 

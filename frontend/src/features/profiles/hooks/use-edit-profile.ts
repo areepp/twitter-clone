@@ -1,4 +1,4 @@
-import { editUserProfile } from '@/lib/user'
+import { editUserProfile } from '@/lib/users'
 import { useMutation, useQueryClient } from 'react-query'
 
 interface EditProfileProps {

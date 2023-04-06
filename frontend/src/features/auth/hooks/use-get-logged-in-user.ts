@@ -1,4 +1,4 @@
-import { getMyProfile } from '@/lib/user'
+import { getMyProfile } from '@/lib/users'
 import { useQuery, UseQueryOptions } from 'react-query'
 
 export const useGetLoggedInUser = (enabled?: boolean) =>

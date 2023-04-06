@@ -1,4 +1,4 @@
-import { checkUsernameAvailability } from '@/lib/user'
+import { checkUsernameAvailability } from '@/lib/users'
 import { useQuery } from 'react-query'
 
 export const useCheckUsernameAvailability = (username: string) =>

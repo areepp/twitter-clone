@@ -1,4 +1,4 @@
-import { getUserProfile } from '@/lib/user'
+import { getUserProfile } from '@/lib/users'
 import { useQuery } from 'react-query'
 
 interface Options {

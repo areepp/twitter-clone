@@ -3,7 +3,7 @@ import db from '@/lib/db'
 import { PutObjectCommand, PutObjectCommandInput } from '@aws-sdk/client-s3'
 import s3 from '@/lib/aws'
 import { v4 as uuidv4 } from 'uuid'
-import { EditUserProfileSchema } from './user.model'
+import { EditUserProfileSchema } from './users.model'
 
 export const getUserProfile = async (username: string) => {
   const user = await db.user.findUnique({ where: { username } })
