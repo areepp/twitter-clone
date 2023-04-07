@@ -22,7 +22,7 @@ interface Props {
 export const NewTweetDialogue = ({ isModal, setOpenModal }: Props) => {
   const user = useGetUserQueryData()
 
-  const { register, handleSubmit, formState } = useForm<NewTweetSchema>({
+  const { register, handleSubmit, formState, reset } = useForm<NewTweetSchema>({
     resolver: zodResolver(NewTweetSchema),
     mode: 'all',
   })
@@ -31,7 +31,10 @@ export const NewTweetDialogue = ({ isModal, setOpenModal }: Props) => {
 
   const onSubmit: SubmitHandler<NewTweetSchema> = async (data) => {
     await mutateAsync(data)
-    setOpenModal(false)
+    if (isModal) {
+      setOpenModal(false)
+    }
+    reset()
   }
 
   return (

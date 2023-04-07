@@ -3,6 +3,7 @@ import db from '@/lib/db'
 export const getAllTweets = () =>
   db.tweet.findMany({
     select: {
+      id: true,
       text: true,
       createdAt: true,
       author: {
@@ -12,6 +13,9 @@ export const getAllTweets = () =>
           username: true,
         },
       },
+    },
+    orderBy: {
+      createdAt: 'desc',
     },
   })
 

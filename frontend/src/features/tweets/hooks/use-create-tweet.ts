@@ -1,8 +1,11 @@
 import { createTweet } from '@/lib/tweets'
-import { useMutation } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 
 export const useCreateTweet = () => {
-  const mutation = useMutation((data: { text?: string }) => createTweet(data))
+  const queryClient = useQueryClient()
+  const mutation = useMutation((data: { text?: string }) => createTweet(data), {
+    onSettled: () => queryClient.invalidateQueries('tweets'),
+  })
 
   return mutation
 }

@@ -1,13 +1,11 @@
+import { IUser } from '@/features/profiles'
 import { z } from 'zod'
 
 export interface ITweet {
   id: number
   text: string
-  img?: string
-  timeStamp: string
-  userName: string
-  userId: string
-  userImg: string
+  createdAt: string
+  author: Pick<IUser, 'username' | 'displayName' | 'profilePictureUrl'>
 }
 
 export const NewTweetSchema = z.object({
