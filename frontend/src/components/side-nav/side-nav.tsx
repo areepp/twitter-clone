@@ -8,7 +8,7 @@ export const SideNav = () => {
 
   return (
     <nav className="fixed flex h-screen w-[72px] flex-col items-center justify-between border-r p-3 pb-5 xl:w-[260px] xl:items-start">
-      <section className="flex flex-col gap-8">
+      <section className="flex w-full flex-col items-center gap-8 xl:items-start">
         <h1>
           <TwitterIcon />
         </h1>

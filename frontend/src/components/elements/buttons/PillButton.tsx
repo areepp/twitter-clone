@@ -3,13 +3,14 @@ import clsx from 'clsx'
 const variants = {
   black: 'bg-black text-white',
   white: 'bg-white text-black border border-gray-200',
-  blue: 'bg-primary-blue text-white',
+  blue: 'bg-primary-blue text-white disabled:bg-blue-200 disabled:cursor-not-allowed',
 }
 
 const sizes = {
-  small: 'h-[32px]',
-  medium: 'h-[36px]',
-  large: 'h-[42px]',
+  small: 'h-[32px] text-sm',
+  medium: 'h-[36px] text-sm',
+  large: 'h-[42px] text-sm',
+  xl: 'h-[50px] text-lg',
 }
 
 interface Props {
@@ -32,10 +33,10 @@ export const PillButton = ({
 }: Props) => (
   <button
     className={clsx(
-      'flex h-[36px] items-center justify-center rounded-full px-4 text-sm font-semibold',
+      'flex h-[36px] items-center justify-center rounded-full px-4 font-semibold',
+      className,
       variants[variant],
-      sizes[size],
-      className
+      sizes[size]
     )}
     onClick={onClick}
     {...rest}

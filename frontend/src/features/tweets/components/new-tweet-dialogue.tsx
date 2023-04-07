@@ -7,12 +7,37 @@ import {
   MapPinIcon,
 } from '@heroicons/react/24/outline'
 import Image from 'next/image'
+import clsx from 'clsx'
+import TextareaAutosize from 'react-textarea-autosize'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { NewTweetSchema } from '../types'
+import { useCreateTweet } from '../hooks/use-create-tweet'
 
-export const NewTweetDialogue = () => {
+interface Props {
+  isModal?: boolean
+  setOpenModal?: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export const NewTweetDialogue = ({ isModal, setOpenModal }: Props) => {
   const user = useGetUserQueryData()
 
+  const { register, handleSubmit, formState } = useForm<NewTweetSchema>({
+    resolver: zodResolver(NewTweetSchema),
+    mode: 'all',
+  })
+
+  const { mutateAsync } = useCreateTweet()
+
+  const onSubmit: SubmitHandler<NewTweetSchema> = async (data) => {
+    await mutateAsync(data)
+    setOpenModal(false)
+  }
+
   return (
-    <div className="flex w-full gap-4 border-b px-3 py-2">
+    <div
+      className={clsx('flex w-full gap-4 px-3 py-2', !isModal && 'border-b')}
+    >
       <div>
         <div className="relative h-12 w-12">
           <Image
@@ -23,21 +48,30 @@ export const NewTweetDialogue = () => {
           />
         </div>
       </div>
-      <form className="grow">
-        <input
-          className="w-full py-3 text-xl focus:outline-none"
-          type="text"
+      <form className="grow" onSubmit={handleSubmit(onSubmit)}>
+        <TextareaAutosize
+          className={clsx(
+            'w-full resize-none pt-3 text-lg focus:outline-none',
+            isModal && 'min-h-[200px]'
+          )}
+          maxLength={280}
           placeholder="What's happening?"
+          {...register('text', { required: true })}
         />
 
-        <div className="flex items-center justify-between">
+        <div className="mt-3 flex items-center justify-between">
           <fieldset className="flex gap-4">
             <PhotoIcon className="h-5 w-5 text-primary-blue" />
             <GifIcon className="h-5 w-5 text-primary-blue" />
             <FaceSmileIcon className="h-5 w-5 text-primary-blue" />
             <MapPinIcon className="h-5 w-5 text-primary-blue" />
           </fieldset>
-          <PillButton text="Tweet" variant="blue" />
+          <PillButton
+            text="Tweet"
+            variant="blue"
+            type="submit"
+            disabled={!formState.isValid}
+          />
         </div>
       </form>
     </div>

@@ -1,2 +1,3 @@
-export * from './GoogleIcon'
-export * from './TwitterIcon'
+export * from './google-icon'
+export * from './twitter-icon'
+export * from './feather-icon'
