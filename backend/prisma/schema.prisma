@@ -20,12 +20,26 @@ model User {
   updatedAt DateTime @updatedAt
 
   Tweet Tweet[]
+
+  likedTweets LikedTweet[]
 }
 
 model Tweet {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
+  id        Int          @id @default(autoincrement())
+  createdAt DateTime     @default(now())
   text      String
-  author    User     @relation(fields: [userId], references: [id])
+  author    User         @relation(fields: [userId], references: [id])
   userId    String
+  likes     LikedTweet[]
+}
+
+model LikedTweet {
+  id      Int      @id @default(autoincrement())
+  likedAt DateTime @default(now())
+
+  tweet   Tweet @relation(fields: [tweetId], references: [id])
+  tweetId Int
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
 }

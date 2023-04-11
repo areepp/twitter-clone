@@ -13,6 +13,11 @@ export const getAllTweets = () =>
           username: true,
         },
       },
+      likes: {
+        select: {
+          id: true,
+        },
+      },
     },
     orderBy: {
       createdAt: 'desc',
@@ -39,3 +44,32 @@ export const createTweet = async ({
 
   return newTweet
 }
+
+export const likeTweet = async ({
+  tweetId,
+  likedBy,
+}: {
+  tweetId: number
+  likedBy: string
+}) =>
+  db.likedTweet.create({
+    data: {
+      tweet: {
+        connect: {
+          id: tweetId,
+        },
+      },
+      User: {
+        connect: {
+          id: likedBy,
+        },
+      },
+    },
+  })
+
+export const unlikeTweet = async ({ likedTweetId }: { likedTweetId: number }) =>
+  db.likedTweet.delete({
+    where: {
+      id: likedTweetId,
+    },
+  })

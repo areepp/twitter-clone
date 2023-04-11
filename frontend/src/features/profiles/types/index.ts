@@ -1,3 +1,4 @@
+import { ITweet } from '@/features/tweets/types'
 import { z } from 'zod'
 
 export interface IUserTemp {
@@ -12,6 +13,10 @@ export interface IUser {
   displayName: string
   profilePictureUrl: string | null
   bio: string
+  likedTweets: {
+    id: number
+    tweet: Pick<ITweet, 'id'>
+  }[]
 }
 
 export const NewUsernameInput = z.object({

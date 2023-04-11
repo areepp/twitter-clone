@@ -6,6 +6,9 @@ export interface ITweet {
   text: string
   createdAt: string
   author: Pick<IUser, 'username' | 'displayName' | 'profilePictureUrl'>
+  likes: {
+    id: string
+  }[]
 }
 
 export const NewTweetSchema = z.object({

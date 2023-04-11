@@ -13,3 +13,8 @@ export const getAllTweets = async () => {
 
 export const createTweet = async (data: { text?: string }) =>
   axios.post('/tweets', data)
+
+export const likeTweet = async (id: number) => axios.patch(`/tweets/${id}/like`)
+
+export const unLikeTweet = async (id: number) =>
+  axios.delete(`/tweets/liked-tweets/${id}`)

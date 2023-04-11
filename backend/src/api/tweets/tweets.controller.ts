@@ -34,4 +34,33 @@ tweetsController.post(
   },
 )
 
+tweetsController.patch('/:id/like', isAuthenticated, async (req, res, next) => {
+  try {
+    const likedTweet = await tweetsService.likeTweet({
+      tweetId: parseInt(req.params.id),
+      likedBy: req.user!.id,
+    })
+
+    res.status(200).json(likedTweet)
+  } catch (error) {
+    next(error)
+  }
+})
+
+tweetsController.delete(
+  '/liked-tweets/:id',
+  isAuthenticated,
+  async (req, res, next) => {
+    try {
+      const unlikedTweet = await tweetsService.unlikeTweet({
+        likedTweetId: parseInt(req.params.id),
+      })
+
+      res.status(200).json(unlikedTweet)
+    } catch (error) {
+      next(error)
+    }
+  },
+)
+
 export default tweetsController

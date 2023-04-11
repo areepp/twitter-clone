@@ -6,7 +6,21 @@ import { v4 as uuidv4 } from 'uuid'
 import { EditUserProfileSchema } from './users.model'
 
 export const getUserProfile = async (username: string) => {
-  const user = await db.user.findUnique({ where: { username } })
+  const user = await db.user.findUnique({
+    where: { username },
+    include: {
+      likedTweets: {
+        select: {
+          id: true,
+          tweet: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      },
+    },
+  })
 
   if (!user) {
     throw new ApiError("User doesn't exists", 404)
@@ -17,6 +31,7 @@ export const getUserProfile = async (username: string) => {
     displayName: user.displayName,
     bio: user.bio,
     profilePictureUrl: user.profilePictureUrl,
+    likedTweets: user.likedTweets,
   }
 }
 
