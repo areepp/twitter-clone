@@ -9,7 +9,7 @@ import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid'
 import { ITweet } from '../types'
 import { formatIsoString } from '../utils/format-iso-string'
 import { useLikeTweet } from '../hooks/use-like-tweet'
-import { useGetLoggedInUser, useGetUserQueryData } from '@/features/auth'
+import { useGetUserQueryData } from '@/features/auth'
 import { useUnLikeTweet } from '../hooks/use-unlike-tweet'
 import Link from 'next/link'
 

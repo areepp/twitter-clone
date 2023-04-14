@@ -1,5 +1,7 @@
 export * from './types'
 export * from './components/edit-username-modal'
 export * from './components/edit-profile-modal'
+export * from './components/profile-nav'
+export * from './components/profile-layout'
 export * from './hooks/use-get-user-profile'
 export * from './hooks/use-get-user-tweets'

@@ -1,16 +1,11 @@
-import Image from 'next/image'
-import { MainLayout } from '@/components/layouts/main-layout'
+import { useGetUserQueryData } from '@/features/auth'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
-import { useGetLoggedInUser } from '@/features/auth'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
-import {
-  EditProfileModal,
-  useGetUserProfile,
-  useGetUserTweets,
-} from '@/features/profiles'
-import { Tweet } from '@/features/tweets'
+import { useGetUserProfile } from '../hooks/use-get-user-profile'
+import { EditProfileModal } from './edit-profile-modal'
 
-const Profile = () => {
+export const ProfileLayout = () => {
   const { query, isReady, push } = useRouter()
   const { username: usernameQuery } = query
 
@@ -18,20 +13,14 @@ const Profile = () => {
     enabled: isReady,
   })
 
-  const {
-    data: userTweets,
-    isLoading: isLoadingTweets,
-    isSuccess: tweetsFetched,
-  } = useGetUserTweets(usernameQuery as string, { enabled: isReady })
-
-  const { data: loggedInUser } = useGetLoggedInUser()
+  const loggedInUser = useGetUserQueryData()
 
   if (isLoading || !isReady) return <div>loading screen..</div>
 
   if (!user) return <div>blank</div>
 
   return (
-    <MainLayout>
+    <>
       <div className="flex w-full items-center gap-6 border-b px-3 py-1">
         <ArrowLeftIcon
           onClick={() => push('/')}
@@ -81,38 +70,6 @@ const Profile = () => {
           </div>
         </section>
       </div>
-      <nav className="flex w-full min-w-[320px] cursor-pointer border-b font-medium text-dark-gray">
-        <div className="grow py-3 text-center font-bold text-slate-800 hover:bg-gray-100">
-          <span className="rounded border-b-4 border-primary-blue py-3">
-            Tweets
-          </span>
-        </div>
-        <div className="grow py-3 text-center hover:bg-gray-100">
-          <span className="">Replies</span>
-        </div>
-        <div className="grow py-3 text-center hover:bg-gray-100">
-          <span className="">Media</span>
-        </div>
-        <div className="grow py-3 text-center hover:bg-gray-100">
-          <span className="">Likes</span>
-        </div>
-      </nav>
-      {tweetsFetched &&
-        userTweets.map((tweet) => (
-          <Tweet
-            key={tweet.id}
-            data={{
-              ...tweet,
-              author: {
-                profilePictureUrl: user.profilePictureUrl,
-                displayName: user.displayName,
-                username: user.username,
-              },
-            }}
-          />
-        ))}
-    </MainLayout>
+    </>
   )
 }
-
-export default Profile

@@ -1,24 +1,26 @@
 import { MainLayout } from '@/components/layouts/main-layout'
-import { LoginBanner, useGetLoggedInUser } from '@/features/auth'
+import {
+  LoginBanner,
+  useGetLoggedInUser,
+  useGetUserQueryData,
+} from '@/features/auth'
 import { EditUserNameModal } from '@/features/profiles'
 import { NewTweetDialogue, Tweets } from '@/features/tweets'
 
 const Home = () => {
-  const { isLoading, data } = useGetLoggedInUser()
-
-  if (isLoading) return <div>loading screen...</div>
+  const loggedInUser = useGetUserQueryData()
 
   return (
     <>
       <MainLayout>
         <div className="flex items-center justify-between border-b p-3 text-xl font-bold">
           <h1>Home</h1>
-          {data && <EditUserNameModal />}
+          {loggedInUser && <EditUserNameModal />}
         </div>
-        {data && <NewTweetDialogue />}
+        {loggedInUser && <NewTweetDialogue />}
         <Tweets />
       </MainLayout>
-      {!data && <LoginBanner />}
+      {!loggedInUser && <LoginBanner />}
     </>
   )
 }
