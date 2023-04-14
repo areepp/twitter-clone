@@ -6,7 +6,7 @@ export const useUnLikeTweet = () => {
   const mutation = useMutation((id: number) => unLikeTweet(id), {
     onSuccess: () => {
       queryClient.refetchQueries('tweets')
-      queryClient.refetchQueries('user')
+      queryClient.refetchQueries(['user', 'me'])
     },
   })
 

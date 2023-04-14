@@ -6,7 +6,7 @@ export const useLikeTweet = () => {
   const mutation = useMutation((id: number) => likeTweet(id), {
     onSuccess: () => {
       queryClient.refetchQueries('tweets')
-      queryClient.refetchQueries('user')
+      queryClient.refetchQueries(['user', 'me'])
     },
   })
 

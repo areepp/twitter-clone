@@ -13,6 +13,6 @@ export const useEditProfile = () => {
   const queryClient = useQueryClient()
 
   return useMutation((data: EditProfileProps) => editUserProfile(data), {
-    onSuccess: () => queryClient.invalidateQueries('user'),
+    onSuccess: () => queryClient.invalidateQueries(['user', 'me']),
   })
 }

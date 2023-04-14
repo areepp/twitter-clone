@@ -11,6 +11,7 @@ import { formatIsoString } from '../utils/format-iso-string'
 import { useLikeTweet } from '../hooks/use-like-tweet'
 import { useGetLoggedInUser, useGetUserQueryData } from '@/features/auth'
 import { useUnLikeTweet } from '../hooks/use-unlike-tweet'
+import Link from 'next/link'
 
 export const Tweet = ({ data }: { data: ITweet }) => {
   const loggedInUser = useGetUserQueryData()
@@ -37,19 +38,23 @@ export const Tweet = ({ data }: { data: ITweet }) => {
   }
 
   return (
-    <div className="flex w-full gap-3 border-b p-3">
-      <div className="relative h-12 w-12">
+    <div className="flex w-full cursor-pointer gap-3 border-b p-3">
+      <Link href={`/profile/${author.username}`} className="relative h-12 w-12">
         <Image
           src={author.profilePictureUrl}
           className="h-full w-full rounded-full object-cover"
           alt="profile photo"
           fill
         />
-      </div>
+      </Link>
       <div className="flex-grow">
         <div className="flex items-center gap-1">
-          <span className="font-semibold">{author.displayName}</span>
-          <span className="text-dark-gray">@{author.username}</span>
+          <Link href={`/profile/${author.username}`} className="font-semibold">
+            {author.displayName}
+          </Link>
+          <Link href={`/profile/${author.username}`} className="text-dark-gray">
+            @{author.username}
+          </Link>
           <span className="h-[2px] w-[2px] rounded-full bg-dark-gray" />
           <span className="text-dark-gray">
             {formatIsoString(data.createdAt)}
