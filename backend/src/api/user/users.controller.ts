@@ -34,6 +34,16 @@ usersController.get('/:username', async (req, res, next) => {
   }
 })
 
+usersController.get('/:username/tweets', async (req, res, next) => {
+  try {
+    const tweets = await userService.getUserTweets(req.params.username)
+
+    res.status(200).json(tweets)
+  } catch (error) {
+    next(error)
+  }
+})
+
 usersController.get(
   '/check-availability/:username',
   isAuthenticated,

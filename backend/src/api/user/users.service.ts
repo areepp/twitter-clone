@@ -35,6 +35,32 @@ export const getUserProfile = async (username: string) => {
   }
 }
 
+export const getUserTweets = async (username: string) => {
+  const tweets = await db.user.findUnique({
+    where: { username },
+    select: {
+      Tweet: {
+        select: {
+          id: true,
+          text: true,
+          createdAt: true,
+          likes: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      },
+    },
+  })
+
+  if (!tweets) {
+    throw new ApiError("User doesn't exists", 404)
+  }
+
+  return tweets
+}
+
 export const getUserWithUsername = async (username: string) =>
   db.user.findUnique({ where: { username } })
 
