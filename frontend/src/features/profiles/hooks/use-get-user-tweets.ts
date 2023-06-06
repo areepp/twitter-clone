@@ -1,5 +1,5 @@
 import { getUserTweets } from '@/lib/users'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 
 interface Options {
   enabled?: boolean

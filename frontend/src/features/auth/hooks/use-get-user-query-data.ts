@@ -1,5 +1,5 @@
 import { IUser } from '@/features/profiles'
-import { useQueryClient } from 'react-query'
+import { useQueryClient } from '@tanstack/react-query'
 
 export const useGetUserQueryData = (): IUser | undefined => {
   const queryClient = useQueryClient()

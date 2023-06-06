@@ -1,6 +1,6 @@
 import axios from '@/lib/axios'
 import { AuthInput } from '../types'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { signup } from '@/lib/auth'
 
 export const useSignup = () => {

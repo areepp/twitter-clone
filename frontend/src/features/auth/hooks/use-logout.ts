@@ -1,6 +1,6 @@
 import { logout } from '@/lib/auth'
 import { useRouter } from 'next/navigation'
-import { useQuery, useQueryClient } from 'react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 export const useLogout = () => {
   const queryClient = useQueryClient()

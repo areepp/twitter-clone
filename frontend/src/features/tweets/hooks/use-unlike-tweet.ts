@@ -1,5 +1,5 @@
 import { unLikeTweet } from '@/lib/tweets'
-import { useMutation, useQueryClient } from 'react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 export const useUnLikeTweet = () => {
   const queryClient = useQueryClient()

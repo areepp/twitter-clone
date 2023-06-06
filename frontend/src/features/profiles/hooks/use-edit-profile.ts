@@ -1,5 +1,5 @@
 import { editUserProfile } from '@/lib/users'
-import { useMutation, useQueryClient } from 'react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 interface EditProfileProps {
   username: string
