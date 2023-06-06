@@ -1,13 +1,15 @@
+'use client'
+
 import { MainLayout } from '@/components/layouts/main-layout'
 import { ProfileLayout, ProfileNav } from '@/features/profiles'
 
-const ProfileWithMedia = () => {
+const ProfileWithReplies = () => {
   return (
     <MainLayout>
       <ProfileLayout />
-      <ProfileNav activeTab="media" />
+      <ProfileNav activeTab="replies" />
     </MainLayout>
   )
 }
 
-export default ProfileWithMedia
+export default ProfileWithReplies

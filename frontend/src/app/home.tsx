@@ -1,3 +1,5 @@
+'use client'
+
 import { MainLayout } from '@/components/layouts/main-layout'
 import { LoginBanner, useGetUserQueryData } from '@/features/auth'
 import { EditUserNameModal } from '@/features/profiles'

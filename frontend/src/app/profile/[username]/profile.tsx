@@ -1,3 +1,5 @@
+'use client'
+
 import { MainLayout } from '@/components/layouts/main-layout'
 import { useGetLoggedInUser } from '@/features/auth'
 import { useRouter } from 'next/router'

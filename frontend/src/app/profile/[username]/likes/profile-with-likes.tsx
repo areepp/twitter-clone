@@ -1,3 +1,5 @@
+'use client'
+
 import { MainLayout } from '@/components/layouts/main-layout'
 import { ProfileLayout, ProfileNav } from '@/features/profiles'
 
