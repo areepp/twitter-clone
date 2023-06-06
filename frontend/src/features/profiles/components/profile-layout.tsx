@@ -1,21 +1,19 @@
 import { useGetUserQueryData } from '@/features/auth'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
+import { useRouter, useParams } from 'next/navigation'
 import { useGetUserProfile } from '../hooks/use-get-user-profile'
 import { EditProfileModal } from './edit-profile-modal'
 
 export const ProfileLayout = () => {
-  const { query, isReady, push } = useRouter()
-  const { username: usernameQuery } = query
+  const { push } = useRouter()
+  const { username: usernameQuery } = useParams()
 
-  const { data: user, isLoading } = useGetUserProfile(usernameQuery as string, {
-    enabled: isReady,
-  })
+  const { data: user, isLoading } = useGetUserProfile(usernameQuery as string)
 
   const loggedInUser = useGetUserQueryData()
 
-  if (isLoading || !isReady) return <div>loading screen..</div>
+  if (isLoading) return <div>loading screen..</div>
 
   if (!user) return <div>blank</div>
 

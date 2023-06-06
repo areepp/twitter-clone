@@ -1,18 +1,18 @@
 import clsx from 'clsx'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { useParams } from 'next/navigation'
 
 interface Props {
   activeTab: 'tweets' | 'replies' | 'media' | 'likes'
 }
 
 export const ProfileNav = ({ activeTab }: Props) => {
-  const { query } = useRouter()
-  console.log(query)
+  const { username } = useParams()
+
   return (
     <nav className="flex w-full min-w-[320px] cursor-pointer border-b font-medium text-dark-gray">
       <Link
-        href={`/profile/${query.username}`}
+        href={`/profile/${username}`}
         className="grow py-3 text-center hover:bg-gray-100"
       >
         <span
@@ -25,7 +25,7 @@ export const ProfileNav = ({ activeTab }: Props) => {
         </span>
       </Link>
       <Link
-        href={`/profile/${query.username}/with_replies`}
+        href={`/profile/${username}/with_replies`}
         className="grow py-3 text-center hover:bg-gray-100"
       >
         <span
@@ -38,7 +38,7 @@ export const ProfileNav = ({ activeTab }: Props) => {
         </span>
       </Link>
       <Link
-        href={`/profile/${query.username}/media`}
+        href={`/profile/${username}/media`}
         className="grow py-3 text-center hover:bg-gray-100"
       >
         <span
@@ -51,7 +51,7 @@ export const ProfileNav = ({ activeTab }: Props) => {
         </span>
       </Link>
       <Link
-        href={`/profile/${query.username}/likes`}
+        href={`/profile/${username}/likes`}
         className="grow py-3 text-center hover:bg-gray-100"
       >
         <span

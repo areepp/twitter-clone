@@ -6,7 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { AuthInput, useLogin } from '@/features/auth'
 import {
   Spinner,

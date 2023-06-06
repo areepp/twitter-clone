@@ -1,8 +1,7 @@
 'use client'
 
 import { MainLayout } from '@/components/layouts/main-layout'
-import { useGetLoggedInUser } from '@/features/auth'
-import { useRouter } from 'next/router'
+import { useRouter, useParams } from 'next/navigation'
 import {
   ProfileLayout,
   ProfileNav,
@@ -12,24 +11,22 @@ import {
 import { Tweet } from '@/features/tweets'
 
 const Profile = () => {
-  const { query, isReady } = useRouter()
-  const { username: usernameQuery } = query
+  const { username: usernameQuery } = useParams()
 
-  const { data: user, isLoading } = useGetUserProfile(usernameQuery as string, {
-    enabled: isReady,
-  })
+  const { data: user, isLoading } = useGetUserProfile(usernameQuery as string)
 
   const {
     data: userTweets,
     isLoading: isLoadingTweets,
     isSuccess: tweetsFetched,
-  } = useGetUserTweets(usernameQuery as string, { enabled: isReady })
+  } = useGetUserTweets(usernameQuery as string)
 
   return (
     <MainLayout>
       <ProfileLayout />
       <ProfileNav activeTab="tweets" />
       {tweetsFetched &&
+        user &&
         userTweets.map((tweet) => (
           <Tweet
             key={tweet.id}
