@@ -1,3 +1,5 @@
+'use client'
+
 import { FieldValues, UseFormRegister } from 'react-hook-form'
 import clsx from 'clsx'
 
@@ -19,7 +21,7 @@ export const TextInput = ({
     <input
       className={clsx(
         className,
-        'rounded border py-3 px-2 focus:border-primary-blue focus:outline-none'
+        'rounded border px-2 py-3 focus:border-primary-blue focus:outline-none'
       )}
       {...props}
       {...rest}

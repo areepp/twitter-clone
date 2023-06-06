@@ -1,3 +1,5 @@
+'use client'
+
 import { PillButton, Spinner, TextInput } from '@/components/elements'
 import { useGetUserQueryData } from '@/features/auth'
 import {
@@ -50,14 +52,14 @@ export const EditProfileModal = () => {
     <Dialog.Root open={openModal} onOpenChange={setOpenModal}>
       <Dialog.Trigger asChild>
         <PillButton
-          className="absolute top-3 right-3"
+          className="absolute right-3 top-3"
           text="Edit profile"
           variant="white"
         />
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-40" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 min-h-[650px] w-[90vw] min-w-[300px] max-w-[570px] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white">
+        <Dialog.Content className="fixed left-1/2 top-1/2 min-h-[650px] w-[90vw] min-w-[300px] max-w-[570px] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white">
           <header className="flex items-center justify-between px-6 py-3">
             <div className="flex items-center gap-3">
               <Dialog.Close>
@@ -87,7 +89,7 @@ export const EditProfileModal = () => {
                   alt="profile picture"
                   fill
                 />
-                <div className="absolute top-[10px] left-[10px] z-50 h-fit w-fit rounded-full bg-black bg-opacity-50 p-2 xs:top-[28px] xs:left-[28px] sm:top-[42px] sm:left-[42px]">
+                <div className="absolute left-[10px] top-[10px] z-50 h-fit w-fit rounded-full bg-black bg-opacity-50 p-2 xs:left-[28px] xs:top-[28px] sm:left-[42px] sm:top-[42px]">
                   <label
                     htmlFor="profile-picture-input"
                     className="cursor-pointer"
@@ -129,7 +131,7 @@ export const EditProfileModal = () => {
                 </fieldset>
                 <fieldset>
                   <textarea
-                    className="h-[100px] w-full resize-none rounded border py-3 px-2 focus:border-primary-blue focus:outline-none"
+                    className="h-[100px] w-full resize-none rounded border px-2 py-3 focus:border-primary-blue focus:outline-none"
                     placeholder="Bio"
                     maxLength={160}
                     {...register('bio')}

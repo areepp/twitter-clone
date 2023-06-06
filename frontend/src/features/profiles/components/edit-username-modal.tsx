@@ -1,3 +1,5 @@
+'use client'
+
 import {
   PillButton,
   Spinner,
@@ -16,7 +18,6 @@ import { NewUsernameInput } from '../types'
 
 export const EditUserNameModal = () => {
   const user = useGetUserQueryData()
-
   const [openModal, setOpenModal] = useState(false)
 
   const {
@@ -52,6 +53,8 @@ export const EditUserNameModal = () => {
     return () => subscription.unsubscribe()
   }, [watch])
 
+  if (!user) return null
+
   return (
     <Dialog.Root open={openModal} onOpenChange={setOpenModal}>
       <Dialog.Trigger asChild>
@@ -64,7 +67,7 @@ export const EditUserNameModal = () => {
         <Dialog.Content asChild>
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="fixed top-1/2 left-1/2 flex h-[512px] w-[90vw] max-w-[512px] -translate-x-1/2 -translate-y-1/2 flex-col justify-between rounded-lg bg-white p-6"
+            className="fixed left-1/2 top-1/2 flex h-[512px] w-[90vw] max-w-[512px] -translate-x-1/2 -translate-y-1/2 flex-col justify-between rounded-lg bg-white p-6"
           >
             <div className="flex flex-col gap-3">
               <TwitterIcon className="mx-auto" />

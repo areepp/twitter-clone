@@ -1,9 +1,14 @@
+'use client'
+
 import { PillButton } from '@/components/elements'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useGetLoggedInUser } from '../hooks/use-get-logged-in-user'
 
 export const LoginBanner = () => {
-  const [showModal, setShowModal] = useState(true)
+  const { data: user } = useGetLoggedInUser()
+
+  if (user) return null
+
   return (
     <>
       <div className="fixed bottom-0 w-full bg-primary-blue px-6 py-3 text-white">
@@ -15,11 +20,7 @@ export const LoginBanner = () => {
             <span>People on Twitter are first to know.</span>
           </div>
           <div className="flex flex-grow gap-3 md:max-w-[175px] md:flex-auto">
-            <Link
-              href="/login"
-              className="w-full md:w-fit"
-              onClick={() => setShowModal(true)}
-            >
+            <Link href="/login" className="w-full md:w-fit">
               <PillButton
                 text="Log in"
                 variant="blue"

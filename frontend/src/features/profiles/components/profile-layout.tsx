@@ -1,3 +1,5 @@
+'use client'
+
 import { useGetUserQueryData } from '@/features/auth'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
@@ -16,6 +18,8 @@ export const ProfileLayout = () => {
   if (isLoading) return <div>loading screen..</div>
 
   if (!user) return <div>blank</div>
+
+  console.log(loggedInUser?.username, user.username)
 
   return (
     <>

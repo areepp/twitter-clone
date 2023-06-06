@@ -1,3 +1,5 @@
+'use client'
+
 import { FeatherIcon, PillButton } from '@/components/elements'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -24,7 +26,7 @@ export const NewTweetModal = () => {
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-40" />
-        <Dialog.Content className="fixed top-1/4 left-1/2 min-h-[320px] w-[90vw] min-w-[300px] max-w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white">
+        <Dialog.Content className="fixed left-1/2 top-1/4 min-h-[320px] w-[90vw] min-w-[300px] max-w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white">
           <header className="p-3">
             <Dialog.Close asChild>
               <XMarkIcon className="h-5 w-5 cursor-pointer" />

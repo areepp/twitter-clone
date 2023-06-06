@@ -1,5 +1,8 @@
+'use client'
+
 import { IUserTemp } from '@/features/profiles'
 import { UserCard } from './user-card'
+import { useGetLoggedInUser } from '@/features/auth'
 
 const USERS_DATA: IUserTemp[] = [
   {
@@ -22,14 +25,20 @@ const USERS_DATA: IUserTemp[] = [
   },
 ]
 
-export const WhoToFollow = () => (
-  <div className="mt-3 flex w-full flex-col gap-6 rounded-xl bg-gray-100 p-3">
-    <h3 className="text-xl font-bold">Who to follow</h3>
-    <div className="flex flex-col gap-6">
-      {USERS_DATA.map((user) => (
-        <UserCard key={user.userId} data={user} />
-      ))}
+export const WhoToFollow = () => {
+  const { data: user } = useGetLoggedInUser()
+
+  if (!user) return null
+
+  return (
+    <div className="mt-3 flex w-full flex-col gap-6 rounded-xl bg-gray-100 p-3">
+      <h3 className="text-xl font-bold">Who to follow</h3>
+      <div className="flex flex-col gap-6">
+        {USERS_DATA.map((user) => (
+          <UserCard key={user.userId} data={user} />
+        ))}
+      </div>
+      <button className="self-start text-primary-blue">Show more</button>
     </div>
-    <button className="self-start text-primary-blue">Show more</button>
-  </div>
-)
+  )
+}

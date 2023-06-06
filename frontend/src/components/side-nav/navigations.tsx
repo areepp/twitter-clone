@@ -1,4 +1,6 @@
-import { useGetUserQueryData } from '@/features/auth'
+'use client'
+
+import { useGetLoggedInUser } from '@/features/auth'
 import { NewTweetModal } from '@/features/tweets'
 import {
   HomeIcon,
@@ -9,11 +11,18 @@ import {
   UserIcon,
   EllipsisHorizontalIcon,
 } from '@heroicons/react/24/outline'
-import { FeatherIcon, PillButton } from '../elements'
 import NavLink from './nav-link'
 
 const ProtectedNavigations = () => {
-  const user = useGetUserQueryData()
+  const { data: user } = useGetLoggedInUser()
+
+  if (!user)
+    return (
+      <nav className="flex flex-col gap-8">
+        <NavLink href="#" Icon={HashtagIcon} text="Explore" />
+      </nav>
+    )
+
   return (
     <nav className="flex w-full flex-col items-center gap-8 xl:items-start">
       <NavLink href="/" Icon={HomeIcon} text="Home" />
@@ -22,7 +31,7 @@ const ProtectedNavigations = () => {
       <NavLink href="#" Icon={EnvelopeIcon} text="Messages" />
       <NavLink href="#" Icon={BookmarkIcon} text="Bookmarks" />
       <NavLink
-        href={`/profile/${user.username}`}
+        href={`/profile/${user?.username}`}
         Icon={UserIcon}
         text="Profile"
       />
@@ -31,11 +40,5 @@ const ProtectedNavigations = () => {
     </nav>
   )
 }
-
-export const PublicNavigation = () => (
-  <nav className="flex flex-col gap-8">
-    <NavLink href="#" Icon={HashtagIcon} text="Explore" />
-  </nav>
-)
 
 export default ProtectedNavigations

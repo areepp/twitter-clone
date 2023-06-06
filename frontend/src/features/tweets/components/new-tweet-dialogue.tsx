@@ -1,3 +1,5 @@
+'use client'
+
 import { PillButton } from '@/components/elements'
 import { useGetUserQueryData } from '@/features/auth'
 import {
@@ -36,6 +38,8 @@ export const NewTweetDialogue = ({ isModal, setOpenModal }: Props) => {
     }
     reset()
   }
+
+  if (!user) return null
 
   return (
     <div
