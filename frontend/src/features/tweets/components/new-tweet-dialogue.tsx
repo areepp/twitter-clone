@@ -1,7 +1,7 @@
 'use client'
 
 import { PillButton } from '@/components/elements'
-import { useGetUserQueryData } from '@/features/auth'
+import { useGetLoggedInUser } from '@/features/auth'
 import {
   PhotoIcon,
   GifIcon,
@@ -22,7 +22,7 @@ interface Props {
 }
 
 export const NewTweetDialogue = ({ isModal, setOpenModal }: Props) => {
-  const user = useGetUserQueryData()
+  const { data: user } = useGetLoggedInUser()
 
   const { register, handleSubmit, formState, reset } = useForm<NewTweetSchema>({
     resolver: zodResolver(NewTweetSchema),
@@ -33,7 +33,7 @@ export const NewTweetDialogue = ({ isModal, setOpenModal }: Props) => {
 
   const onSubmit: SubmitHandler<NewTweetSchema> = async (data) => {
     await mutateAsync(data)
-    if (isModal) {
+    if (isModal && setOpenModal) {
       setOpenModal(false)
     }
     reset()
@@ -43,22 +43,27 @@ export const NewTweetDialogue = ({ isModal, setOpenModal }: Props) => {
 
   return (
     <div
-      className={clsx('flex w-full gap-4 px-3 py-2', !isModal && 'border-b')}
+      className={clsx(
+        'flex w-full gap-4 px-3 pb-3 pt-6',
+        !isModal && 'border-b'
+      )}
     >
-      <div>
-        <div className="relative h-12 w-12">
-          <Image
-            src={user.profilePictureUrl ?? '/twitter-default-pp.png'}
-            fill
-            className="rounded-full object-cover"
-            alt="photo profile"
-          />
-        </div>
+      <div className="relative h-12 w-12">
+        <Image
+          src={user.profilePictureUrl ?? '/twitter-default-pp.png'}
+          fill
+          className="rounded-full object-cover"
+          alt="photo profile"
+        />
       </div>
-      <form className="grow" onSubmit={handleSubmit(onSubmit)}>
+
+      <form
+        className="flex h-full grow flex-col"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <TextareaAutosize
           className={clsx(
-            'w-full resize-none pt-3 text-lg focus:outline-none',
+            'w-full flex-1 resize-none pt-3 text-lg focus:outline-none',
             isModal && 'min-h-[200px]'
           )}
           maxLength={280}

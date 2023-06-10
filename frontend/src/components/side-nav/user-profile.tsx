@@ -3,7 +3,7 @@
 import { useGetLoggedInUser } from '@/features/auth'
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
-import * as Popover from '@radix-ui/react-popover'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/elements'
 import Logout from './logout'
 
 const UserProfile = () => {
@@ -12,10 +12,10 @@ const UserProfile = () => {
   if (!user) return null
 
   return (
-    <Popover.Root>
-      <Popover.Trigger asChild>
+    <Popover>
+      <PopoverTrigger asChild>
         <section
-          className="flex cursor-pointer select-none items-center justify-between rounded-full p-3 hover:bg-gray-100 xl:w-full"
+          className="flex cursor-pointer select-none items-center justify-between rounded-full p-3 transition hover:bg-gray-100 xl:w-full"
           aria-label="Update dimensions"
         >
           <div className="flex items-center gap-3">
@@ -35,13 +35,11 @@ const UserProfile = () => {
           </div>
           <EllipsisHorizontalIcon className="hidden h-5 w-5 xl:block" />
         </section>
-      </Popover.Trigger>
-      <Popover.Portal>
-        <Popover.Content className="mb-3">
-          <Logout />
-        </Popover.Content>
-      </Popover.Portal>
-    </Popover.Root>
+      </PopoverTrigger>
+      <PopoverContent className="mb-3">
+        <Logout />
+      </PopoverContent>
+    </Popover>
   )
 }
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useGetUserQueryData } from '@/features/auth'
+import { useGetLoggedInUser } from '@/features/auth'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { useRouter, useParams } from 'next/navigation'
@@ -13,13 +13,11 @@ export const ProfileLayout = () => {
 
   const { data: user, isLoading } = useGetUserProfile(usernameQuery as string)
 
-  const loggedInUser = useGetUserQueryData()
+  const { data: loggedInUser } = useGetLoggedInUser()
 
   if (isLoading) return <div>loading screen..</div>
 
   if (!user) return <div>blank</div>
-
-  console.log(loggedInUser?.username, user.username)
 
   return (
     <>

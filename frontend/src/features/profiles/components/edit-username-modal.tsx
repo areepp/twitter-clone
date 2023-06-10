@@ -1,15 +1,20 @@
 'use client'
 
 import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
   PillButton,
   Spinner,
   TextInput,
   TwitterIcon,
 } from '@/components/elements'
-import { useGetUserQueryData } from '@/features/auth'
+import { useGetLoggedInUser } from '@/features/auth'
 import { SparklesIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
-import * as Dialog from '@radix-ui/react-dialog'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form'
 import { useEditProfile } from '../hooks/use-edit-profile'
@@ -17,7 +22,7 @@ import { useCheckUsernameAvailability } from '../hooks/use-check-username-availa
 import { NewUsernameInput } from '../types'
 
 export const EditUserNameModal = () => {
-  const user = useGetUserQueryData()
+  const { data: user } = useGetLoggedInUser()
   const [openModal, setOpenModal] = useState(false)
 
   const {
@@ -33,14 +38,15 @@ export const EditUserNameModal = () => {
 
   const { username } = useWatch({ control })
 
-  const { refetch: checkAvailability, isError } =
-    useCheckUsernameAvailability(username)
+  const { refetch: checkAvailability, isError } = useCheckUsernameAvailability(
+    username as string
+  )
 
   const { mutateAsync: changeUsername, isLoading } = useEditProfile()
 
   const onSubmit: SubmitHandler<NewUsernameInput> = async (data) => {
     await changeUsername({
-      username: user.username,
+      username: user!.username,
       newUsername: data.username,
     })
     setOpenModal(false)
@@ -56,64 +62,62 @@ export const EditUserNameModal = () => {
   if (!user) return null
 
   return (
-    <Dialog.Root open={openModal} onOpenChange={setOpenModal}>
-      <Dialog.Trigger asChild>
+    <Dialog open={openModal} onOpenChange={setOpenModal}>
+      <DialogTrigger asChild>
         <button className="rounded-full p-3 hover:bg-gray-100">
           <SparklesIcon className="h-5 w-5" />
         </button>
-      </Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-40" />
-        <Dialog.Content asChild>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="fixed left-1/2 top-1/2 flex h-[512px] w-[90vw] max-w-[512px] -translate-x-1/2 -translate-y-1/2 flex-col justify-between rounded-lg bg-white p-6"
-          >
-            <div className="flex flex-col gap-3">
-              <TwitterIcon className="mx-auto" />
-              <Dialog.Title className="text-2xl font-bold">
-                Change your username?
-              </Dialog.Title>
-              <Dialog.Description className="text-dark-gray">
-                Your @username is unique. You can always change it here again.
-              </Dialog.Description>
-              <TextInput
-                placeholder="Username"
-                register={register}
-                registerValue="username"
-                className={
-                  errors.username ? 'border-red-600 focus:border-red-600' : ''
-                }
-              />
-              {(errors?.username || isError) && (
-                <span className="text-sm text-red-600">
-                  {errors.username?.message
-                    ? errors.username.message
-                    : 'This username has been taken. Please choose another.'}
-                </span>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
+      </DialogTrigger>
+
+      <DialogContent>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex h-[512px] w-[90vw] max-w-[512px] flex-col justify-between p-6"
+        >
+          <div className="flex flex-col gap-3">
+            <TwitterIcon className="mx-auto" />
+            <DialogTitle className="text-2xl font-bold">
+              Change your username?
+            </DialogTitle>
+            <DialogDescription className="text-dark-gray">
+              Your @username is unique. You can always change it here again.
+            </DialogDescription>
+            <TextInput
+              placeholder="Username"
+              register={register}
+              registerValue="username"
+              className={
+                errors.username ? 'border-red-600 focus:border-red-600' : ''
+              }
+            />
+            {(errors?.username || isError) && (
+              <span className="text-sm text-red-600">
+                {errors.username?.message
+                  ? errors.username.message
+                  : 'This username has been taken. Please choose another.'}
+              </span>
+            )}
+          </div>
+          <div className="flex flex-col gap-1">
+            <PillButton
+              text={isLoading ? <Spinner /> : 'Set username'}
+              variant="black"
+              size="large"
+              type="submit"
+              disabled={isLoading}
+            />
+            <DialogClose asChild>
               <PillButton
-                text={isLoading ? <Spinner /> : 'Set username'}
-                variant="black"
+                text="Cancel"
+                variant="white"
                 size="large"
-                type="submit"
-                disabled={isLoading}
+                aria-label="Close"
+                className="mt-3"
               />
-              <Dialog.Close asChild>
-                <PillButton
-                  text="Cancel"
-                  variant="white"
-                  size="large"
-                  aria-label="Close"
-                  className="mt-3"
-                />
-              </Dialog.Close>
-            </div>
-          </form>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+            </DialogClose>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   )
 }

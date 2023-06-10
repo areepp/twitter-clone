@@ -9,12 +9,12 @@ import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid'
 import { ITweet } from '../types'
 import { formatIsoString } from '../utils/format-iso-string'
 import { useLikeTweet } from '../hooks/use-like-tweet'
-import { useGetUserQueryData } from '@/features/auth'
+import { useGetLoggedInUser } from '@/features/auth'
 import { useUnLikeTweet } from '../hooks/use-unlike-tweet'
 import Link from 'next/link'
 
 export const Tweet = ({ data }: { data: ITweet }) => {
-  const loggedInUser = useGetUserQueryData()
+  const { data: loggedInUser } = useGetLoggedInUser()
   const { author } = data
   const { mutate: likeTweetMutation } = useLikeTweet()
   const { mutate: unlikeTweetMutation } = useUnLikeTweet()
@@ -65,9 +65,9 @@ export const Tweet = ({ data }: { data: ITweet }) => {
           <ChatBubbleOvalLeftIcon className="h-5 w-5 " />
           <ArrowPathRoundedSquareIcon className="h-5 w-5" />
           <div className="flex items-center gap-2">
-            {loggedInUser?.likedTweets.filter(
-              (liked) => liked.tweet.id === data.id
-            ).length > 0 ? (
+            {loggedInUser?.likedTweets.find(
+              (list) => list.tweet.id === data.id
+            ) ? (
               <HeartIconSolid
                 className="h-5 w-5 cursor-pointer text-pink-600"
                 onClick={unlikeTweet}
