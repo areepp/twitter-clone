@@ -10,8 +10,8 @@ export const useLogout = () => {
     queryFn: logout,
     enabled: false,
     onSettled: () => {
-      queryClient.setQueryData(['user', 'me'], () => undefined)
-      router.push('/')
+      queryClient.removeQueries(['user', 'me'])
+      router.push('/login')
     },
   })
 }

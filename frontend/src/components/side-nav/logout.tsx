@@ -11,13 +11,15 @@ import {
   DialogClose,
 } from '@/components/elements'
 import { PillButton, TwitterIcon } from '../elements'
+import { useState } from 'react'
 
 const Logout = () => {
-  const { refetch } = useLogout()
+  const { refetch, isInitialLoading } = useLogout()
   const { data: user } = useGetLoggedInUser()
+  const [openModal, setOpenModal] = useState(false)
 
   return (
-    <Dialog>
+    <Dialog open={openModal} onOpenChange={setOpenModal}>
       <DialogTrigger asChild>
         <button className="flex w-full items-center gap-1 p-4 transition hover:bg-gray-100 focus:outline-none">
           <ArrowLeftOnRectangleIcon className="h-5 w-5" />
@@ -34,7 +36,7 @@ const Logout = () => {
         </DialogDescription>
         <PillButton
           className="mt-6"
-          text="Log out"
+          text={isInitialLoading ? 'Logging out..' : 'Log out'}
           variant="black"
           size="large"
           onClick={refetch}
