@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import { AuthInput, useLogin } from '@/features/auth'
 import {
@@ -20,10 +20,9 @@ const Login = () => {
 
   const { mutateAsync, isLoading } = useLogin()
 
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = useForm<AuthInput>({ resolver: zodResolver(AuthInput) })
+  const methods = useForm<AuthInput>({ resolver: zodResolver(AuthInput) })
+  const { errors } = methods.formState
+
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const [passwordInputType, setPasswordInputType] = useState<
@@ -77,42 +76,44 @@ const Login = () => {
             <span>or</span>
             <span className="border-b" />
           </div>
-          <form
-            onSubmit={handleSubmit(signInWithEmailAndPassword)}
-            className="flex w-full flex-col gap-3"
-          >
-            <fieldset className="flex flex-col gap-1">
-              <TextInput placeholder="email" name="email" />
-              {errors.email && (
-                <span className="text-xs">{errors.email.message}</span>
-              )}
-            </fieldset>
-            <fieldset className="relative flex flex-col gap-1">
-              <TextInput placeholder="password" name="password" />
-              {passwordInputType === 'password' ? (
-                <EyeIcon
-                  className="absolute right-4 top-4 h-5 w-5 hover:cursor-pointer"
-                  onClick={togglePasswordInputType}
-                />
-              ) : (
-                <EyeSlashIcon
-                  className="absolute right-4 top-4 h-5 w-5 hover:cursor-pointer"
-                  onClick={togglePasswordInputType}
-                />
-              )}
-              {errors.password && (
-                <span className="text-xs">{errors.password.message}</span>
-              )}
-            </fieldset>
-            <button
-              disabled={isLoading}
-              type="submit"
-              className="flex w-full items-center justify-center gap-3 rounded-full border bg-gray-900 px-6 py-2 font-semibold text-white"
+          <FormProvider {...methods}>
+            <form
+              onSubmit={methods.handleSubmit(signInWithEmailAndPassword)}
+              className="flex w-full flex-col gap-3"
             >
-              {isLoading ? <Spinner /> : 'Log in'}
-            </button>
-            {errorMessage && <span className="text-xs">{errorMessage}</span>}
-          </form>
+              <fieldset className="flex flex-col gap-1">
+                <TextInput placeholder="email" name="email" />
+                {errors.email && (
+                  <span className="text-xs">{errors.email.message}</span>
+                )}
+              </fieldset>
+              <fieldset className="relative flex flex-col gap-1">
+                <TextInput placeholder="password" name="password" />
+                {passwordInputType === 'password' ? (
+                  <EyeIcon
+                    className="absolute right-4 top-4 h-5 w-5 hover:cursor-pointer"
+                    onClick={togglePasswordInputType}
+                  />
+                ) : (
+                  <EyeSlashIcon
+                    className="absolute right-4 top-4 h-5 w-5 hover:cursor-pointer"
+                    onClick={togglePasswordInputType}
+                  />
+                )}
+                {errors.password && (
+                  <span className="text-xs">{errors.password.message}</span>
+                )}
+              </fieldset>
+              <button
+                disabled={isLoading}
+                type="submit"
+                className="flex w-full items-center justify-center gap-3 rounded-full border bg-gray-900 px-6 py-2 font-semibold text-white"
+              >
+                {isLoading ? <Spinner /> : 'Log in'}
+              </button>
+              {errorMessage && <span className="text-xs">{errorMessage}</span>}
+            </form>
+          </FormProvider>
           <p className="self-start">
             Don't have an account?{' '}
             <Link className="text-primary-blue" href="/signup">

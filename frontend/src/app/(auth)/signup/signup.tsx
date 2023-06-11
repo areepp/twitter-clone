@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
@@ -15,10 +15,9 @@ import {
 } from '@/components/elements'
 
 const Signup = () => {
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = useForm<AuthInput>({ resolver: zodResolver(AuthInput) })
+  const methods = useForm<AuthInput>({ resolver: zodResolver(AuthInput) })
+  const { errors } = methods.formState
+
   const [message, setMessage] = useState<string | null>(null)
 
   const [passwordInputType, setPasswordInputType] = useState<
@@ -64,59 +63,60 @@ const Signup = () => {
             <span>or</span>
             <span className="border-b" />
           </div>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex w-full flex-col gap-3"
-          >
-            <fieldset className="flex flex-col gap-1">
-              {/* <input
-                className="rounded-lg border py-3 px-2 focus:outline-primary-blue"
-                type="text"
-                placeholder="email"
-                {...register('email')}
-              /> */}
-              <TextInput placeholder="email" name="email" />
-              {errors.email && (
-                <span className="text-xs">{errors.email.message}</span>
-              )}
-            </fieldset>
-            <fieldset className="relative flex flex-col gap-1">
-              {/* <input
-                className="rounded-lg border py-3 px-2 focus:outline-primary-blue"
-                type={passwordInputType}
-                placeholder="password"
-                {...register('password')}
-              /> */}
-              <TextInput
-                placeholder="password"
-                name="password"
-                type={passwordInputType}
-              />
-              {passwordInputType === 'password' ? (
-                <EyeIcon
-                  className="absolute right-4 top-4 h-5 w-5 hover:cursor-pointer"
-                  onClick={togglePasswordInputType}
-                />
-              ) : (
-                <EyeSlashIcon
-                  className="absolute right-4 top-4 h-5 w-5 hover:cursor-pointer"
-                  onClick={togglePasswordInputType}
-                />
-              )}
-              {errors.password && (
-                <span className="text-xs">{errors.password.message}</span>
-              )}
-            </fieldset>
-
-            <button
-              disabled={isLoading}
-              type="submit"
-              className="flex w-full items-center justify-center gap-3 rounded-full border bg-gray-900 px-6 py-2 font-semibold text-white"
+          <FormProvider {...methods}>
+            <form
+              onSubmit={methods.handleSubmit(onSubmit)}
+              className="flex w-full flex-col gap-3"
             >
-              {isLoading ? <Spinner /> : 'Sign up'}
-            </button>
-            {message && <span className="text-xs">{message}</span>}
-          </form>
+              <fieldset className="flex flex-col gap-1">
+                {/* <input
+                  className="rounded-lg border py-3 px-2 focus:outline-primary-blue"
+                  type="text"
+                  placeholder="email"
+                  {...register('email')}
+                /> */}
+                <TextInput placeholder="email" name="email" />
+                {errors.email && (
+                  <span className="text-xs">{errors.email.message}</span>
+                )}
+              </fieldset>
+              <fieldset className="relative flex flex-col gap-1">
+                {/* <input
+                  className="rounded-lg border py-3 px-2 focus:outline-primary-blue"
+                  type={passwordInputType}
+                  placeholder="password"
+                  {...register('password')}
+                /> */}
+                <TextInput
+                  placeholder="password"
+                  name="password"
+                  type={passwordInputType}
+                />
+                {passwordInputType === 'password' ? (
+                  <EyeIcon
+                    className="absolute right-4 top-4 h-5 w-5 hover:cursor-pointer"
+                    onClick={togglePasswordInputType}
+                  />
+                ) : (
+                  <EyeSlashIcon
+                    className="absolute right-4 top-4 h-5 w-5 hover:cursor-pointer"
+                    onClick={togglePasswordInputType}
+                  />
+                )}
+                {errors.password && (
+                  <span className="text-xs">{errors.password.message}</span>
+                )}
+              </fieldset>
+              <button
+                disabled={isLoading}
+                type="submit"
+                className="flex w-full items-center justify-center gap-3 rounded-full border bg-gray-900 px-6 py-2 font-semibold text-white"
+              >
+                {isLoading ? <Spinner /> : 'Sign up'}
+              </button>
+              {message && <span className="text-xs">{message}</span>}
+            </form>
+          </FormProvider>
           <p className="self-start">
             Already have an account?{' '}
             <Link className="text-primary-blue" href="/login">

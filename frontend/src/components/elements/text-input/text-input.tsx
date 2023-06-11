@@ -11,6 +11,8 @@ interface Props extends React.HTMLProps<HTMLInputElement> {
 export const TextInput = ({ name, className, ...rest }: Props) => {
   const { register } = useFormContext()
 
+  console.log('AAAAAAAA', useFormContext())
+
   return (
     <input
       className={clsx(
