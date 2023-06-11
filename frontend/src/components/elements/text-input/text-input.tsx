@@ -1,21 +1,15 @@
 'use client'
 
-import { FieldValues, UseFormRegister } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import clsx from 'clsx'
 
 interface Props extends React.HTMLProps<HTMLInputElement> {
-  registerValue?: string
-  register?: UseFormRegister<FieldValues>
+  name: string
   value?: string
 }
 
-export const TextInput = ({
-  registerValue,
-  register,
-  className,
-  ...rest
-}: Props) => {
-  const props = register ? register(registerValue) : {}
+export const TextInput = ({ name, className, ...rest }: Props) => {
+  const { register } = useFormContext()
 
   return (
     <input
@@ -23,7 +17,7 @@ export const TextInput = ({
         className,
         'rounded border px-2 py-3 focus:border-primary-blue focus:outline-none'
       )}
-      {...props}
+      {...register(name)}
       {...rest}
     />
   )

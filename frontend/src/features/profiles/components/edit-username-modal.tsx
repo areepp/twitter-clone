@@ -26,7 +26,6 @@ export const EditUserNameModal = () => {
   const [openModal, setOpenModal] = useState(false)
 
   const {
-    register,
     handleSubmit,
     watch,
     formState: { errors },
@@ -84,8 +83,7 @@ export const EditUserNameModal = () => {
             </DialogDescription>
             <TextInput
               placeholder="Username"
-              register={register}
-              registerValue="username"
+              name="username"
               className={
                 errors.username ? 'border-red-600 focus:border-red-600' : ''
               }

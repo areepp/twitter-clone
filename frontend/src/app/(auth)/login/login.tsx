@@ -21,7 +21,6 @@ const Login = () => {
   const { mutateAsync, isLoading } = useLogin()
 
   const {
-    register,
     handleSubmit,
     formState: { errors },
   } = useForm<AuthInput>({ resolver: zodResolver(AuthInput) })
@@ -35,7 +34,7 @@ const Login = () => {
     try {
       setErrorMessage(null)
       await mutateAsync(data)
-      await router.push('/')
+      router.push('/')
     } catch (err) {
       setErrorMessage(
         err.response.data.message ?? 'something wrong occured. Try again later'
@@ -83,21 +82,13 @@ const Login = () => {
             className="flex w-full flex-col gap-3"
           >
             <fieldset className="flex flex-col gap-1">
-              <TextInput
-                placeholder="email"
-                register={register}
-                registerValue="email"
-              />
+              <TextInput placeholder="email" name="email" />
               {errors.email && (
                 <span className="text-xs">{errors.email.message}</span>
               )}
             </fieldset>
             <fieldset className="relative flex flex-col gap-1">
-              <TextInput
-                placeholder="password"
-                register={register}
-                registerValue="password"
-              />
+              <TextInput placeholder="password" name="password" />
               {passwordInputType === 'password' ? (
                 <EyeIcon
                   className="absolute right-4 top-4 h-5 w-5 hover:cursor-pointer"

@@ -16,7 +16,6 @@ import {
 
 const Signup = () => {
   const {
-    register,
     handleSubmit,
     formState: { errors },
   } = useForm<AuthInput>({ resolver: zodResolver(AuthInput) })
@@ -76,11 +75,7 @@ const Signup = () => {
                 placeholder="email"
                 {...register('email')}
               /> */}
-              <TextInput
-                placeholder="email"
-                register={register}
-                registerValue="email"
-              />
+              <TextInput placeholder="email" name="email" />
               {errors.email && (
                 <span className="text-xs">{errors.email.message}</span>
               )}
@@ -94,8 +89,7 @@ const Signup = () => {
               /> */}
               <TextInput
                 placeholder="password"
-                register={register}
-                registerValue="password"
+                name="password"
                 type={passwordInputType}
               />
               {passwordInputType === 'password' ? (

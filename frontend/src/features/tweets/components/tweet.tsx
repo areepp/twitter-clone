@@ -41,7 +41,7 @@ export const Tweet = ({ data }: { data: ITweet }) => {
     <div className="flex w-full cursor-pointer gap-3 border-b p-3">
       <Link href={`/profile/${author.username}`} className="relative h-12 w-12">
         <Image
-          src={author.profilePictureUrl}
+          src={author.profilePictureUrl ?? '/twitter-default-pp.png'}
           className="h-full w-full rounded-full object-cover"
           alt="profile photo"
           fill

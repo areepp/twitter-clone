@@ -120,8 +120,7 @@ export const EditProfileModal = () => {
                 <TextInput
                   placeholder="Display name"
                   maxLength={50}
-                  register={register}
-                  registerValue="displayName"
+                  name="displayName"
                   className={
                     errors.displayName
                       ? 'border-red-600 focus:border-red-600'
