@@ -21,6 +21,7 @@ tweetsController.post(
   isAuthenticated,
   validateRequest({ body: NewTweetSchema }),
   async (req, res, next) => {
+    console.log('iiiiiii', req.user!.id)
     try {
       const newTweet = await tweetsService.createTweet({
         authorId: req.user!.id,

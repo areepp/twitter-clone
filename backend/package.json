@@ -10,6 +10,9 @@
     "check-types": "tsc --noEmit",
     "lint": "npx eslint . --ext .ts"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
