@@ -5,9 +5,9 @@ import Link from 'next/link'
 import { useGetLoggedInUser } from '../hooks/use-get-logged-in-user'
 
 export const LoginBanner = () => {
-  const { data: user } = useGetLoggedInUser()
+  const { data: user, isLoading } = useGetLoggedInUser()
 
-  if (user) return null
+  if (user || isLoading) return null
 
   return (
     <>
