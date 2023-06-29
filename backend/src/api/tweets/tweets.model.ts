@@ -5,6 +5,10 @@ export interface ITweet {
   text: string
 }
 
+export const GetTweetsSchema = z.object({
+  cursor: z.string().optional(),
+})
+
 export const NewTweetSchema = z.object({
   text: z
     .string()
@@ -13,3 +17,4 @@ export const NewTweetSchema = z.object({
 })
 
 export type NewTweetSchema = z.infer<typeof NewTweetSchema>
+export type GetTweetsSchema = z.infer<typeof GetTweetsSchema>

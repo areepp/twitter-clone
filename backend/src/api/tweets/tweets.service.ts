@@ -1,7 +1,7 @@
 import db from '@/lib/db'
 
-export const getAllTweets = () =>
-  db.tweet.findMany({
+export const getAllTweets = async ({ cursor }: { cursor: number }) => {
+  const tweets = await db.tweet.findMany({
     select: {
       id: true,
       text: true,
@@ -19,10 +19,22 @@ export const getAllTweets = () =>
         },
       },
     },
+    take: 10,
+    cursor: cursor
+      ? {
+          id: cursor,
+        }
+      : undefined,
     orderBy: {
       createdAt: 'desc',
     },
   })
+
+  return {
+    result: tweets,
+    next_cursor: tweets[9].id,
+  }
+}
 
 export const createTweet = async ({
   authorId,
