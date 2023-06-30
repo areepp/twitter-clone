@@ -9,7 +9,7 @@ async function main() {
         text: 'tweet created by seed',
         author: {
           connect: {
-            id: '8ecd62fe-6233-4ba6-a4c5-95a17576faff',
+            id: '117021340127220940452',
           },
         },
       },

@@ -61,7 +61,7 @@ authController.post(
       } else {
         return res
           .status(403)
-          .json({ message: info.message ?? 'some error occured' })
+          .json({ message: info ? info?.message : 'some error occured' })
       }
     })(req, res, next)
   },

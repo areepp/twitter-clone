@@ -36,7 +36,8 @@ const Login = () => {
       router.push('/')
     } catch (err) {
       setErrorMessage(
-        err.response.data.message ?? 'something wrong occured. Try again later'
+        err.response?.data?.message ??
+          'something wrong occured. Try again later'
       )
     }
   }
