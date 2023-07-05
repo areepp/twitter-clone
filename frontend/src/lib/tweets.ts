@@ -1,9 +1,16 @@
 import { ITweet } from '@/features/tweets/types'
 import axios from './axios'
 
-export const getAllTweets = async () => {
+export const getTweets = async (cursor?: number) => {
   try {
-    const response = await axios.get<ITweet[]>('/tweets')
+    const response = await axios.get<{ data: ITweet[]; next_cursor: number }>(
+      '/tweets',
+      {
+        params: {
+          cursor,
+        },
+      }
+    )
 
     return response.data
   } catch (error) {
