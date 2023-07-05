@@ -3,10 +3,10 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 15; i++) {
     await prisma.tweet.create({
       data: {
-        text: 'tweet created by seed',
+        text: 'tweet created by seed d',
         author: {
           connect: {
             id: '117021340127220940452',

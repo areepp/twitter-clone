@@ -1,6 +1,6 @@
 import db from '@/lib/db'
 
-export const getAllTweets = async ({ cursor }: { cursor: number }) => {
+export const getAllTweets = async ({ cursor }: { cursor?: number }) => {
   const tweets = await db.tweet.findMany({
     select: {
       id: true,
@@ -31,8 +31,8 @@ export const getAllTweets = async ({ cursor }: { cursor: number }) => {
   })
 
   return {
-    result: tweets,
-    next_cursor: tweets[9].id,
+    data: tweets,
+    next_cursor: tweets.length >= 10 ? tweets[9].id : undefined,
   }
 }
 

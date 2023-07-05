@@ -8,11 +8,13 @@ const tweetsController = express.Router()
 
 tweetsController.get(
   '/',
-  validateRequest({ body: GetTweetsSchema }),
+  validateRequest({ query: GetTweetsSchema }),
   async (req, res, next) => {
     try {
       const tweets = await tweetsService.getAllTweets({
-        cursor: parseInt(req.body.cursor),
+        cursor: req.query.cursor
+          ? parseInt(req.query.cursor as string)
+          : undefined,
       })
 
       return res.status(200).json(tweets)
