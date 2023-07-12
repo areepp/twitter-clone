@@ -14,13 +14,10 @@ export const Tweets = () => {
   })
 
   useEffect(() => {
-    console.log('aaaaaaa', inView)
     if (inView) {
       query.fetchNextPage()
     }
   }, [inView])
-
-  console.log(query.isFetchingNextPage)
 
   if (query.isLoading) return <div>loading...</div>
 

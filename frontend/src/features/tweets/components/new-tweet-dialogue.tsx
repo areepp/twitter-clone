@@ -7,14 +7,17 @@ import {
   GifIcon,
   FaceSmileIcon,
   MapPinIcon,
+  XMarkIcon,
 } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import clsx from 'clsx'
 import TextareaAutosize from 'react-textarea-autosize'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { NewTweetSchema } from '../types'
+import { SubmitHandler, useForm, useFieldArray } from 'react-hook-form'
+import { MAX_FILE_SIZE, NewTweetSchema } from '../types'
 import { useCreateTweet } from '../hooks/use-create-tweet'
+import { useDropzone } from 'react-dropzone'
+import { useCallback } from 'react'
 
 interface Props {
   isModal?: boolean
@@ -24,9 +27,33 @@ interface Props {
 export const NewTweetDialogue = ({ isModal, setOpenModal }: Props) => {
   const { data: user } = useGetLoggedInUser()
 
-  const { register, handleSubmit, formState, reset } = useForm<NewTweetSchema>({
-    resolver: zodResolver(NewTweetSchema),
-    mode: 'all',
+  const { register, handleSubmit, formState, reset, control } =
+    useForm<NewTweetSchema>({
+      resolver: zodResolver(NewTweetSchema),
+      mode: 'all',
+    })
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'media_attachments',
+  })
+
+  const onDrop = useCallback(
+    (files: File[]) => {
+      append({ url: URL.createObjectURL(files[0]), file: files[0] })
+    },
+    [append]
+  )
+
+  const { open } = useDropzone({
+    onDrop,
+    noClick: true,
+    noKeyboard: true,
+    noDrag: true,
+    maxSize: MAX_FILE_SIZE,
+    accept: {
+      'image/*': ['.png', '.jpg', '.jpeg', '.webp'],
+    },
   })
 
   const { mutateAsync } = useCreateTweet()
@@ -63,17 +90,43 @@ export const NewTweetDialogue = ({ isModal, setOpenModal }: Props) => {
       >
         <TextareaAutosize
           className={clsx(
-            'w-full flex-1 resize-none pt-3 text-lg focus:outline-none',
-            isModal && 'min-h-[200px]'
+            'w-full resize-none pt-3 text-lg focus:outline-none',
+            isModal && 'min-h-[50px]'
           )}
           maxLength={280}
           placeholder="What's happening?"
           {...register('text', { required: true })}
         />
 
+        <div className="flex-1">
+          {fields.length > 0 &&
+            fields.map((media) => (
+              <div
+                className="relative h-[340px] w-full overflow-hidden rounded-2xl"
+                key={media.id}
+              >
+                <Image
+                  src={media.url}
+                  fill={true}
+                  className="bg-cover"
+                  alt="new tweet attachment"
+                />
+                <div
+                  className="absolute right-3 top-3 z-30 cursor-pointer rounded-full bg-black/50 p-1"
+                  onClick={() => remove(media.index)}
+                >
+                  <XMarkIcon className="h-5 w-5 text-white" />
+                </div>
+              </div>
+            ))}
+        </div>
+
         <div className="mt-3 flex items-center justify-between">
           <fieldset className="flex gap-4">
-            <PhotoIcon className="h-5 w-5 text-primary-blue" />
+            <PhotoIcon
+              onClick={open}
+              className="h-5 w-5 cursor-pointer text-primary-blue"
+            />
             <GifIcon className="h-5 w-5 text-primary-blue" />
             <FaceSmileIcon className="h-5 w-5 text-primary-blue" />
             <MapPinIcon className="h-5 w-5 text-primary-blue" />

@@ -1,5 +1,5 @@
 import { ITweet } from '@/features/tweets/types'
-import axios from './axios'
+import axios, { axiosMultiPart } from './axios'
 
 export const getTweets = async (cursor?: number) => {
   try {
@@ -18,8 +18,23 @@ export const getTweets = async (cursor?: number) => {
   }
 }
 
-export const createTweet = async (data: { text?: string }) =>
-  axios.post('/tweets', data)
+export type CreateTweetProps = {
+  text: string
+  media_attachments?: Array<{ file: File }>
+}
+
+export const createTweet = async (data: CreateTweetProps) => {
+  const formData = new FormData()
+
+  formData.append('text', data.text)
+
+  if (data.media_attachments) {
+    for (let i = 0; i < data.media_attachments?.length; i++) {
+      formData.append('media_attachments', data.media_attachments[i].file)
+    }
+  }
+  return axiosMultiPart.post('/tweets', formData)
+}
 
 export const likeTweet = async (id: number) => axios.patch(`/tweets/${id}/like`)
 
