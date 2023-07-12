@@ -1,9 +1,7 @@
 import ApiError from '@/types/api-error'
 import db from '@/lib/db'
-import { PutObjectCommand, PutObjectCommandInput } from '@aws-sdk/client-s3'
-import s3 from '@/lib/aws'
-import { v4 as uuidv4 } from 'uuid'
 import { EditUserProfileSchema } from './users.model'
+import { sendPutObjectCommand } from '@/lib/s3/put-object'
 
 export const getUserProfile = async (username: string) => {
   const user = await db.user.findUnique({
@@ -90,38 +88,20 @@ export const editUserProfile = async (
     }
   }
 
+  let profilePictureUrl: string | null = null
+  if (profilePictureFile) {
+    profilePictureUrl = await sendPutObjectCommand(profilePictureFile)
+  }
+
   if (displayName || bio) {
     await db.user.update({
       where: { username: user.username },
       data: {
         displayName,
         bio,
-      },
-    })
-  }
-
-  if (profilePictureFile) {
-    const uniqueFileName = uuidv4()
-
-    const params: PutObjectCommandInput = {
-      Bucket: process.env.BUCKET_NAME,
-      Key: uniqueFileName,
-      Body: profilePictureFile.buffer,
-      ContentType: profilePictureFile.mimetype,
-    }
-
-    const command = new PutObjectCommand(params)
-
-    await s3.send(command)
-
-    await db.user.update({
-      where: {
-        username: user.username,
-      },
-      data: {
-        profilePictureUrl:
-          'https://my-twitter-clone.s3.ap-southeast-1.amazonaws.com/' +
-          uniqueFileName,
+        ...(profilePictureUrl && {
+          profilePictureUrl,
+        }),
       },
     })
   }

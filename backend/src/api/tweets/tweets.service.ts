@@ -1,4 +1,6 @@
 import db from '@/lib/db'
+import { sendPutObjectCommand } from '@/lib/s3/put-object'
+import { MediaAttachment } from '@/types/global'
 
 export const getAllTweets = async ({ cursor }: { cursor?: number }) => {
   const tweets = await db.tweet.findMany({
@@ -16,6 +18,11 @@ export const getAllTweets = async ({ cursor }: { cursor?: number }) => {
       likes: {
         select: {
           id: true,
+        },
+      },
+      mediaAttachments: {
+        select: {
+          url: true,
         },
       },
     },
@@ -39,10 +46,29 @@ export const getAllTweets = async ({ cursor }: { cursor?: number }) => {
 export const createTweet = async ({
   authorId,
   text,
+  mediaAttachments,
 }: {
   authorId: string
   text: string
+  mediaAttachments?: Array<Express.Multer.File>
 }) => {
+  let parsedAttachmentIds: Array<Pick<MediaAttachment, 'id'>> | undefined =
+    undefined
+  if (mediaAttachments) {
+    const attachmentsData = await Promise.all(
+      mediaAttachments.map(async (file) => {
+        const url = await sendPutObjectCommand(file)
+        return await db.mediaAttachment.create({
+          data: {
+            url,
+          },
+        })
+      }),
+    )
+    parsedAttachmentIds = attachmentsData.map((attachment) => ({
+      id: attachment.id,
+    }))
+  }
   const newTweet = await db.tweet.create({
     data: {
       text,
@@ -50,6 +76,9 @@ export const createTweet = async ({
         connect: {
           id: authorId,
         },
+      },
+      mediaAttachments: {
+        connect: parsedAttachmentIds,
       },
     },
   })

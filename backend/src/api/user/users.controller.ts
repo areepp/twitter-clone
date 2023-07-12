@@ -10,7 +10,7 @@ import {
 import * as userService from './users.service'
 
 const storage = multer.memoryStorage()
-const upload = multer({ storage: storage })
+const upload = multer({ storage })
 
 const usersController = express.Router()
 
@@ -73,11 +73,12 @@ usersController.patch(
   upload.single('profilePictureFile'),
   async (req, res, next) => {
     try {
+      // logged in user and requested user have to be the same
       if (req.params.username !== req?.user?.username) {
         throw new ApiError('Request denied.', 403)
-      } // logged in user and requested user have to be the same
+      }
 
-      await userService.editUserProfile(req.user!, {
+      await userService.editUserProfile(req.user, {
         ...req.body,
         profilePictureFile: req.file,
       })

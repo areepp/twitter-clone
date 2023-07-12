@@ -25,12 +25,13 @@ model User {
 }
 
 model Tweet {
-  id        Int          @id @default(autoincrement())
-  createdAt DateTime     @default(now())
-  text      String
-  author    User         @relation(fields: [userId], references: [id])
-  userId    String
-  likes     LikedTweet[]
+  id               Int               @id @default(autoincrement())
+  createdAt        DateTime          @default(now())
+  text             String
+  author           User              @relation(fields: [userId], references: [id])
+  userId           String
+  likes            LikedTweet[]
+  mediaAttachments MediaAttachment[]
 }
 
 model LikedTweet {
@@ -42,4 +43,11 @@ model LikedTweet {
 
   User   User?   @relation(fields: [userId], references: [id])
   userId String?
+}
+
+model MediaAttachment {
+  id      Int    @id @default(autoincrement())
+  url     String
+  Tweet   Tweet? @relation(fields: [tweetId], references: [id])
+  tweetId Int?
 }

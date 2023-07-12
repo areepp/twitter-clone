@@ -35,7 +35,7 @@ export const EditUserProfileSchema = z
   })
   .partial()
   .refine(
-    (data) => data.username || data.displayName || data.bio,
+    (data) => data.username ?? data.displayName ?? data.bio,
     'Either "username" or "displayName" or "bio" field should be filled in.',
   )
 

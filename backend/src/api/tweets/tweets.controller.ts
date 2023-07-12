@@ -3,8 +3,12 @@ import validateRequest from '@/middlewares/validate-request'
 import express from 'express'
 import { GetTweetsSchema, NewTweetSchema } from './tweets.model'
 import * as tweetsService from './tweets.service'
+import multer from 'multer'
 
 const tweetsController = express.Router()
+
+const storage = multer.memoryStorage()
+const upload = multer({ storage })
 
 tweetsController.get(
   '/',
@@ -27,12 +31,16 @@ tweetsController.get(
 tweetsController.post(
   '/',
   isAuthenticated,
-  validateRequest({ body: NewTweetSchema }),
+  // validateRequest({ body: NewTweetSchema }), // TODO: work on this validation
+  upload.array('media_attachments', 4),
   async (req, res, next) => {
     try {
       const newTweet = await tweetsService.createTweet({
         authorId: req.user!.id,
         text: req.body.text,
+        ...(req.files && {
+          mediaAttachments: req.files as Array<Express.Multer.File>,
+        }),
       })
 
       return res.status(200).json(newTweet)
