@@ -102,7 +102,7 @@ export const NewTweetDialogue = ({ isModal, setOpenModal }: Props) => {
           {fields.length > 0 &&
             fields.map((media) => (
               <div
-                className="relative h-[340px] w-full overflow-hidden rounded-2xl"
+                className="relative h-[50px] w-full overflow-hidden rounded-2xl"
                 key={media.id}
               >
                 <Image

@@ -9,9 +9,7 @@ export type ITweet = {
   likes: {
     id: string
   }[]
-  mediaAttachments: {
-    url: string
-  }[]
+  mediaAttachments: MediaAttachment[]
 }
 
 export const MAX_FILE_SIZE = 50 * 1000 * 1000 // 50 MB

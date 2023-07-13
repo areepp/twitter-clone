@@ -12,6 +12,7 @@ import { useLikeTweet } from '../hooks/use-like-tweet'
 import { useGetLoggedInUser } from '@/features/auth'
 import { useUnLikeTweet } from '../hooks/use-unlike-tweet'
 import Link from 'next/link'
+import MediaAttachments from './media-attachments'
 
 export const Tweet = ({ data }: { data: ITweet }) => {
   const { data: loggedInUser } = useGetLoggedInUser()
@@ -62,20 +63,13 @@ export const Tweet = ({ data }: { data: ITweet }) => {
         </div>
         <p>{data.text}</p>
         {data.mediaAttachments.length > 0 && (
-          <div>
-            {data.mediaAttachments.map((media) => (
-              <Image
-                key={media.url}
-                src={media.url}
-                width={400}
-                height={400}
-                alt="tweet image"
-              />
-            ))}
-          </div>
+          <MediaAttachments
+            className="mt-2"
+            attachments={data.mediaAttachments}
+          />
         )}
 
-        <div className="mt-2 flex gap-20 text-dark-gray">
+        <div className="mt-3 flex gap-20 text-dark-gray">
           <ChatBubbleOvalLeftIcon className="h-5 w-5 " />
           <ArrowPathRoundedSquareIcon className="h-5 w-5" />
           <div className="flex items-center gap-2">
