@@ -18,6 +18,7 @@ import { MAX_FILE_SIZE, NewTweetSchema } from '../types'
 import { useCreateTweet } from '../hooks/use-create-tweet'
 import { useDropzone } from 'react-dropzone'
 import { useCallback } from 'react'
+import MediaAttachments from './media-attachments'
 
 interface Props {
   isModal?: boolean
@@ -56,7 +57,7 @@ export const NewTweetDialogue = ({ isModal, setOpenModal }: Props) => {
     },
   })
 
-  const { mutateAsync } = useCreateTweet()
+  const { mutateAsync, isLoading } = useCreateTweet()
 
   const onSubmit: SubmitHandler<NewTweetSchema> = async (data) => {
     await mutateAsync(data)
@@ -99,26 +100,14 @@ export const NewTweetDialogue = ({ isModal, setOpenModal }: Props) => {
         />
 
         <div className="flex-1">
-          {fields.length > 0 &&
-            fields.map((media) => (
-              <div
-                className="relative h-[50px] w-full overflow-hidden rounded-2xl"
-                key={media.id}
-              >
-                <Image
-                  src={media.url}
-                  fill={true}
-                  className="bg-cover"
-                  alt="new tweet attachment"
-                />
-                <div
-                  className="absolute right-3 top-3 z-30 cursor-pointer rounded-full bg-black/50 p-1"
-                  onClick={() => remove(media.index)}
-                >
-                  <XMarkIcon className="h-5 w-5 text-white" />
-                </div>
-              </div>
-            ))}
+          {fields.length > 0 && (
+            <MediaAttachments
+              attachments={fields}
+              hasDeleteButton
+              handleDelete={(index: number) => remove(index)}
+              className={!isModal ? 'mt-2' : ''}
+            />
+          )}
         </div>
 
         <div className="mt-3 flex items-center justify-between">
@@ -135,7 +124,8 @@ export const NewTweetDialogue = ({ isModal, setOpenModal }: Props) => {
             text="Tweet"
             variant="blue"
             type="submit"
-            disabled={!formState.isValid}
+            disabled={!formState.isValid || isLoading}
+            isLoading={isLoading}
           />
         </div>
       </form>

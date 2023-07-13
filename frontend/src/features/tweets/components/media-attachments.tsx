@@ -1,12 +1,20 @@
+import { XMarkIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import Image from 'next/image'
 
 type Props = {
   attachments: MediaAttachment[]
   className?: string
+  hasDeleteButton?: boolean
+  handleDelete?: (id: number) => void
 }
 
-const MediaAttachments = ({ attachments, className }: Props) => {
+const MediaAttachments = ({
+  attachments,
+  className,
+  hasDeleteButton,
+  handleDelete,
+}: Props) => {
   const totalAttachments = attachments.length
 
   return (
@@ -17,7 +25,7 @@ const MediaAttachments = ({ attachments, className }: Props) => {
         totalAttachments > 1 && 'grid grid-cols-2 gap-px'
       )}
     >
-      {attachments.map((media) => (
+      {attachments.map((media, index) => (
         <div
           key={media.url}
           className={clsx(
@@ -36,6 +44,14 @@ const MediaAttachments = ({ attachments, className }: Props) => {
             alt="tweet image"
             className="object-cover"
           />
+          {hasDeleteButton && (
+            <div
+              className="absolute right-3 top-3 z-30 cursor-pointer rounded-full bg-black/50 p-1"
+              onClick={() => handleDelete?.(index)}
+            >
+              <XMarkIcon className="h-5 w-5 text-white" />
+            </div>
+          )}
         </div>
       ))}
     </div>

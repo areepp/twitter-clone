@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { Spinner } from '../spinner'
 
 const variants = {
   black: 'bg-black text-white',
@@ -21,6 +22,7 @@ interface Props {
   onClick?: () => void
   type?: 'button' | 'submit'
   disabled?: boolean
+  isLoading?: boolean
 }
 
 export const PillButton = ({
@@ -29,6 +31,7 @@ export const PillButton = ({
   size = 'medium',
   className,
   onClick,
+  isLoading,
   ...rest
 }: Props) => (
   <button
@@ -41,6 +44,6 @@ export const PillButton = ({
     onClick={onClick}
     {...rest}
   >
-    {text}
+    {isLoading ? <Spinner /> : text}
   </button>
 )
