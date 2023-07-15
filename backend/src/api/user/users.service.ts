@@ -2,6 +2,7 @@ import ApiError from '@/types/api-error'
 import db from '@/lib/db'
 import { EditUserProfileSchema } from './users.model'
 import { sendPutObjectCommand } from '@/lib/s3/put-object'
+import { getAllTweets } from '../tweets/tweets.service'
 
 export const getUserProfile = async (username: string) => {
   const user = await db.user.findUnique({
@@ -33,33 +34,24 @@ export const getUserProfile = async (username: string) => {
   }
 }
 
-export const getUserTweets = async (username: string) => {
-  const tweets = await db.user.findUnique({
+export const getUserTweets = async ({
+  username,
+  cursor,
+}: {
+  username: string
+  cursor?: number
+}) => {
+  const userExists = await db.user.findUnique({
     where: { username },
-    select: {
-      Tweet: {
-        select: {
-          id: true,
-          text: true,
-          createdAt: true,
-          likes: {
-            select: {
-              id: true,
-            },
-          },
-          mediaAttachments: {
-            select: {
-              url: true,
-            },
-          },
-        },
-      },
-    },
   })
-
-  if (!tweets) {
+  if (!userExists) {
     throw new ApiError("User doesn't exists", 404)
   }
+
+  const tweets = await getAllTweets({
+    username,
+    cursor,
+  })
 
   return tweets
 }

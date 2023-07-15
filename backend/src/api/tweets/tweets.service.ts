@@ -1,41 +1,91 @@
 import db from '@/lib/db'
 import { sendPutObjectCommand } from '@/lib/s3/put-object'
 import { MediaAttachment } from '@/types/global'
+import { Tweet } from './tweets.model'
 
-export const getAllTweets = async ({ cursor }: { cursor?: number }) => {
-  const tweets = await db.tweet.findMany({
-    select: {
-      id: true,
-      text: true,
-      createdAt: true,
-      author: {
-        select: {
-          profilePictureUrl: true,
-          displayName: true,
-          username: true,
+export const getAllTweets = async ({
+  username,
+  cursor,
+}: {
+  username?: string
+  cursor?: number
+}) => {
+  let tweets: Array<Tweet> = []
+
+  if (username) {
+    tweets = await db.tweet.findMany({
+      where: {
+        author: {
+          username,
         },
       },
-      likes: {
-        select: {
-          id: true,
+      select: {
+        id: true,
+        text: true,
+        createdAt: true,
+        author: {
+          select: {
+            profilePictureUrl: true,
+            displayName: true,
+            username: true,
+          },
+        },
+        likes: {
+          select: {
+            id: true,
+          },
+        },
+        mediaAttachments: {
+          select: {
+            url: true,
+          },
         },
       },
-      mediaAttachments: {
-        select: {
-          url: true,
+      take: 10,
+      cursor: cursor
+        ? {
+            id: cursor,
+          }
+        : undefined,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+  } else {
+    tweets = await db.tweet.findMany({
+      select: {
+        id: true,
+        text: true,
+        createdAt: true,
+        author: {
+          select: {
+            profilePictureUrl: true,
+            displayName: true,
+            username: true,
+          },
+        },
+        likes: {
+          select: {
+            id: true,
+          },
+        },
+        mediaAttachments: {
+          select: {
+            url: true,
+          },
         },
       },
-    },
-    take: 10,
-    cursor: cursor
-      ? {
-          id: cursor,
-        }
-      : undefined,
-    orderBy: {
-      createdAt: 'desc',
-    },
-  })
+      take: 10,
+      cursor: cursor
+        ? {
+            id: cursor,
+          }
+        : undefined,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+  }
 
   return {
     data: tweets,

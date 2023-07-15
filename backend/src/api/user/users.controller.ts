@@ -36,7 +36,12 @@ usersController.get('/:username', async (req, res, next) => {
 
 usersController.get('/:username/tweets', async (req, res, next) => {
   try {
-    const tweets = await userService.getUserTweets(req.params.username)
+    const tweets = await userService.getUserTweets({
+      username: req.params.username,
+      cursor: req.query.cursor
+        ? parseInt(req.query.cursor as string)
+        : undefined,
+    })
 
     res.status(200).json(tweets)
   } catch (error) {

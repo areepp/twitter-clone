@@ -1,8 +1,20 @@
 import { z } from 'zod'
 
-export interface ITweet {
-  id: number
+export type Tweet = {
   text: string
+  id: number
+  createdAt: Date
+  mediaAttachments: {
+    url: string
+  }[]
+  author: {
+    username: string
+    displayName: string
+    profilePictureUrl: string | null
+  }
+  likes: {
+    id: number
+  }[]
 }
 
 export const GetTweetsSchema = z.object({
