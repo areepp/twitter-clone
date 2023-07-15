@@ -47,6 +47,11 @@ export const getUserTweets = async (username: string) => {
               id: true,
             },
           },
+          mediaAttachments: {
+            select: {
+              url: true,
+            },
+          },
         },
       },
     },

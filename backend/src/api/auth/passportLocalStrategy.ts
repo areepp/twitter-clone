@@ -1,4 +1,4 @@
-import passport, { PassportStatic } from 'passport'
+import passport from 'passport'
 import localStrategy from 'passport-local'
 import bcrypt from 'bcryptjs'
 import * as authService from './auth.service'

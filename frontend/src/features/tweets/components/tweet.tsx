@@ -62,7 +62,7 @@ export const Tweet = ({ data }: { data: ITweet }) => {
           </span>
         </div>
         <p>{data.text}</p>
-        {data.mediaAttachments.length > 0 && (
+        {data.mediaAttachments?.length > 0 && (
           <MediaAttachments
             className="mt-2"
             attachments={data.mediaAttachments}
