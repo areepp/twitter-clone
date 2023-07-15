@@ -64,7 +64,10 @@ export const NewTweetDialogue = ({ isModal, setOpenModal }: Props) => {
     if (isModal && setOpenModal) {
       setOpenModal(false)
     }
-    reset()
+    reset({
+      text: '',
+      media_attachments: [],
+    })
   }
 
   if (!user) return null
