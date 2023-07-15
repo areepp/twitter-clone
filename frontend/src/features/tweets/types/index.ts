@@ -12,6 +12,11 @@ export type ITweet = {
   mediaAttachments: MediaAttachment[]
 }
 
+export type TweetResponse = {
+  data: ITweet[]
+  next_cursor: number
+}
+
 export const MAX_FILE_SIZE = 50 * 1000 * 1000 // 50 MB
 
 const ACCEPTED_IMAGE_TYPES = [

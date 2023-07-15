@@ -1,16 +1,13 @@
-import { ITweet } from '@/features/tweets/types'
+import { ITweet, TweetResponse } from '@/features/tweets/types'
 import axios, { axiosMultiPart } from './axios'
 
 export const getTweets = async (cursor?: number) => {
   try {
-    const response = await axios.get<{ data: ITweet[]; next_cursor: number }>(
-      '/tweets',
-      {
-        params: {
-          cursor,
-        },
-      }
-    )
+    const response = await axios.get<TweetResponse>('/tweets', {
+      params: {
+        cursor,
+      },
+    })
 
     return response.data
   } catch (error) {

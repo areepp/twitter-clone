@@ -7,12 +7,13 @@ import {
   useGetUserProfile,
   useGetUserTweets,
 } from '@/features/profiles'
-import { Tweet } from '@/features/tweets'
+import { Tweets } from '@/features/tweets'
 
 const Profile = () => {
   const { username: usernameQuery } = useParams()
 
   const { data: user } = useGetUserProfile(usernameQuery as string)
+  const userTweetsQuery = useGetUserTweets(usernameQuery as string)
 
   const {
     data: userTweets,
@@ -24,21 +25,7 @@ const Profile = () => {
     <>
       <ProfileLayout />
       <ProfileNav activeTab="tweets" />
-      {tweetsFetched &&
-        user &&
-        userTweets.map((tweet) => (
-          <Tweet
-            key={tweet.id}
-            data={{
-              ...tweet,
-              author: {
-                profilePictureUrl: user.profilePictureUrl,
-                displayName: user.displayName,
-                username: user.username,
-              },
-            }}
-          />
-        ))}
+      <Tweets query={userTweetsQuery} />
     </>
   )
 }

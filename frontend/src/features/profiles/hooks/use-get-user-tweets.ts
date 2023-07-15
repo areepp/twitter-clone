@@ -1,13 +1,14 @@
 import { getUserTweets } from '@/lib/users'
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 
-interface Options {
-  enabled?: boolean
-}
-
-export const useGetUserTweets = (username: string, options?: Options) => {
-  return useQuery(['tweets', username], () => getUserTweets(username), {
-    retry: false,
-    ...options,
-  })
+export const useGetUserTweets = (username: string) => {
+  return useInfiniteQuery(
+    ['tweets', username],
+    ({ pageParam = undefined }) =>
+      getUserTweets({ username, cursor: pageParam }),
+    {
+      getNextPageParam: (lastPage) => lastPage.next_cursor,
+      getPreviousPageParam: (firstPage) => firstPage.next_cursor,
+    }
+  )
 }

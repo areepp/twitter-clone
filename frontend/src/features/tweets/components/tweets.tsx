@@ -4,10 +4,20 @@ import { useEffect } from 'react'
 import { useGetInfiniteTweets } from '../hooks/use-get-all-tweets'
 import { Tweet } from './tweet'
 import { useInView } from 'react-intersection-observer'
+import { ITweet } from '../types'
+import { UseInfiniteQueryResult } from '@tanstack/react-query'
 
-export const Tweets = () => {
-  const query = useGetInfiniteTweets()
-
+export const Tweets = ({
+  query,
+}: {
+  query: UseInfiniteQueryResult<
+    {
+      data: ITweet[]
+      next_cursor: number
+    },
+    unknown
+  >
+}) => {
   const [ref, inView] = useInView({
     delay: 500,
     rootMargin: '800px',
