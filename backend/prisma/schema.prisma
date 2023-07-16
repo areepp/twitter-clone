@@ -22,6 +22,9 @@ model User {
   Tweet Tweet[]
 
   likedTweets LikedTweet[]
+
+  followers Follows[] @relation("follower")
+  following Follows[] @relation("following")
 }
 
 model Tweet {
@@ -50,4 +53,13 @@ model MediaAttachment {
   url     String
   Tweet   Tweet? @relation(fields: [tweetId], references: [id])
   tweetId Int?
+}
+
+model Follows {
+  follower    User   @relation("follower", fields: [followerId], references: [id])
+  followerId  String
+  following   User   @relation("following", fields: [followingId], references: [id])
+  followingId String
+
+  @@id([followerId, followingId])
 }

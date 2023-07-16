@@ -18,6 +18,12 @@ export const getUserProfile = async (username: string) => {
           },
         },
       },
+      _count: {
+        select: {
+          followers: true,
+          following: true,
+        },
+      },
     },
   })
 
@@ -26,11 +32,14 @@ export const getUserProfile = async (username: string) => {
   }
 
   return {
+    id: user.id,
     username: user.username,
     displayName: user.displayName,
     bio: user.bio,
     profilePictureUrl: user.profilePictureUrl,
     likedTweets: user.likedTweets,
+    followingTotal: user._count.following,
+    followerTotal: user._count.followers,
   }
 }
 
@@ -102,4 +111,44 @@ export const editUserProfile = async (
       },
     })
   }
+}
+
+export const followUser = async ({
+  followeeId,
+  followerId,
+}: {
+  followeeId: string
+  followerId: string
+}) => {
+  return db.follows.create({
+    data: {
+      follower: {
+        connect: {
+          id: followerId,
+        },
+      },
+      following: {
+        connect: {
+          id: followeeId,
+        },
+      },
+    },
+  })
+}
+
+export const unfollowUser = async ({
+  followeeId,
+  followerId,
+}: {
+  followeeId: string
+  followerId: string
+}) => {
+  return db.follows.delete({
+    where: {
+      followerId_followingId: {
+        followerId,
+        followingId: followeeId,
+      },
+    },
+  })
 }

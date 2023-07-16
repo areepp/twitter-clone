@@ -95,4 +95,38 @@ usersController.patch(
   },
 )
 
+usersController.post('/:id/follow', isAuthenticated, async (req, res, next) => {
+  try {
+    await userService.followUser({
+      followeeId: req.params.id,
+      followerId: req.user!.id,
+    })
+
+    return res
+      .status(200)
+      .send(`You are now following user with id ${req.params.id}`)
+  } catch (error) {
+    next(error)
+  }
+})
+
+usersController.post(
+  '/:id/unfollow',
+  isAuthenticated,
+  async (req, res, next) => {
+    try {
+      await userService.unfollowUser({
+        followeeId: req.params.id,
+        followerId: req.user!.id,
+      })
+
+      return res
+        .status(200)
+        .send(`You unfollowed user with id ${req.params.id}`)
+    } catch (error) {
+      next(error)
+    }
+  },
+)
+
 export default usersController
