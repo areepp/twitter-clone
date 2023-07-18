@@ -17,6 +17,9 @@ export interface IUser {
     id: number
     tweet: Pick<ITweet, 'id'>
   }[]
+  isFollowedByLoggedInUser?: boolean
+  followingTotal: number
+  followerTotal: number
 }
 
 export const NewUsernameInput = z.object({

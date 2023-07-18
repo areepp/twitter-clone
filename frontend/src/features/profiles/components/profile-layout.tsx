@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { useRouter, useParams } from 'next/navigation'
 import { useGetUserProfile } from '../hooks/use-get-user-profile'
 import { EditProfileModal } from './edit-profile-modal'
+import FollowButton from './follow-button'
 
 export const ProfileLayout = () => {
   const { push } = useRouter()
@@ -36,8 +37,10 @@ export const ProfileLayout = () => {
       <div className="relative flex w-full flex-col">
         <section className="h-[27vw] max-h-[200px] w-full flex-shrink bg-slate-200"></section>
         <section className="relative h-auto min-h-[220px] p-5">
-          {loggedInUser && loggedInUser.username === user.username && (
+          {loggedInUser && loggedInUser.username === user.username ? (
             <EditProfileModal />
+          ) : (
+            <FollowButton />
           )}
 
           <div className="mt-6 flex flex-col gap-3 xs:mt-14 sm:top-20">
@@ -50,11 +53,11 @@ export const ProfileLayout = () => {
             <p>{user.bio}</p>
             <div className="flex gap-3">
               <div className="flex gap-1">
-                <span className="font-bold">29</span>
+                <span className="font-bold">{user.followingTotal}</span>
                 <span>Following</span>
               </div>
               <div className="flex gap-1">
-                <span className="font-bold">1</span>
+                <span className="font-bold">{user.followerTotal}</span>
                 <span>Follower</span>
               </div>
             </div>

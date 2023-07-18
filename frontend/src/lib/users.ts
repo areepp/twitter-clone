@@ -70,3 +70,9 @@ export const editUserProfile = async ({
     bio,
     profilePictureFile,
   })
+
+export const followUser = async (followeeUsername: string) =>
+  axios.post(`/users/${followeeUsername}/follow`)
+
+export const unFollowUser = async (followeeUsername: string) =>
+  axios.post(`/users/${followeeUsername}/unfollow`)
