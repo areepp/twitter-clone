@@ -16,7 +16,9 @@ const usersController = express.Router()
 
 usersController.get('/me', isAuthenticated, async (req, res, next) => {
   try {
-    const user = await userService.getUserProfile(req.user!.username)
+    const user = await userService.getUserProfile({
+      username: req.user!.username,
+    })
 
     res.status(200).json(user)
   } catch (error) {
@@ -26,7 +28,10 @@ usersController.get('/me', isAuthenticated, async (req, res, next) => {
 
 usersController.get('/:username', async (req, res, next) => {
   try {
-    const user = await userService.getUserProfile(req.params.username)
+    const user = await userService.getUserProfile({
+      username: req.params.username,
+      loggedInUserUsername: req.user?.username,
+    })
 
     res.status(200).json(user)
   } catch (error) {
@@ -95,34 +100,38 @@ usersController.patch(
   },
 )
 
-usersController.post('/:id/follow', isAuthenticated, async (req, res, next) => {
-  try {
-    await userService.followUser({
-      followeeId: req.params.id,
-      followerId: req.user!.id,
-    })
-
-    return res
-      .status(200)
-      .send(`You are now following user with id ${req.params.id}`)
-  } catch (error) {
-    next(error)
-  }
-})
-
 usersController.post(
-  '/:id/unfollow',
+  '/:username/follow',
   isAuthenticated,
   async (req, res, next) => {
     try {
-      await userService.unfollowUser({
-        followeeId: req.params.id,
-        followerId: req.user!.id,
+      await userService.followUser({
+        followeeUsername: req.params.username,
+        followerUsername: req.user!.username,
       })
 
       return res
         .status(200)
-        .send(`You unfollowed user with id ${req.params.id}`)
+        .send(`You are now following ${req.params.username}`)
+    } catch (error) {
+      next(error)
+    }
+  },
+)
+
+usersController.post(
+  '/:username/unfollow',
+  isAuthenticated,
+  async (req, res, next) => {
+    try {
+      await userService.unfollowUser({
+        followeeUsername: req.params.username,
+        followerUsername: req.user!.username,
+      })
+
+      return res
+        .status(200)
+        .send(`You unfollowed user with id ${req.params.username}`)
     } catch (error) {
       next(error)
     }

@@ -4,7 +4,14 @@ import { EditUserProfileSchema } from './users.model'
 import { sendPutObjectCommand } from '@/lib/s3/put-object'
 import { getAllTweets } from '../tweets/tweets.service'
 
-export const getUserProfile = async (username: string) => {
+export const getUserProfile = async ({
+  username,
+  loggedInUserUsername,
+}: {
+  username: string
+  loggedInUserUsername?: string
+}) => {
+  let isFollowedByLoggedInUser: boolean = false
   const user = await db.user.findUnique({
     where: { username },
     include: {
@@ -27,6 +34,20 @@ export const getUserProfile = async (username: string) => {
     },
   })
 
+  if (loggedInUserUsername && user?.id) {
+    const follows = await db.follows.findUnique({
+      where: {
+        followerUsername_followingUsername: {
+          followerUsername: loggedInUserUsername,
+          followingUsername: user.username,
+        },
+      },
+    })
+    if (follows) {
+      isFollowedByLoggedInUser = true
+    }
+  }
+
   if (!user) {
     throw new ApiError("User doesn't exists", 404)
   }
@@ -40,6 +61,9 @@ export const getUserProfile = async (username: string) => {
     likedTweets: user.likedTweets,
     followingTotal: user._count.following,
     followerTotal: user._count.followers,
+    ...(loggedInUserUsername && {
+      isFollowedByLoggedInUser,
+    }),
   }
 }
 
@@ -114,22 +138,23 @@ export const editUserProfile = async (
 }
 
 export const followUser = async ({
-  followeeId,
-  followerId,
+  followeeUsername,
+  followerUsername,
 }: {
-  followeeId: string
-  followerId: string
+  followeeUsername: string
+  followerUsername: string
 }) => {
+  console.log('eyyyy', followeeUsername, followerUsername)
   return db.follows.create({
     data: {
       follower: {
         connect: {
-          id: followerId,
+          username: followerUsername,
         },
       },
       following: {
         connect: {
-          id: followeeId,
+          username: followeeUsername,
         },
       },
     },
@@ -137,17 +162,17 @@ export const followUser = async ({
 }
 
 export const unfollowUser = async ({
-  followeeId,
-  followerId,
+  followeeUsername,
+  followerUsername,
 }: {
-  followeeId: string
-  followerId: string
+  followeeUsername: string
+  followerUsername: string
 }) => {
   return db.follows.delete({
     where: {
-      followerId_followingId: {
-        followerId,
-        followingId: followeeId,
+      followerUsername_followingUsername: {
+        followerUsername,
+        followingUsername: followeeUsername,
       },
     },
   })
