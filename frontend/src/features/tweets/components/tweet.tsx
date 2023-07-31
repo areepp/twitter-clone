@@ -13,22 +13,31 @@ import { useGetLoggedInUser } from '@/features/auth'
 import { useUnLikeTweet } from '../hooks/use-unlike-tweet'
 import Link from 'next/link'
 import MediaAttachments from './media-attachments'
+import IconWithNumber from './icon-with-number'
+import { useRouter } from 'next/navigation'
 
 export const Tweet = ({ data }: { data: ITweet }) => {
+  const { push } = useRouter()
   const { data: loggedInUser } = useGetLoggedInUser()
   const { author } = data
   const { mutate: likeTweetMutation } = useLikeTweet()
   const { mutate: unlikeTweetMutation } = useUnLikeTweet()
 
-  const likeTweet = () => {
+  console.log(typeof data.id)
+
+  const likeTweet = (e: React.MouseEvent) => {
+    e.stopPropagation()
+
     if (!loggedInUser) {
       alert('join twitter to perform this action')
       return
     }
-    likeTweetMutation(data.id)
+    // likeTweetMutation(data.id)
   }
 
-  const unlikeTweet = () => {
+  const unlikeTweet = (e: React.MouseEvent) => {
+    e.stopPropagation()
+
     if (!loggedInUser) {
       alert('join twitter to perform this action')
       return
@@ -38,9 +47,20 @@ export const Tweet = ({ data }: { data: ITweet }) => {
     )
   }
 
+  const handleTweetClick = () => {
+    push(`/profile/${author.username}/status/${data.id}`)
+  }
+
   return (
-    <div className="flex w-full cursor-pointer gap-3 border-b p-3">
-      <Link href={`/profile/${author.username}`} className="relative h-12 w-12">
+    <div
+      className="flex w-full cursor-pointer gap-3 border-b p-3"
+      onClick={handleTweetClick}
+    >
+      <Link
+        href={`/profile/${author.username}`}
+        onClick={(e) => e.stopPropagation()}
+        className="relative h-12 w-12"
+      >
         <Image
           src={author.profilePictureUrl ?? '/twitter-default-pp.png'}
           className="h-full w-full rounded-full object-cover"
@@ -50,10 +70,18 @@ export const Tweet = ({ data }: { data: ITweet }) => {
       </Link>
       <div className="flex-grow">
         <div className="flex items-center gap-1">
-          <Link href={`/profile/${author.username}`} className="font-semibold">
+          <Link
+            href={`/profile/${author.username}`}
+            onClick={(e) => e.stopPropagation()}
+            className="font-semibold"
+          >
             {author.displayName}
           </Link>
-          <Link href={`/profile/${author.username}`} className="text-dark-gray">
+          <Link
+            href={`/profile/${author.username}`}
+            onClick={(e) => e.stopPropagation()}
+            className="text-dark-gray"
+          >
             @{author.username}
           </Link>
           <span className="h-[2px] w-[2px] rounded-full bg-dark-gray" />
@@ -70,26 +98,32 @@ export const Tweet = ({ data }: { data: ITweet }) => {
         )}
 
         <div className="mt-3 flex gap-20 text-dark-gray">
-          <ChatBubbleOvalLeftIcon className="h-5 w-5 " />
-          <ArrowPathRoundedSquareIcon className="h-5 w-5" />
-          <div className="flex items-center gap-2">
-            {loggedInUser?.likedTweets.find(
-              (list) => list.tweet.id === data.id
-            ) ? (
-              <HeartIconSolid
-                className="h-5 w-5 cursor-pointer text-pink-600"
-                onClick={unlikeTweet}
-              />
-            ) : (
-              <HeartIcon
-                className="h-5 w-5 cursor-pointer"
-                onClick={likeTweet}
-              />
-            )}
-            <span className="text-sm">
-              {data.likes.length === 0 ? '' : data.likes.length}
-            </span>
-          </div>
+          <IconWithNumber
+            icon={<ChatBubbleOvalLeftIcon className="h-5 w-5" />}
+            count={data._count.replies}
+          />
+          <IconWithNumber
+            icon={<ArrowPathRoundedSquareIcon className="h-5 w-5" />}
+            count={0}
+          />
+          <IconWithNumber
+            icon={
+              loggedInUser?.likedTweets.find(
+                (list) => list.tweet.id === data.id
+              ) ? (
+                <HeartIconSolid
+                  className="h-5 w-5 cursor-pointer text-pink-600"
+                  onClick={unlikeTweet}
+                />
+              ) : (
+                <HeartIcon
+                  className="h-5 w-5 cursor-pointer"
+                  onClick={likeTweet}
+                />
+              )
+            }
+            count={data.likes.length}
+          />
           <ArrowUpTrayIcon className="h-5 w-5" />
         </div>
       </div>

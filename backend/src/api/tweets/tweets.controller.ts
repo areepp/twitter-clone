@@ -28,6 +28,22 @@ tweetsController.get(
   },
 )
 
+tweetsController.get(
+  '/:id',
+  validateRequest({ query: GetTweetsSchema }),
+  async (req, res, next) => {
+    try {
+      const tweets = await tweetsService.getTweetReplies({
+        id: Number(req.params.id),
+      })
+
+      return res.status(200).json(tweets)
+    } catch (error) {
+      next(error)
+    }
+  },
+)
+
 tweetsController.post(
   '/',
   isAuthenticated,
@@ -44,6 +60,30 @@ tweetsController.post(
       })
 
       return res.status(200).json(newTweet)
+    } catch (error) {
+      next(error)
+    }
+  },
+)
+
+tweetsController.post(
+  '/:id/reply',
+  isAuthenticated,
+  // validateRequest({ body: NewTweetSchema }), // TODO: work on this validation
+  upload.array('media_attachments', 4),
+  async (req, res, next) => {
+    try {
+      const newReply = await tweetsService.createReply({
+        tweetId: Number(req.params.id),
+        authorId: req.user!.id,
+        text: req.body.text,
+        replyId: Number(req.query['in_reply_to_reply_id']),
+        ...(req.files && {
+          mediaAttachments: req.files as Array<Express.Multer.File>,
+        }),
+      })
+
+      return res.status(200).json(newReply)
     } catch (error) {
       next(error)
     }

@@ -14,7 +14,7 @@ export interface IUser {
   profilePictureUrl: string | null
   bio: string
   likedTweets: {
-    id: number
+    id: string
     tweet: Pick<ITweet, 'id'>
   }[]
   isFollowedByLoggedInUser?: boolean

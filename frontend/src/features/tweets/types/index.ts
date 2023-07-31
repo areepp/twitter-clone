@@ -2,7 +2,7 @@ import { IUser } from '@/features/profiles'
 import { z } from 'zod'
 
 export type ITweet = {
-  id: number
+  id: string
   text: string
   createdAt: string
   author: Pick<IUser, 'username' | 'displayName' | 'profilePictureUrl'>
@@ -10,11 +10,22 @@ export type ITweet = {
     id: string
   }[]
   mediaAttachments: MediaAttachment[]
+  _count: {
+    replies: number
+  }
+  parentTweetId?: string
 }
 
 export type TweetResponse = {
   data: ITweet[]
-  next_cursor: number
+  next_cursor?: number
+}
+
+export type TweetWithRepliesResponse = {
+  data: ITweet & {
+    replies: ITweet[]
+  }
+  next_cursor?: number
 }
 
 export const MAX_FILE_SIZE = 50 * 1000 * 1000 // 50 MB

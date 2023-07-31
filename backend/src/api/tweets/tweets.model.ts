@@ -1,8 +1,9 @@
+import { Prisma } from '@prisma/client'
 import { z } from 'zod'
 
 export type Tweet = {
   text: string
-  id: number
+  id: bigint
   createdAt: Date
   mediaAttachments: {
     url: string
@@ -15,6 +16,13 @@ export type Tweet = {
   likes: {
     id: number
   }[]
+  _count: {
+    replies: number
+  }
+}
+
+export type TweetWithReplies = Tweet & {
+  replies: Tweet[]
 }
 
 export const GetTweetsSchema = z.object({
@@ -68,3 +76,33 @@ export type NewTweetSchema = Pick<TempNewTweetSchema, 'text'> & {
   media_attachments: Array<Express.Multer.File>
 }
 export type GetTweetsSchema = z.infer<typeof GetTweetsSchema>
+
+export const queryGetTweets: Prisma.TweetArgs = {
+  select: {
+    id: true,
+    text: true,
+    createdAt: true,
+    author: {
+      select: {
+        profilePictureUrl: true,
+        displayName: true,
+        username: true,
+      },
+    },
+    likes: {
+      select: {
+        id: true,
+      },
+    },
+    mediaAttachments: {
+      select: {
+        url: true,
+      },
+    },
+    _count: {
+      select: {
+        replies: true,
+      },
+    },
+  },
+}

@@ -94,7 +94,7 @@ export const NewTweetDialogue = ({ isModal, setOpenModal }: Props) => {
       >
         <TextareaAutosize
           className={clsx(
-            'w-full resize-none pt-3 text-lg focus:outline-none',
+            'w-full resize-none pt-1 text-lg focus:outline-none',
             isModal && 'min-h-[50px]'
           )}
           maxLength={280}

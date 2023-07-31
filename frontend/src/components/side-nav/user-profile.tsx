@@ -29,7 +29,7 @@ const UserProfile = () => {
             </div>
 
             <div className="hidden text-sm xl:block">
-              <p>{user?.username}</p>
+              <p className="font-semibold">{user?.displayName}</p>
               <p className="text-dark-gray">@{user?.username}</p>
             </div>
           </div>

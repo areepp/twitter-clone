@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 export const useLikeTweet = () => {
   const queryClient = useQueryClient()
-  const mutation = useMutation((id: number) => likeTweet(id), {
+  const mutation = useMutation((id: string) => likeTweet(id), {
     onSuccess: () => {
       queryClient.refetchQueries(['tweets'])
       queryClient.refetchQueries(['user', 'me'])

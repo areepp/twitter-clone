@@ -1,7 +1,8 @@
 import db from '@/lib/db'
 import { sendPutObjectCommand } from '@/lib/s3/put-object'
 import { MediaAttachment } from '@/types/global'
-import { Tweet } from './tweets.model'
+import { Tweet, TweetWithReplies } from './tweets.model'
+import { generateRandomNumbers } from '@/utils/helpers'
 
 export const getAllTweets = async ({
   username,
@@ -40,6 +41,11 @@ export const getAllTweets = async ({
             url: true,
           },
         },
+        _count: {
+          select: {
+            replies: true,
+          },
+        },
       },
       take: 10,
       cursor: cursor
@@ -74,6 +80,11 @@ export const getAllTweets = async ({
             url: true,
           },
         },
+        _count: {
+          select: {
+            replies: true,
+          },
+        },
       },
       take: 10,
       cursor: cursor
@@ -90,6 +101,172 @@ export const getAllTweets = async ({
   return {
     data: tweets,
     next_cursor: tweets.length >= 10 ? tweets[9].id : undefined,
+  }
+}
+
+export const getTweetReplies = async ({
+  id,
+  cursor,
+}: {
+  id: number
+  cursor?: number
+}) => {
+  let tweet
+  tweet = await db.tweet.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      text: true,
+      createdAt: true,
+      author: {
+        select: {
+          profilePictureUrl: true,
+          displayName: true,
+          username: true,
+        },
+      },
+      likes: {
+        select: {
+          id: true,
+        },
+      },
+      mediaAttachments: {
+        select: {
+          url: true,
+        },
+      },
+      _count: {
+        select: {
+          replies: true,
+        },
+      },
+      replies: {
+        where: {
+          parentReplyId: null,
+        },
+        select: {
+          id: true,
+          text: true,
+          createdAt: true,
+          parentReplyId: true,
+          author: {
+            select: {
+              profilePictureUrl: true,
+              displayName: true,
+              username: true,
+            },
+          },
+          likes: {
+            select: {
+              id: true,
+            },
+          },
+          mediaAttachments: {
+            select: {
+              url: true,
+            },
+          },
+          _count: {
+            select: {
+              replies: true,
+            },
+          },
+        },
+        take: 10,
+        cursor: cursor
+          ? {
+              id: cursor,
+            }
+          : undefined,
+        orderBy: {
+          createdAt: 'desc',
+        },
+      },
+    },
+  })
+
+  if (!tweet) {
+    tweet = await db.replyTweet.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        text: true,
+        createdAt: true,
+        author: {
+          select: {
+            profilePictureUrl: true,
+            displayName: true,
+            username: true,
+          },
+        },
+        likes: {
+          select: {
+            id: true,
+          },
+        },
+        mediaAttachments: {
+          select: {
+            url: true,
+          },
+        },
+        _count: {
+          select: {
+            replies: true,
+          },
+        },
+        parentTweetId: true,
+        replies: {
+          select: {
+            id: true,
+            text: true,
+            createdAt: true,
+            author: {
+              select: {
+                profilePictureUrl: true,
+                displayName: true,
+                username: true,
+              },
+            },
+            likes: {
+              select: {
+                id: true,
+              },
+            },
+            mediaAttachments: {
+              select: {
+                url: true,
+              },
+            },
+            _count: {
+              select: {
+                replies: true,
+              },
+            },
+          },
+          take: 10,
+          cursor: cursor
+            ? {
+                id: cursor,
+              }
+            : undefined,
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+      },
+    })
+  }
+
+  return {
+    data: tweet,
+    next_cursor:
+      tweet?.replies && tweet.replies.length >= 10
+        ? tweet?.replies[9].id
+        : undefined,
   }
 }
 
@@ -121,6 +298,7 @@ export const createTweet = async ({
   }
   const newTweet = await db.tweet.create({
     data: {
+      id: generateRandomNumbers(),
       text,
       author: {
         connect: {
@@ -164,3 +342,73 @@ export const unlikeTweet = async ({ likedTweetId }: { likedTweetId: number }) =>
       id: likedTweetId,
     },
   })
+
+export const createReply = async ({
+  authorId,
+  text,
+  mediaAttachments,
+  tweetId,
+  replyId,
+}: {
+  authorId: string
+  text: string
+  mediaAttachments?: Array<Express.Multer.File>
+  tweetId: number
+  replyId?: number
+}) => {
+  let parsedAttachmentIds: Array<Pick<MediaAttachment, 'id'>> | undefined =
+    undefined
+
+  if (mediaAttachments) {
+    const attachmentsData = await Promise.all(
+      mediaAttachments.map(async (file) => {
+        const url = await sendPutObjectCommand(file)
+        return await db.mediaAttachment.create({
+          data: {
+            url,
+          },
+        })
+      }),
+    )
+    parsedAttachmentIds = attachmentsData.map((attachment) => ({
+      id: attachment.id,
+    }))
+  }
+
+  const newReply = await db.replyTweet.create({
+    data: {
+      id: generateRandomNumbers(),
+      tweet: {
+        connect: {
+          id: tweetId,
+        },
+      },
+      text,
+      author: {
+        connect: {
+          id: authorId,
+        },
+      },
+      mediaAttachments: {
+        connect: parsedAttachmentIds,
+      },
+    },
+  })
+
+  if (replyId) {
+    await db.replyTweet.update({
+      where: {
+        id: replyId,
+      },
+      data: {
+        replies: {
+          connect: {
+            id: newReply.id,
+          },
+        },
+      },
+    })
+  }
+
+  return newReply
+}
