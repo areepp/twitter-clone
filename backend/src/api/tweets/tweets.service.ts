@@ -43,7 +43,11 @@ export const getAllTweets = async ({
         },
         _count: {
           select: {
-            replies: true,
+            replies: {
+              where: {
+                parentReplyId: null,
+              },
+            },
           },
         },
       },
@@ -82,7 +86,11 @@ export const getAllTweets = async ({
         },
         _count: {
           select: {
-            replies: true,
+            replies: {
+              where: {
+                parentReplyId: null,
+              },
+            },
           },
         },
       },
