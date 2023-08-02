@@ -2,7 +2,7 @@
 
 import { Spinner } from '@/components/elements'
 import { useGetLoggedInUser } from '@/features/auth'
-import { Tweets } from '@/features/tweets'
+import { Tweet, Tweets } from '@/features/tweets'
 import MediaAttachments from '@/features/tweets/components/media-attachments'
 import TweetYourReply from '@/features/tweets/components/tweet-your-reply'
 import { useGetInfiniteReplies } from '@/features/tweets/hooks/use-get-infinite-replies'
@@ -15,20 +15,41 @@ import {
   ChatBubbleOvalLeftIcon,
   HeartIcon,
 } from '@heroicons/react/24/outline'
+import clsx from 'clsx'
 import { format } from 'date-fns'
 import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'
+import { useEffect, useRef } from 'react'
 
 const TweetDetailPage = () => {
-  const { push } = useRouter()
+  const tweetRef = useRef<HTMLDivElement>(null)
+  const { back } = useRouter()
   const { id: tweetId } = useParams()
   const { data: loggedInUser } = useGetLoggedInUser()
-  const { data, isInitialLoading } = useGetTweetDetails(tweetId)
+  const {
+    data: tweetResponse,
+    isInitialLoading,
+    isSuccess,
+  } = useGetTweetDetails(tweetId, {
+    onSuccess: () => {
+      tweetRef.current?.scrollIntoView()
+    },
+  })
+  const {
+    data: parentTweetResponse,
+    isInitialLoading: isInitialParentTweetLoading,
+  } = useGetTweetDetails(
+    tweetResponse?.data.parentReplyId ?? tweetResponse?.data.parentTweetId
+  )
   const infiniteRepliesQuery = useGetInfiniteReplies(tweetId)
 
-  const tweet = data?.data
+  const tweet = tweetResponse?.data
 
-  if (isInitialLoading)
+  useEffect(() => {
+    tweetRef.current?.scrollIntoView()
+  }, [isSuccess])
+
+  if (isInitialLoading || isInitialParentTweetLoading)
     return (
       <div className="flex h-[500px] w-full items-center justify-center">
         <Spinner />
@@ -46,14 +67,23 @@ const TweetDetailPage = () => {
     <>
       <div className="fixed z-50 flex w-full max-w-[600px] items-center gap-6 border-b bg-white bg-opacity-50 p-3 backdrop-blur-sm">
         <ArrowLeftIcon
-          onClick={() => push('/')}
+          onClick={back}
           className="h-5 w-5 shrink-0 cursor-pointer"
         />
         <div className="w-full">
           <p className="w-11/12 truncate text-xl font-bold">Tweet</p>
         </div>
       </div>
-      <div className="mt-14 p-3">
+      {parentTweetResponse?.data && (
+        <Tweet data={parentTweetResponse?.data} className="mt-12 !border-b-0" />
+      )}
+      <div
+        ref={tweetRef}
+        className={clsx(
+          'relative scroll-mt-12  p-3',
+          tweet.parentTweetId ? 'mt-0' : 'mt-14'
+        )}
+      >
         <div className="flex items-center gap-3">
           <div className="relative h-10 w-10">
             <Image
@@ -111,6 +141,9 @@ const TweetDetailPage = () => {
           parentTweetId={tweet.parentTweetId ?? tweet.id}
           parentReplyId={tweet.parentTweetId ? tweet.id : undefined}
         />
+        {(tweet.parentTweetId || tweet.parentReplyId) && (
+          <div className="absolute -top-12 left-[30px] h-[60px] w-[2px] bg-stone-300" />
+        )}
       </div>
       {loggedInUser && <hr className="mb-2" />}
       <Tweets query={infiniteRepliesQuery} />

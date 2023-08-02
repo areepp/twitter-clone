@@ -24,6 +24,8 @@ export type TweetResponse = {
 export type TweetWithRepliesResponse = {
   data: ITweet & {
     replies: ITweet[]
+    parentTweetId?: string | null
+    parentReplyId?: string | null
   }
   next_cursor?: number
 }

@@ -21,7 +21,9 @@ export const getTweets = async (cursor?: number) => {
 
 export const getTweetDetail = async (id: string) => {
   try {
-    const response = await axios.get<TweetWithRepliesResponse>(`/tweets/${id}`)
+    const response = await axios.get<Pick<TweetWithRepliesResponse, 'data'>>(
+      `/tweets/${id}`
+    )
     return response.data
   } catch (error) {
     throw new Error(error)

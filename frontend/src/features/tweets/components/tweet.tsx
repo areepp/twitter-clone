@@ -15,15 +15,19 @@ import Link from 'next/link'
 import MediaAttachments from './media-attachments'
 import IconWithNumber from './icon-with-number'
 import { useRouter } from 'next/navigation'
+import clsx from 'clsx'
 
-export const Tweet = ({ data }: { data: ITweet }) => {
+type Props = {
+  data: ITweet
+  className?: string
+}
+
+export const Tweet = ({ data, className }: Props) => {
   const { push } = useRouter()
   const { data: loggedInUser } = useGetLoggedInUser()
   const { author } = data
   const { mutate: likeTweetMutation } = useLikeTweet()
   const { mutate: unlikeTweetMutation } = useUnLikeTweet()
-
-  console.log(typeof data.id)
 
   const likeTweet = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -32,7 +36,7 @@ export const Tweet = ({ data }: { data: ITweet }) => {
       alert('join twitter to perform this action')
       return
     }
-    // likeTweetMutation(data.id)
+    likeTweetMutation(data.id)
   }
 
   const unlikeTweet = (e: React.MouseEvent) => {
@@ -53,13 +57,16 @@ export const Tweet = ({ data }: { data: ITweet }) => {
 
   return (
     <div
-      className="flex w-full cursor-pointer gap-3 border-b p-3"
+      className={clsx(
+        'flex w-full cursor-pointer gap-3 border-b p-3',
+        className
+      )}
       onClick={handleTweetClick}
     >
       <Link
         href={`/profile/${author.username}`}
         onClick={(e) => e.stopPropagation()}
-        className="relative h-12 w-12"
+        className="relative h-10 w-10"
       >
         <Image
           src={author.profilePictureUrl ?? '/twitter-default-pp.png'}

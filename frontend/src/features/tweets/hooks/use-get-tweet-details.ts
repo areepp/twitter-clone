@@ -1,5 +1,13 @@
 import { getTweetDetail, getTweets } from '@/lib/tweets'
-import { useQuery } from '@tanstack/react-query'
+import { UseQueryOptions, useQuery } from '@tanstack/react-query'
+import { TweetWithRepliesResponse } from '../types'
 
-export const useGetTweetDetails = (id: string) =>
-  useQuery(['tweets', id], () => getTweetDetail(id))
+type Options = {
+  onSuccess?: (data: TweetWithRepliesResponse) => void
+}
+
+export const useGetTweetDetails = (id?: string | null, options?: Options) =>
+  useQuery(['tweets', id], () => getTweetDetail(id as string), {
+    enabled: !!id,
+    ...options,
+  })

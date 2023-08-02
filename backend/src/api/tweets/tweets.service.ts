@@ -119,7 +119,7 @@ export const getTweetReplies = async ({
   id: number
   cursor?: number
 }) => {
-  let tweet
+  let tweet: TweetWithReplies | null
   tweet = await db.tweet.findUnique({
     where: {
       id,
@@ -147,7 +147,11 @@ export const getTweetReplies = async ({
       },
       _count: {
         select: {
-          replies: true,
+          replies: {
+            where: {
+              parentReplyId: null,
+            },
+          },
         },
       },
       replies: {
@@ -227,6 +231,7 @@ export const getTweetReplies = async ({
           },
         },
         parentTweetId: true,
+        parentReplyId: true,
         replies: {
           select: {
             id: true,
