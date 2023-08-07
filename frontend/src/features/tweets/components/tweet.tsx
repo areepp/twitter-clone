@@ -46,9 +46,7 @@ export const Tweet = ({ data, className }: Props) => {
       alert('join twitter to perform this action')
       return
     }
-    unlikeTweetMutation(
-      loggedInUser.likedTweets.filter((el) => el.tweet.id === data.id)[0].id
-    )
+    unlikeTweetMutation(data.id)
   }
 
   const handleTweetClick = () => {
@@ -115,9 +113,7 @@ export const Tweet = ({ data, className }: Props) => {
           />
           <IconWithNumber
             icon={
-              loggedInUser?.likedTweets.find(
-                (list) => list.tweet.id === data.id
-              ) ? (
+              data.isLiked ? (
                 <HeartIconSolid
                   className="h-5 w-5 cursor-pointer text-pink-600"
                   onClick={unlikeTweet}

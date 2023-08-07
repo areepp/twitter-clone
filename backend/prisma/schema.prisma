@@ -58,8 +58,8 @@ model LikedTweet {
   id      Int      @id @default(autoincrement())
   likedAt DateTime @default(now())
 
-  tweet   Tweet  @relation(fields: [tweetId], references: [id])
-  tweetId BigInt
+  tweet   Tweet?  @relation(fields: [tweetId], references: [id])
+  tweetId BigInt?
 
   User         User?       @relation(fields: [userId], references: [id])
   userId       String?

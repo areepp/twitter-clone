@@ -14,6 +14,7 @@ export type ITweet = {
     replies: number
   }
   parentTweetId?: string
+  isLiked?: boolean
 }
 
 export type TweetResponse = {

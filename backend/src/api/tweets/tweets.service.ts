@@ -1,15 +1,17 @@
 import db from '@/lib/db'
 import { sendPutObjectCommand } from '@/lib/s3/put-object'
 import { MediaAttachment } from '@/types/global'
-import { Tweet, TweetWithReplies } from './tweets.model'
+import { Tweet, getRepliesSelect, tweetSelect } from './tweets.model'
 import { generateRandomNumbers } from '@/utils/helpers'
 
 export const getAllTweets = async ({
   username,
   cursor,
+  loggedInUserId,
 }: {
   username?: string
   cursor?: number
+  loggedInUserId?: string
 }) => {
   let tweets: Array<Tweet> = []
 
@@ -20,37 +22,7 @@ export const getAllTweets = async ({
           username,
         },
       },
-      select: {
-        id: true,
-        text: true,
-        createdAt: true,
-        author: {
-          select: {
-            profilePictureUrl: true,
-            displayName: true,
-            username: true,
-          },
-        },
-        likes: {
-          select: {
-            id: true,
-          },
-        },
-        mediaAttachments: {
-          select: {
-            url: true,
-          },
-        },
-        _count: {
-          select: {
-            replies: {
-              where: {
-                parentReplyId: null,
-              },
-            },
-          },
-        },
-      },
+      select: tweetSelect,
       take: 10,
       cursor: cursor
         ? {
@@ -63,37 +35,7 @@ export const getAllTweets = async ({
     })
   } else {
     tweets = await db.tweet.findMany({
-      select: {
-        id: true,
-        text: true,
-        createdAt: true,
-        author: {
-          select: {
-            profilePictureUrl: true,
-            displayName: true,
-            username: true,
-          },
-        },
-        likes: {
-          select: {
-            id: true,
-          },
-        },
-        mediaAttachments: {
-          select: {
-            url: true,
-          },
-        },
-        _count: {
-          select: {
-            replies: {
-              where: {
-                parentReplyId: null,
-              },
-            },
-          },
-        },
-      },
+      select: tweetSelect,
       take: 10,
       cursor: cursor
         ? {
@@ -106,6 +48,21 @@ export const getAllTweets = async ({
     })
   }
 
+  if (loggedInUserId) {
+    tweets = await Promise.all(
+      tweets.map(async (tweet) => {
+        const like = await db.likedTweet.findFirst({
+          where: {
+            userId: loggedInUserId,
+            tweetId: tweet.id,
+          },
+        })
+
+        return { ...tweet, isLiked: !!like }
+      }),
+    )
+  }
+
   return {
     data: tweets,
     next_cursor: tweets.length >= 10 ? tweets[9].id : undefined,
@@ -115,87 +72,20 @@ export const getAllTweets = async ({
 export const getTweetReplies = async ({
   id,
   cursor,
+  loggedInUserId,
 }: {
   id: number
   cursor?: number
+  loggedInUserId?: string
 }) => {
-  let tweet: TweetWithReplies | null
+  let tweet: Tweet | null
   tweet = await db.tweet.findUnique({
     where: {
       id,
     },
     select: {
-      id: true,
-      text: true,
-      createdAt: true,
-      author: {
-        select: {
-          profilePictureUrl: true,
-          displayName: true,
-          username: true,
-        },
-      },
-      likes: {
-        select: {
-          id: true,
-        },
-      },
-      mediaAttachments: {
-        select: {
-          url: true,
-        },
-      },
-      _count: {
-        select: {
-          replies: {
-            where: {
-              parentReplyId: null,
-            },
-          },
-        },
-      },
-      replies: {
-        where: {
-          parentReplyId: null,
-        },
-        select: {
-          id: true,
-          text: true,
-          createdAt: true,
-          parentReplyId: true,
-          author: {
-            select: {
-              profilePictureUrl: true,
-              displayName: true,
-              username: true,
-            },
-          },
-          likes: {
-            select: {
-              id: true,
-            },
-          },
-          mediaAttachments: {
-            select: {
-              url: true,
-            },
-          },
-          _count: {
-            select: {
-              replies: true,
-            },
-          },
-        },
-        take: 10,
-        cursor: cursor
-          ? {
-              id: cursor,
-            }
-          : undefined,
-        orderBy: {
-          createdAt: 'desc',
-        },
-      },
+      ...tweetSelect,
+      ...getRepliesSelect(cursor),
     },
   })
 
@@ -205,73 +95,43 @@ export const getTweetReplies = async ({
         id,
       },
       select: {
-        id: true,
-        text: true,
-        createdAt: true,
-        author: {
-          select: {
-            profilePictureUrl: true,
-            displayName: true,
-            username: true,
-          },
-        },
-        likes: {
-          select: {
-            id: true,
-          },
-        },
-        mediaAttachments: {
-          select: {
-            url: true,
-          },
-        },
-        _count: {
-          select: {
-            replies: true,
-          },
-        },
+        ...tweetSelect,
         parentTweetId: true,
         parentReplyId: true,
-        replies: {
-          select: {
-            id: true,
-            text: true,
-            createdAt: true,
-            author: {
-              select: {
-                profilePictureUrl: true,
-                displayName: true,
-                username: true,
-              },
-            },
-            likes: {
-              select: {
-                id: true,
-              },
-            },
-            mediaAttachments: {
-              select: {
-                url: true,
-              },
-            },
-            _count: {
-              select: {
-                replies: true,
-              },
-            },
-          },
-          take: 10,
-          cursor: cursor
-            ? {
-                id: cursor,
-              }
-            : undefined,
-          orderBy: {
-            createdAt: 'desc',
-          },
-        },
+        ...getRepliesSelect(cursor),
       },
     })
+  }
+
+  if (loggedInUserId && tweet) {
+    const tweetLiked = await db.likedTweet.findFirst({
+      where: {
+        userId: loggedInUserId,
+        tweetId: tweet.id,
+      },
+    })
+
+    let repliesWithIsLiked = null
+    if (tweet.replies) {
+      repliesWithIsLiked = await Promise.all(
+        tweet.replies.map(async (reply) => {
+          const like = await db.likedTweet.findFirst({
+            where: {
+              userId: loggedInUserId,
+              replyTweetId: reply.id,
+            },
+          })
+
+          return { ...reply, isLiked: !!like }
+        }),
+      )
+    }
+
+    tweet = {
+      ...tweet,
+      isLiked: !!tweetLiked,
+      replies: repliesWithIsLiked ?? tweet.replies,
+    }
   }
 
   return {
@@ -333,14 +193,30 @@ export const likeTweet = async ({
 }: {
   tweetId: number
   likedBy: string
-}) =>
-  db.likedTweet.create({
+}) => {
+  const isATweet = await db.tweet.findUnique({
+    where: {
+      id: tweetId,
+    },
+  })
+
+  return db.likedTweet.create({
     data: {
-      tweet: {
-        connect: {
-          id: tweetId,
-        },
-      },
+      ...(isATweet
+        ? {
+            tweet: {
+              connect: {
+                id: tweetId,
+              },
+            },
+          }
+        : {
+            ReplyTweet: {
+              connect: {
+                id: tweetId,
+              },
+            },
+          }),
       User: {
         connect: {
           id: likedBy,
@@ -348,13 +224,34 @@ export const likeTweet = async ({
       },
     },
   })
+}
 
-export const unlikeTweet = async ({ likedTweetId }: { likedTweetId: number }) =>
-  db.likedTweet.delete({
+export const unlikeTweet = async ({
+  tweetId,
+  loggedInUserId,
+}: {
+  tweetId: number
+  loggedInUserId: string
+}) => {
+  const isATweet = await db.tweet.findUnique({
     where: {
-      id: likedTweetId,
+      id: tweetId,
     },
   })
+
+  return db.likedTweet.deleteMany({
+    where: {
+      userId: loggedInUserId,
+      ...(isATweet
+        ? {
+            tweetId: tweetId,
+          }
+        : {
+            replyTweetId: tweetId,
+          }),
+    },
+  })
+}
 
 export const createReply = async ({
   authorId,

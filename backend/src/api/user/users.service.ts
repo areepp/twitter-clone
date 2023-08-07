@@ -144,7 +144,6 @@ export const followUser = async ({
   followeeUsername: string
   followerUsername: string
 }) => {
-  console.log('eyyyy', followeeUsername, followerUsername)
   return db.follows.create({
     data: {
       follower: {

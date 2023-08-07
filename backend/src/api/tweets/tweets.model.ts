@@ -1,26 +1,6 @@
 import { Prisma } from '@prisma/client'
 import { z } from 'zod'
 
-export type Tweet = {
-  text: string
-  id: bigint
-  createdAt: Date
-  mediaAttachments: {
-    url: string
-  }[]
-  author: {
-    username: string
-    displayName: string
-    profilePictureUrl: string | null
-  }
-  likes: {
-    id: number
-  }[]
-  _count: {
-    replies: number
-  }
-}
-
 export type TweetWithReplies = Tweet & {
   replies: Tweet[]
 }
@@ -106,3 +86,87 @@ export const queryGetTweets: Prisma.TweetArgs = {
     },
   },
 }
+
+export const tweetSelect: Prisma.TweetSelect = {
+  id: true,
+  text: true,
+  createdAt: true,
+  author: {
+    select: {
+      profilePictureUrl: true,
+      displayName: true,
+      username: true,
+    },
+  },
+  likes: {
+    select: {
+      id: true,
+    },
+  },
+  mediaAttachments: {
+    select: {
+      url: true,
+    },
+  },
+  _count: {
+    select: {
+      replies: {
+        where: {
+          parentReplyId: null,
+        },
+      },
+    },
+  },
+}
+
+export type Tweet = Prisma.TweetGetPayload<{
+  select: typeof tweetSelect
+}> & {
+  isLiked?: boolean
+}
+
+export const getRepliesSelect = (cursor?: number): Prisma.TweetSelect => ({
+  ...tweetSelect,
+  replies: {
+    where: {
+      parentReplyId: null,
+    },
+    select: {
+      id: true,
+      text: true,
+      createdAt: true,
+      parentReplyId: true,
+      author: {
+        select: {
+          profilePictureUrl: true,
+          displayName: true,
+          username: true,
+        },
+      },
+      likes: {
+        select: {
+          id: true,
+        },
+      },
+      mediaAttachments: {
+        select: {
+          url: true,
+        },
+      },
+      _count: {
+        select: {
+          replies: true,
+        },
+      },
+    },
+    take: 10,
+    cursor: cursor
+      ? {
+          id: cursor,
+        }
+      : undefined,
+    orderBy: {
+      createdAt: 'desc',
+    },
+  },
+})

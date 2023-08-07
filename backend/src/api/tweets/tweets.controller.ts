@@ -16,6 +16,7 @@ tweetsController.get(
   async (req, res, next) => {
     try {
       const tweets = await tweetsService.getAllTweets({
+        loggedInUserId: req.user?.id,
         cursor: req.query.cursor
           ? parseInt(req.query.cursor as string)
           : undefined,
@@ -35,6 +36,10 @@ tweetsController.get(
     try {
       const tweets = await tweetsService.getTweetReplies({
         id: Number(req.params.id),
+        cursor: req.query.cursor
+          ? parseInt(req.query.cursor as string)
+          : undefined,
+        loggedInUserId: req.user?.id,
       })
 
       return res.status(200).json(tweets)
@@ -109,7 +114,8 @@ tweetsController.delete(
   async (req, res, next) => {
     try {
       const unlikedTweet = await tweetsService.unlikeTweet({
-        likedTweetId: parseInt(req.params.id),
+        tweetId: parseInt(req.params.id),
+        loggedInUserId: req.user!.id,
       })
 
       res.status(200).json(unlikedTweet)
