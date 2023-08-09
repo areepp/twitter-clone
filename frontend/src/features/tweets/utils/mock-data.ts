@@ -11,8 +11,8 @@ export const MOCK_TWEET: ITweet = {
   id: '1111111',
   mediaAttachments: [],
   text: 'yes',
-  likes: [],
   _count: {
     replies: 0,
+    likes: 0,
   },
 }

@@ -125,7 +125,7 @@ export const Tweet = ({ data, className }: Props) => {
                 />
               )
             }
-            count={data.likes.length}
+            count={data._count.likes}
           />
           <ArrowUpTrayIcon className="h-5 w-5" />
         </div>

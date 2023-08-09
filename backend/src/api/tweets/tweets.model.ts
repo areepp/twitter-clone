@@ -57,36 +57,6 @@ export type NewTweetSchema = Pick<TempNewTweetSchema, 'text'> & {
 }
 export type GetTweetsSchema = z.infer<typeof GetTweetsSchema>
 
-export const queryGetTweets: Prisma.TweetArgs = {
-  select: {
-    id: true,
-    text: true,
-    createdAt: true,
-    author: {
-      select: {
-        profilePictureUrl: true,
-        displayName: true,
-        username: true,
-      },
-    },
-    likes: {
-      select: {
-        id: true,
-      },
-    },
-    mediaAttachments: {
-      select: {
-        url: true,
-      },
-    },
-    _count: {
-      select: {
-        replies: true,
-      },
-    },
-  },
-}
-
 export const tweetSelect: Prisma.TweetSelect = {
   id: true,
   text: true,
@@ -96,11 +66,6 @@ export const tweetSelect: Prisma.TweetSelect = {
       profilePictureUrl: true,
       displayName: true,
       username: true,
-    },
-  },
-  likes: {
-    select: {
-      id: true,
     },
   },
   mediaAttachments: {
@@ -115,6 +80,7 @@ export const tweetSelect: Prisma.TweetSelect = {
           parentReplyId: null,
         },
       },
+      likes: true,
     },
   },
 }
@@ -143,11 +109,6 @@ export const getRepliesSelect = (cursor?: number): Prisma.TweetSelect => ({
           username: true,
         },
       },
-      likes: {
-        select: {
-          id: true,
-        },
-      },
       mediaAttachments: {
         select: {
           url: true,
@@ -156,6 +117,7 @@ export const getRepliesSelect = (cursor?: number): Prisma.TweetSelect => ({
       _count: {
         select: {
           replies: true,
+          likes: true,
         },
       },
     },

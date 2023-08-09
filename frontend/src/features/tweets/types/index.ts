@@ -6,12 +6,10 @@ export type ITweet = {
   text: string
   createdAt: string
   author: Pick<IUser, 'username' | 'displayName' | 'profilePictureUrl'>
-  likes: {
-    id: string
-  }[]
   mediaAttachments: MediaAttachment[]
   _count: {
     replies: number
+    likes: number
   }
   parentTweetId?: string
   isLiked?: boolean
