@@ -143,6 +143,61 @@ export const getTweetReplies = async ({
   }
 }
 
+export const getLikedTweets = async ({
+  userId,
+  loggedInUserId,
+  cursor,
+}: {
+  userId: string
+  loggedInUserId?: string
+  cursor?: number
+}) => {
+  const likes = await db.likedTweet.findMany({
+    where: {
+      userId,
+    },
+    select: {
+      tweet: {
+        select: tweetSelect,
+      },
+      ReplyTweet: {
+        select: tweetSelect,
+      },
+    },
+    orderBy: {
+      likedAt: 'desc',
+    },
+    take: 10,
+    cursor: cursor
+      ? {
+          id: cursor,
+        }
+      : undefined,
+  })
+
+  let tweets = likes.map((like) => like.tweet ?? like.ReplyTweet)
+
+  if (loggedInUserId && tweets) {
+    tweets = await Promise.all(
+      tweets.map(async (tweet) => {
+        const like = await db.likedTweet.findFirst({
+          where: {
+            userId: loggedInUserId,
+            tweetId: tweet?.id,
+          },
+        })
+
+        return { ...tweet, isLiked: !!like }
+      }),
+    )
+  }
+
+  return {
+    data: tweets,
+    next_cursor: tweets && tweets.length >= 10 ? tweets[9]?.id : undefined,
+  }
+}
+
 export const createTweet = async ({
   authorId,
   text,

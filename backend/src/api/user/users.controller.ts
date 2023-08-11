@@ -46,6 +46,23 @@ usersController.get('/:username/tweets', async (req, res, next) => {
       cursor: req.query.cursor
         ? parseInt(req.query.cursor as string)
         : undefined,
+      loggedInUserId: req.user?.id,
+    })
+
+    res.status(200).json(tweets)
+  } catch (error) {
+    next(error)
+  }
+})
+
+usersController.get('/:username/likes', async (req, res, next) => {
+  try {
+    const tweets = await userService.getUserLikedTweets({
+      username: req.params.username,
+      cursor: req.query.cursor
+        ? parseInt(req.query.cursor as string)
+        : undefined,
+      loggedInUserId: req.user?.id,
     })
 
     res.status(200).json(tweets)

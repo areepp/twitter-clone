@@ -75,7 +75,11 @@ const TweetDetailPage = () => {
         </div>
       </div>
       {parentTweetResponse?.data && (
-        <Tweet data={parentTweetResponse?.data} className="mt-12 !border-b-0" />
+        <Tweet
+          data={parentTweetResponse?.data}
+          className="mt-12 !border-b-0"
+          queryKeyToInvalidate={['tweets', tweetId]}
+        />
       )}
       <div
         ref={tweetRef}
@@ -146,7 +150,10 @@ const TweetDetailPage = () => {
         )}
       </div>
       {loggedInUser && <hr className="mb-2" />}
-      <Tweets query={infiniteRepliesQuery} />
+      <Tweets
+        query={infiniteRepliesQuery}
+        queryKeyToInvalidate={['tweets', tweetId, 'replies']}
+      />
     </>
   )
 }

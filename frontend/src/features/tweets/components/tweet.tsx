@@ -20,14 +20,15 @@ import clsx from 'clsx'
 type Props = {
   data: ITweet
   className?: string
+  queryKeyToInvalidate: Array<string>
 }
 
-export const Tweet = ({ data, className }: Props) => {
+export const Tweet = ({ data, className, queryKeyToInvalidate }: Props) => {
   const { push } = useRouter()
   const { data: loggedInUser } = useGetLoggedInUser()
   const { author } = data
-  const { mutate: likeTweetMutation } = useLikeTweet()
-  const { mutate: unlikeTweetMutation } = useUnLikeTweet()
+  const { mutate: likeTweetMutation } = useLikeTweet(queryKeyToInvalidate)
+  const { mutate: unlikeTweetMutation } = useUnLikeTweet(queryKeyToInvalidate)
 
   const likeTweet = (e: React.MouseEvent) => {
     e.stopPropagation()

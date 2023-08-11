@@ -1,11 +1,11 @@
-import { getUserTweets } from '@/lib/users'
+import { getUserLikes } from '@/lib/users'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
-export const useGetUserTweets = (username: string) => {
+export const useGetUserLikedTweets = (username: string) => {
   return useInfiniteQuery(
-    [username, 'tweets'],
+    [username, 'likes'],
     ({ pageParam = undefined }) =>
-      getUserTweets({ username, cursor: pageParam }),
+      getUserLikes({ username, cursor: pageParam }),
     {
       getNextPageParam: (lastPage) => lastPage.next_cursor,
       getPreviousPageParam: (firstPage) => firstPage.next_cursor,

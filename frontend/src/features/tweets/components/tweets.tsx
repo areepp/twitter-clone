@@ -9,8 +9,10 @@ import { UseInfiniteQueryResult } from '@tanstack/react-query'
 
 export const Tweets = ({
   query,
+  queryKeyToInvalidate,
 }: {
   query: UseInfiniteQueryResult<TweetResponse, unknown>
+  queryKeyToInvalidate: Array<string>
 }) => {
   const [ref, inView] = useInView({
     delay: 500,
@@ -30,7 +32,11 @@ export const Tweets = ({
       {query.data?.pages.map((page) => (
         <div key={page.next_cursor ?? 1}>
           {page.data.map((tweet) => (
-            <Tweet key={tweet.id} data={tweet} />
+            <Tweet
+              key={tweet.id}
+              data={tweet}
+              queryKeyToInvalidate={queryKeyToInvalidate}
+            />
           ))}
         </div>
       ))}

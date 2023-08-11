@@ -14,7 +14,7 @@ const Home = () => {
         <EditUserNameModal />
       </div>
       <NewTweetDialogue />
-      <Tweets query={tweetsQuery} />
+      <Tweets query={tweetsQuery} queryKeyToInvalidate={['tweets']} />
     </>
   )
 }

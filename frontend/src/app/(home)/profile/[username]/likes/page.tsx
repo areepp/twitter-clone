@@ -1,9 +1,28 @@
 'use client'
 
-import ProfileWithLikes from './profile-with-likes'
+import {
+  ProfileLayout,
+  ProfileNav,
+  useGetUserLikedTweets,
+} from '@/features/profiles'
+import { Tweets } from '@/features/tweets'
+import { useParams } from 'next/navigation'
 
 const ProfileWithLikesPage = () => {
-  return <ProfileWithLikes />
+  const { username: usernameQuery } = useParams()
+
+  const userLikedTweetsQuery = useGetUserLikedTweets(usernameQuery)
+
+  return (
+    <>
+      <ProfileLayout />
+      <ProfileNav activeTab="likes" />
+      <Tweets
+        query={userLikedTweetsQuery}
+        queryKeyToInvalidate={[usernameQuery, 'likes']}
+      />
+    </>
+  )
 }
 
 export default ProfileWithLikesPage

@@ -1,5 +1,5 @@
 import { IUser } from '@/features/profiles'
-import { ITweet, TweetResponse } from '@/features/tweets/types'
+import { TweetResponse } from '@/features/tweets/types'
 import axios, { axiosMultiPart } from './axios'
 
 export const getUserProfile = async (username: string) => {
@@ -36,6 +36,25 @@ export const getUserTweets = async ({
         },
       }
     )
+    return response.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const getUserLikes = async ({
+  username,
+  cursor,
+}: {
+  username: string
+  cursor?: number
+}) => {
+  try {
+    const response = await axios.get<TweetResponse>(`users/${username}/likes`, {
+      params: {
+        cursor,
+      },
+    })
     return response.data
   } catch (error) {
     throw new Error(error)

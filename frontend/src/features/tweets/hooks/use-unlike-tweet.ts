@@ -1,12 +1,11 @@
 import { unLikeTweet } from '@/lib/tweets'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-export const useUnLikeTweet = () => {
+export const useUnLikeTweet = (queryKeyToInvalidate: Array<string>) => {
   const queryClient = useQueryClient()
   const mutation = useMutation((id: string) => unLikeTweet(id), {
     onSuccess: () => {
-      queryClient.refetchQueries(['tweets'])
-      queryClient.refetchQueries(['user', 'me'])
+      queryClient.refetchQueries(queryKeyToInvalidate)
     },
   })
 
