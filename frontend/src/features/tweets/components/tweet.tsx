@@ -54,10 +54,14 @@ export const Tweet = ({ data, className, queryKeyToInvalidate }: Props) => {
     push(`/profile/${author.username}/status/${data.id}`)
   }
 
+  const doNothing = (e: React.MouseEvent) => {
+    e.stopPropagation()
+  }
+
   return (
     <div
       className={clsx(
-        'flex w-full cursor-pointer gap-3 border-b p-3',
+        'flex w-full cursor-pointer gap-3 border-b p-3 pb-1 hover:bg-gray-100',
         className
       )}
       onClick={handleTweetClick}
@@ -65,7 +69,7 @@ export const Tweet = ({ data, className, queryKeyToInvalidate }: Props) => {
       <Link
         href={`/profile/${author.username}`}
         onClick={(e) => e.stopPropagation()}
-        className="relative h-10 w-10"
+        className="relative h-10 w-10 transition hover:brightness-90"
       >
         <Image
           src={author.profilePictureUrl ?? '/twitter-default-pp.png'}
@@ -79,7 +83,7 @@ export const Tweet = ({ data, className, queryKeyToInvalidate }: Props) => {
           <Link
             href={`/profile/${author.username}`}
             onClick={(e) => e.stopPropagation()}
-            className="font-semibold"
+            className="font-semibold hover:underline"
           >
             {author.displayName}
           </Link>
@@ -103,14 +107,20 @@ export const Tweet = ({ data, className, queryKeyToInvalidate }: Props) => {
           />
         )}
 
-        <div className="mt-3 flex gap-20 text-dark-gray">
+        <div className="mt-1 flex gap-20 text-dark-gray">
           <IconWithNumber
             icon={<ChatBubbleOvalLeftIcon className="h-5 w-5" />}
             count={data._count.replies}
           />
           <IconWithNumber
-            icon={<ArrowPathRoundedSquareIcon className="h-5 w-5" />}
+            icon={
+              <ArrowPathRoundedSquareIcon
+                className="h-5 w-5"
+                onClick={doNothing}
+              />
+            }
             count={0}
+            disabled
           />
           <IconWithNumber
             icon={
@@ -128,7 +138,12 @@ export const Tweet = ({ data, className, queryKeyToInvalidate }: Props) => {
             }
             count={data._count.likes}
           />
-          <ArrowUpTrayIcon className="h-5 w-5" />
+          <div
+            className="cursor-not-allowed rounded-full p-2 transition hover:bg-gray-100"
+            onClick={doNothing}
+          >
+            <ArrowUpTrayIcon className="h-5 w-5" />
+          </div>
         </div>
       </div>
     </div>

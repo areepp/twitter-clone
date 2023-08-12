@@ -114,14 +114,22 @@ export const NewTweetDialogue = ({ isModal, setOpenModal }: Props) => {
         </div>
 
         <div className="mt-3 flex items-center justify-between">
-          <fieldset className="flex gap-4">
-            <PhotoIcon
-              onClick={open}
-              className="h-5 w-5 cursor-pointer text-primary-blue"
-            />
-            <GifIcon className="h-5 w-5 text-primary-blue" />
-            <FaceSmileIcon className="h-5 w-5 text-primary-blue" />
-            <MapPinIcon className="h-5 w-5 text-primary-blue" />
+          <fieldset className="flex">
+            <div className="rounded-full p-2 transition hover:bg-blue-100">
+              <PhotoIcon
+                onClick={open}
+                className="h-5 w-5 cursor-pointer text-primary-blue"
+              />
+            </div>
+            <div className="cursor-not-allowed rounded-full p-2 transition hover:bg-blue-100">
+              <GifIcon className="h-5 w-5 text-primary-blue" />
+            </div>
+            <div className="cursor-not-allowed rounded-full p-2 transition hover:bg-blue-100">
+              <FaceSmileIcon className="h-5 w-5 text-primary-blue" />
+            </div>
+            <div className="cursor-not-allowed rounded-full p-2 transition hover:bg-blue-100">
+              <MapPinIcon className="h-5 w-5 text-primary-blue" />
+            </div>
           </fieldset>
           <PillButton
             text="Tweet"

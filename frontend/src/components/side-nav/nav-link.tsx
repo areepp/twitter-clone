@@ -13,7 +13,7 @@ const NavLink = ({ href, Icon, text, disabled }: Props) => (
   <Link
     href={href}
     className={clsx(
-      'flex items-center gap-4 rounded-full px-4 py-3 transition hover:bg-zinc-300',
+      'flex items-center gap-4 rounded-full px-4 py-3 transition hover:bg-gray-100',
       disabled && 'cursor-not-allowed'
     )}
   >
