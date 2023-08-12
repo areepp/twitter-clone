@@ -2,8 +2,9 @@ import clsx from 'clsx'
 import { Spinner } from '../spinner'
 
 const variants = {
-  black: 'bg-black text-white',
-  white: 'bg-white text-black border border-gray-200',
+  black: 'bg-black text-white disabled:cursor-not-allowed',
+  white:
+    'bg-white text-black border border-gray-200 disabled:cursor-not-allowed',
   blue: 'bg-primary-blue text-white disabled:bg-blue-200 disabled:cursor-not-allowed',
 }
 

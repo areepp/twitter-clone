@@ -31,14 +31,16 @@ export const WhoToFollow = () => {
   if (!user) return null
 
   return (
-    <div className="mt-3 flex w-full flex-col gap-6 rounded-xl bg-gray-100 p-3">
+    <div className="mt-3 flex w-full cursor-not-allowed flex-col gap-6 rounded-xl bg-gray-100 p-3">
       <h3 className="text-xl font-bold">Who to follow</h3>
       <div className="flex flex-col gap-6">
         {USERS_DATA.map((user) => (
           <UserCard key={user.userId} data={user} />
         ))}
       </div>
-      <button className="self-start text-primary-blue">Show more</button>
+      <button className="cursor-not-allowed self-start text-primary-blue">
+        Show more
+      </button>
     </div>
   )
 }

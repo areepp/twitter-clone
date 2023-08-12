@@ -18,6 +18,6 @@ export const UserCard = ({ data }: { data: IUserTemp }) => (
         <span className="text-dark-gray">@{data.userId}</span>
       </div>
     </div>
-    <PillButton text="Follow" variant="black" size="small" />
+    <PillButton text="Follow" variant="black" size="small" disabled />
   </div>
 )

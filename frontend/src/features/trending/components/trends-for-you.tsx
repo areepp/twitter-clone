@@ -45,7 +45,7 @@ const TRENDS_DATA: ITrend[] = [
 ]
 
 export const TrendsForYou = () => (
-  <div className="w-full rounded-xl bg-gray-100 p-3">
+  <div className="w-full cursor-not-allowed rounded-xl bg-gray-100 p-3">
     <h3 className="text-xl font-bold">Trends For You</h3>
     <div className="mt-6 flex flex-col gap-6">
       {TRENDS_DATA.map((trend) => (
