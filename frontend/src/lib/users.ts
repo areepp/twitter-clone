@@ -61,6 +61,25 @@ export const getUserLikes = async ({
   }
 }
 
+export const getUserMediaTweets = async ({
+  username,
+  cursor,
+}: {
+  username: string
+  cursor?: number
+}) => {
+  try {
+    const response = await axios.get<TweetResponse>(`users/${username}/media`, {
+      params: {
+        cursor,
+      },
+    })
+    return response.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 export const checkUsernameAvailability = async (username: string) => {
   try {
     const response = await axios.get(`/users/check-availability/${username}`)

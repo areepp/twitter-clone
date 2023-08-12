@@ -71,6 +71,20 @@ usersController.get('/:username/likes', async (req, res, next) => {
   }
 })
 
+usersController.get('/:username/media', async (req, res, next) => {
+  try {
+    const tweets = await userService.getUserMedias({
+      username: req.params.username,
+      cursor: req.query.curs ? parseInt(req.query.cursor as string) : undefined,
+      loggedInUserId: req.user?.id,
+    })
+
+    res.status(200).json(tweets)
+  } catch (error) {
+    next(error)
+  }
+})
+
 usersController.get(
   '/check-availability/:username',
   isAuthenticated,

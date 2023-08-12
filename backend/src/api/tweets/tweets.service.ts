@@ -198,6 +198,55 @@ export const getLikedTweets = async ({
   }
 }
 
+export const getTweetWithMedias = async ({
+  userId,
+  loggedInUserId,
+  cursor,
+}: {
+  userId: string
+  loggedInUserId?: string
+  cursor?: number
+}) => {
+  let tweets = await db.tweet.findMany({
+    where: {
+      userId,
+      mediaAttachments: {
+        some: {},
+      },
+    },
+    select: tweetSelect,
+    orderBy: {
+      createdAt: 'desc',
+    },
+    take: 10,
+    cursor: cursor
+      ? {
+          id: cursor,
+        }
+      : undefined,
+  })
+
+  if (loggedInUserId && tweets) {
+    tweets = await Promise.all(
+      tweets.map(async (tweet) => {
+        const like = await db.likedTweet.findFirst({
+          where: {
+            userId: loggedInUserId,
+            tweetId: tweet?.id,
+          },
+        })
+
+        return { ...tweet, isLiked: !!like }
+      }),
+    )
+  }
+
+  return {
+    data: tweets,
+    next_cursor: tweets && tweets.length >= 10 ? tweets[9]?.id : undefined,
+  }
+}
+
 export const createTweet = async ({
   authorId,
   text,
