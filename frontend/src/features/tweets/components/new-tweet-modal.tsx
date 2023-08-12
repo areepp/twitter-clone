@@ -9,14 +9,19 @@ import {
 } from '@/components/elements'
 import { useState } from 'react'
 import { NewTweetDialogue } from './new-tweet-dialogue'
+import clsx from 'clsx'
 
-export const NewTweetModal = () => {
+type Props = {
+  className?: string
+}
+
+export const NewTweetModal = ({ className }: Props) => {
   const [openModal, setOpenModal] = useState(false)
 
   return (
     <Dialog open={openModal} onOpenChange={setOpenModal}>
       <DialogTrigger asChild>
-        <div className="w-full">
+        <div className={clsx('w-full', className)}>
           <PillButton
             text="Tweet"
             variant="blue"

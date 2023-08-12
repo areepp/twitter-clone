@@ -19,24 +19,24 @@ const ProtectedNavigations = () => {
   if (!user)
     return (
       <nav className="flex flex-col gap-8">
-        <NavLink href="#" Icon={HashtagIcon} text="Explore" />
+        <NavLink href="#" Icon={HashtagIcon} text="Explore" disabled />
       </nav>
     )
 
   return (
-    <nav className="flex w-full flex-col items-center gap-8 xl:items-start">
+    <nav className="flex w-full flex-col items-center xl:items-start">
       <NavLink href="/" Icon={HomeIcon} text="Home" />
-      <NavLink href="#" Icon={HashtagIcon} text="Explore" />
-      <NavLink href="#" Icon={BellIcon} text="Notifications" />
-      <NavLink href="#" Icon={EnvelopeIcon} text="Messages" />
-      <NavLink href="#" Icon={BookmarkIcon} text="Bookmarks" />
+      <NavLink href="#" Icon={HashtagIcon} text="Explore" disabled />
+      <NavLink href="#" Icon={BellIcon} text="Notifications" disabled />
+      <NavLink href="#" Icon={EnvelopeIcon} text="Messages" disabled />
+      <NavLink href="#" Icon={BookmarkIcon} text="Bookmarks" disabled />
       <NavLink
         href={`/profile/${user?.username}`}
         Icon={UserIcon}
         text="Profile"
       />
-      <NavLink href="#" Icon={EllipsisHorizontalIcon} text="More" />
-      <NewTweetModal />
+      <NavLink href="#" Icon={EllipsisHorizontalIcon} text="More" disabled />
+      <NewTweetModal className="mt-3" />
     </nav>
   )
 }
